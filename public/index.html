@@ -159,21 +159,6 @@
                         <li><button onclick="window.location.hash = '#ar-summary'" class="w-full flex items-center gap-4 px-4 py-2.5 hover:bg-slate-200/60 border-l-4 border-transparent hover:border-blue-400 transition-colors text-sm" id="nav-ar-summary"><div class="relative flex items-center gap-4" data-tooltip="AR Summary"><i class="fa-solid fa-file-invoice w-6 text-center"></i> <span class="nav-text">AR Summary</span></div></button></li>
                     </ul>
                 </li>
-                <!-- Menu Inspection (Dropdown) -->
-                <li id="nav-inspection-parent">
-                    <button onclick="toggleSubmenu('inspection-submenu')" class="w-full flex items-center justify-between gap-4 px-6 py-3 hover:bg-slate-100 border-l-4 border-transparent hover:border-blue-400 transition-colors">
-                        <div class="relative flex items-center gap-4" data-tooltip="Inspection">
-                            <i class="fa-solid fa-clipboard-check w-6 text-center"></i>
-                            <span class="nav-text">Inspection</span>
-                        </div>
-                        <i id="inspection-submenu-arrow" class="fa-solid fa-chevron-down nav-text text-xs transition-transform"></i>
-                    </button>
-                    <ul id="inspection-submenu" class="hidden pl-8 pr-2 py-1 space-y-1 bg-slate-50">
-                        <li><button onclick="window.location.hash = '#inspection-dashboard'" class="w-full flex items-center gap-4 px-4 py-2.5 hover:bg-slate-200/60 border-l-4 border-transparent hover:border-blue-400 transition-colors text-sm" id="nav-inspection-dashboard"><div class="relative flex items-center gap-4" data-tooltip="Dashboard Inspection"><i class="fa-solid fa-gauge w-6 text-center"></i> <span class="nav-text">Dashboard Inspection</span></div></button></li>
-                        <li><button onclick="window.location.hash = '#hotel-inspection'" class="w-full flex items-center gap-4 px-4 py-2.5 hover:bg-slate-200/60 border-l-4 border-transparent hover:border-blue-400 transition-colors text-sm" id="nav-hotel-inspection"><div class="relative flex items-center gap-4" data-tooltip="Hotel Inspection"><i class="fa-solid fa-magnifying-glass-location w-6 text-center"></i> <span class="nav-text">Hotel Inspection</span></div></button></li>
-                        <li><button onclick="window.location.hash = '#task-to-do'" class="w-full flex items-center gap-4 px-4 py-2.5 hover:bg-slate-200/60 border-l-4 border-transparent hover:border-blue-400 transition-colors text-sm" id="nav-task-to-do"><div class="relative flex items-center gap-4" data-tooltip="Task to Do"><i class="fa-solid fa-list-check w-6 text-center"></i> <span class="nav-text">Task to Do</span></div></button></li>
-                    </ul>
-                </li>
                 <!-- BARU: Menu Internal Audit (Dropdown) -->
                 <li id="nav-internal-audit-parent">
                     <button onclick="toggleSubmenu('internal-audit-submenu')" class="w-full flex items-center justify-between gap-4 px-6 py-3 hover:bg-slate-100 border-l-4 border-transparent hover:border-blue-400 transition-colors">
@@ -187,6 +172,21 @@
                         <li><button onclick="window.location.hash = '#trial-balance'" class="w-full flex items-center gap-4 px-4 py-2.5 hover:bg-slate-200/60 border-l-4 border-transparent hover:border-blue-400 transition-colors text-sm" id="nav-trial-balance"><div class="relative flex items-center gap-4" data-tooltip="Trial Balance"><i class="fa-solid fa-file-invoice-dollar w-6 text-center"></i> <span class="nav-text">Trial Balance</span></div></button></li>
                         <li><button onclick="window.location.hash = '#agenda-audit'" class="w-full flex items-center gap-4 px-4 py-2.5 hover:bg-slate-200/60 border-l-4 border-transparent hover:border-blue-400 transition-colors text-sm" id="nav-agenda-audit"><div class="relative flex items-center gap-4" data-tooltip="Agenda Audit"><i class="fa-solid fa-calendar-check w-6 text-center"></i> <span class="nav-text">Agenda Audit</span></div></button></li>
                         <li><button onclick="window.location.hash = '#audit-calendar'" class="w-full flex items-center gap-4 px-4 py-2.5 hover:bg-slate-200/60 border-l-4 border-transparent hover:border-blue-400 transition-colors text-sm" id="nav-audit-calendar"><div class="relative flex items-center gap-4" data-tooltip="Audit Calendar"><i class="fa-solid fa-calendar-week w-6 text-center"></i> <span class="nav-text">Calendar</span></div></button></li>
+                    </ul>
+                </li>
+                <!-- Menu Inspection (Dropdown) -->
+                <li id="nav-inspection-parent">
+                    <button onclick="toggleSubmenu('inspection-submenu')" class="w-full flex items-center justify-between gap-4 px-6 py-3 hover:bg-slate-100 border-l-4 border-transparent hover:border-blue-400 transition-colors">
+                        <div class="relative flex items-center gap-4" data-tooltip="Inspection">
+                            <i class="fa-solid fa-clipboard-check w-6 text-center"></i>
+                            <span class="nav-text">Inspection</span>
+                        </div>
+                        <i id="inspection-submenu-arrow" class="fa-solid fa-chevron-down nav-text text-xs transition-transform"></i>
+                    </button>
+                    <ul id="inspection-submenu" class="hidden pl-8 pr-2 py-1 space-y-1 bg-slate-50">
+                        <li><button onclick="window.location.hash = '#inspection-dashboard'" class="w-full flex items-center gap-4 px-4 py-2.5 hover:bg-slate-200/60 border-l-4 border-transparent hover:border-blue-400 transition-colors text-sm" id="nav-inspection-dashboard"><div class="relative flex items-center gap-4" data-tooltip="Dashboard Inspection"><i class="fa-solid fa-gauge w-6 text-center"></i> <span class="nav-text">Dashboard Inspection</span></div></button></li>
+                        <li><button onclick="window.location.hash = '#hotel-inspection'" class="w-full flex items-center gap-4 px-4 py-2.5 hover:bg-slate-200/60 border-l-4 border-transparent hover:border-blue-400 transition-colors text-sm" id="nav-hotel-inspection"><div class="relative flex items-center gap-4" data-tooltip="Hotel Inspection"><i class="fa-solid fa-magnifying-glass-location w-6 text-center"></i> <span class="nav-text">Hotel Inspection</span></div></button></li>
+                        <li><button onclick="window.location.hash = '#task-to-do'" class="w-full flex items-center gap-4 px-4 py-2.5 hover:bg-slate-200/60 border-l-4 border-transparent hover:border-blue-400 transition-colors text-sm" id="nav-task-to-do"><div class="relative flex items-center gap-4" data-tooltip="Task to Do"><i class="fa-solid fa-list-check w-6 text-center"></i> <span class="nav-text">Task to Do</span></div></button></li>
                     </ul>
                 </li>
                 <!-- BARU: Menu Guest Review (Dropdown) -->
