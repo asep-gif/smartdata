@@ -1,0 +1,6 @@
+/* Menambahkan style umum untuk input form */
+.form-input {
+    @apply shadow-sm appearance-none border border-slate-300 rounded-lg w-full py-3 px-4 text-slate-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition;
+}
+
+/* Style tambahan bisa ditambahkan di sini jika diperlukan */

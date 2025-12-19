@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ulasan Hotel Anda</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- BARU: Sertakan utils.js yang berisi fetchAPI -->
+    <script src="js/utils.js"></script>
+    <style>
+        .star-rating input[type="radio"] {
+            display: none;
+        }
+        .star-rating label {
+            font-size: 2.5rem;
+            color: #d1d5db; /* gray-300 */
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        .star-rating input[type="radio"]:checked ~ label,
+        .star-rating label:hover,
+        .star-rating label:hover ~ label {
+            color: #f59e0b; /* amber-500 */
+        }
+        /* BARU: Style untuk rating keseluruhan yang disabled */
+        .star-rating-display label {
+            font-size: 2.5rem;
+            color: #d1d5db; /* gray-300 */
+        }
+        /* BARU: Perkecil bintang untuk rating detail */
+        .detail-rating .star-rating label {
+            font-size: 1.75rem; /* Lebih kecil dari 2.5rem */
+            line-height: 2rem;
+        }
+    </style>
+</head>
+<body class="bg-slate-100 flex items-center justify-center min-h-screen p-4 font-sans">
+
+    <div class="w-full max-w-2xl bg-white rounded-2xl shadow-lg p-8">
+        <div id="review-form-header" class="text-center mb-8">
+            <img id="review-form-logo" src="assets/logo/logo.png" alt="Logo Hotel" class="h-24 w-auto mx-auto mb-4 hidden">
+            <h1 id="review-form-header-text" class="text-2xl font-bold text-slate-800">Memuat Formulir...</h1>
+            <p id="review-form-subheader-text" class="text-slate-500 mt-2"></p>
+        </div>
+
+        <form id="guest-review-form" class="space-y-6">
+
+            <!-- Info Tamu (Opsional) -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-5">
+                <div>
+                    <label for="hotel-name" class="block text-sm font-medium text-slate-700">Nama Hotel <span class="text-red-500">*</span></label>
+                    <select id="hotel-name" name="hotel_id" required class="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                        <option value="">-- Pilih Hotel --</option>
+                        <!-- Opsi akan diisi oleh JavaScript -->
+                    </select>
+                </div>
+                <div>
+                    <label for="checkin-date" class="block text-sm font-medium text-slate-700">Tanggal Check-in <span class="text-red-500">*</span></label>
+                    <input type="date" id="checkin-date" name="checkin_date" required class="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                </div>
+                <div>
+                    <label for="guest-name" class="block text-sm font-medium text-slate-700">Nama <span class="text-red-500">*</span></label>
+                    <input type="text" id="guest-name" name="guest_name" required class="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" placeholder="Nama Anda">
+                </div>
+                <div>
+                    <label for="room-number" class="block text-sm font-medium text-slate-700">Nomor Kamar <span class="text-red-500">*</span></label>
+                    <input type="text" id="room-number" name="room_number" required class="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" placeholder="Contoh: 808">
+                </div>
+            </div>
+
+            <!-- Rating Keseluruhan -->
+            <div>
+                <label class="block text-sm font-medium text-slate-700 mb-2 text-center">Rating Keseluruhan (Otomatis)</label>
+                <!-- Rating ini akan diisi oleh JS -->
+                <div id="overall-rating-display" class="star-rating-display flex justify-center">
+                    <label title="Buruk"><i class="fas fa-star"></i></label>
+                    <label title="Kurang"><i class="fas fa-star"></i></label>
+                    <label title="Cukup"><i class="fas fa-star"></i></label>
+                    <label title="Bagus"><i class="fas fa-star"></i></label>
+                    <label title="Luar Biasa"><i class="fas fa-star"></i></label>
+                </div>
+                <input type="hidden" id="overall-rating-value" name="rating" value="0">
+                <!-- BARU: Kontainer untuk Legenda dan Skor Rata-rata -->
+                <div class="flex flex-col items-center mt-2">
+                    <!-- Legenda Bintang -->
+                    <div class="flex flex-col items-center space-y-1 text-xs text-slate-500 sm:flex-row sm:justify-center sm:space-y-0 sm:space-x-4">
+                        <span class="inline-flex items-center">Luar Biasa <span class="ml-2"><i class="fas fa-star text-amber-500"></i><i class="fas fa-star text-amber-500"></i><i class="fas fa-star text-amber-500"></i><i class="fas fa-star text-amber-500"></i><i class="fas fa-star text-amber-500"></i></span></span>
+                        <span class="inline-flex items-center">Bagus <span class="ml-2"><i class="fas fa-star text-amber-500"></i><i class="fas fa-star text-amber-500"></i><i class="fas fa-star text-amber-500"></i><i class="fas fa-star text-amber-500"></i></span></span>
+                        <span class="inline-flex items-center">Cukup <span class="ml-2"><i class="fas fa-star text-amber-500"></i><i class="fas fa-star text-amber-500"></i><i class="fas fa-star text-amber-500"></i></span></span>
+                        <span class="inline-flex items-center">Kurang <span class="ml-2"><i class="fas fa-star text-amber-500"></i><i class="fas fa-star text-amber-500"></i></span></span>
+                        <span class="inline-flex items-center">Buruk <span class="ml-2"><i class="fas fa-star text-amber-500"></i></span></span>
+                    </div>
+                    <!-- Skor Rata-rata -->
+                    <div class="mt-4 text-center">
+                        <p class="text-sm text-slate-500">Rata-rata</p>
+                        <p id="average-score-display" class="font-bold text-xl text-slate-700">0.0 <span class="text-base font-normal text-slate-500">/ 5</span></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Detail Rating -->
+            <div class="detail-rating grid grid-cols-1 sm:grid-cols-3 gap-6 pt-4">
+                <div class="text-center">
+                    <label for="cleanliness" class="block text-sm font-medium text-slate-700 mb-1">Kebersihan</label>
+                    <div class="star-rating flex justify-center flex-row-reverse">
+                        <input type="radio" id="cleanliness-5" name="cleanliness" value="5" required/><label for="cleanliness-5" title="Luar Biasa"><i class="fas fa-star"></i></label>
+                        <input type="radio" id="cleanliness-4" name="cleanliness" value="4" /><label for="cleanliness-4" title="Bagus"><i class="fas fa-star"></i></label>
+                        <input type="radio" id="cleanliness-3" name="cleanliness" value="3" /><label for="cleanliness-3" title="Cukup"><i class="fas fa-star"></i></label>
+                        <input type="radio" id="cleanliness-2" name="cleanliness" value="2" /><label for="cleanliness-2" title="Kurang"><i class="fas fa-star"></i></label>
+                        <input type="radio" id="cleanliness-1" name="cleanliness" value="1" /><label for="cleanliness-1" title="Buruk"><i class="fas fa-star"></i></label>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <label for="service" class="block text-sm font-medium text-slate-700 mb-1">Pelayanan</label>
+                     <div class="star-rating flex justify-center flex-row-reverse">
+                        <input type="radio" id="service-5" name="service" value="5" required/><label for="service-5" title="Luar Biasa"><i class="fas fa-star"></i></label>
+                        <input type="radio" id="service-4" name="service" value="4" /><label for="service-4" title="Bagus"><i class="fas fa-star"></i></label>
+                        <input type="radio" id="service-3" name="service" value="3" /><label for="service-3" title="Cukup"><i class="fas fa-star"></i></label>
+                        <input type="radio" id="service-2" name="service" value="2" /><label for="service-2" title="Kurang"><i class="fas fa-star"></i></label>
+                        <input type="radio" id="service-1" name="service" value="1" /><label for="service-1" title="Buruk"><i class="fas fa-star"></i></label>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <label for="facilities" class="block text-sm font-medium text-slate-700 mb-1">Fasilitas</label>
+                    <div class="star-rating flex justify-center flex-row-reverse">
+                        <input type="radio" id="facilities-5" name="facilities" value="5" required/><label for="facilities-5" title="Luar Biasa"><i class="fas fa-star"></i></label>
+                        <input type="radio" id="facilities-4" name="facilities" value="4" /><label for="facilities-4" title="Bagus"><i class="fas fa-star"></i></label>
+                        <input type="radio" id="facilities-3" name="facilities" value="3" /><label for="facilities-3" title="Cukup"><i class="fas fa-star"></i></label>
+                        <input type="radio" id="facilities-2" name="facilities" value="2" /><label for="facilities-2" title="Kurang"><i class="fas fa-star"></i></label>
+                        <input type="radio" id="facilities-1" name="facilities" value="1" /><label for="facilities-1" title="Buruk"><i class="fas fa-star"></i></label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Komentar -->
+            <div>
+                <label for="comment" class="block text-sm font-medium text-slate-700">Ulasan Anda</label>
+                <textarea id="comment" name="comment" rows="4" class="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" placeholder="Ceritakan pengalaman Anda lebih detail..."></textarea>
+            </div>
+
+            <!-- BARU: Upload Foto/Video -->
+            <div>
+                <label class="block text-sm font-medium text-slate-700">Tambah Foto atau Video (Opsional)</label>
+                <label for="media-upload" class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-slate-300 border-dashed rounded-md cursor-pointer hover:border-blue-400 bg-slate-50 hover:bg-slate-100 transition">
+                    <div class="space-y-1 text-center">
+                        <i class="mx-auto h-12 w-12 text-slate-400 fa-solid fa-camera-retro"></i>
+                        <div class="flex text-sm text-slate-600">
+                            <p class="pl-1">Klik untuk memilih file atau langsung gunakan kamera</p>
+                        </div>
+                        <p class="text-xs text-slate-500">Mendukung format PNG, JPG, MP4, MOV</p>
+                    </div>
+                </label>
+                <input id="media-upload" name="media_upload" type="file" class="sr-only" multiple accept="image/*,video/*" capture="environment">
+                <div id="media-preview-container" class="mt-4 grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-4"></div>
+            </div>
+
+            <!-- BARU: Bagian Promo (awalnya tersembunyi) -->
+            <div id="promo-section" class="hidden pt-4 border-t border-dashed">
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 items-center">
+                    <div class="sm:col-span-1"><img id="promo-image" src="" alt="Promo Image" class="rounded-lg shadow-md w-full"></div>
+                    <div class="sm:col-span-2">
+                        <h3 id="promo-title" class="text-lg font-bold text-slate-800"></h3>
+                        <p id="promo-description" class="text-sm text-slate-600 mt-2"></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- BARU: Input Email -->
+            <div class="pt-4 border-t border-dashed">
+                <label for="guest-email" class="block text-sm font-medium text-slate-700">Alamat Email <span class="text-red-500">*</span></label>
+                <input type="email" id="guest-email" name="guest_email" required class="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" placeholder="email@anda.com">
+                <p class="mt-1 text-xs text-slate-500">Kami akan mengirimkan salinan ulasan Anda & voucher ke email ini.</p>
+            </div>
+
+            <!-- Tombol Submit -->
+            <div class="pt-4">
+                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition-all duration-300 shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-blue-500/40">
+                    Kirim Ulasan
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- BARU: Script untuk handle upload dan kompresi gambar -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const mediaInput = document.getElementById('media-upload');
+            const previewContainer = document.getElementById('media-preview-container');
+            const form = document.getElementById('guest-review-form');
+            const hotelSelect = document.getElementById('hotel-name');
+            let mediaFiles = [];
+            const API_BASE_URL = 'http://localhost:3000';
+
+            // BARU: Logika untuk kalkulasi rating
+            const detailRatingNames = ['cleanliness', 'service', 'facilities'];
+            const overallRatingDisplay = document.getElementById('overall-rating-display');
+            const overallRatingValueInput = document.getElementById('overall-rating-value');
+            const overallStars = overallRatingDisplay.querySelectorAll('label');
+            const averageScoreDisplay = document.getElementById('average-score-display');
+
+            function updateOverallRating() {
+                let total = 0;
+                let count = 0;
+
+                detailRatingNames.forEach(name => {
+                    const checkedRadio = form.querySelector(`input[name="${name}"]:checked`);
+                    if (checkedRadio) {
+                        total += parseInt(checkedRadio.value, 10);
+                        count++;
+                    }
+                });
+
+                const average = count > 0 ? total / count : 0;
+                const roundedAverage = Math.round(average);
+                
+                overallRatingValueInput.value = roundedAverage;
+
+                // Update tampilan bintang
+                overallStars.forEach((star, index) => {
+                    if (index < roundedAverage) {
+                        star.style.color = '#f59e0b'; // amber-500
+                    } else {
+                        star.style.color = '#d1d5db'; // gray-300
+                    }
+                });
+
+                // BARU: Update tampilan skor rata-rata numerik
+                if (averageScoreDisplay) {
+                    averageScoreDisplay.innerHTML = `${average.toFixed(1)} <span class="text-sm font-normal text-slate-500">/ 5</span>`;
+                }
+            }
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const hotelIdFromUrl = urlParams.get('hotel_id');
+
+            async function loadHotelsAndInitialize() {
+                try {
+                    const response = await fetch(`${API_BASE_URL}/api/reviews/hotels`);
+                    if (!response.ok) throw new Error('Gagal mengambil data hotel');
+                    
+                    const hotels = await response.json();
+
+                    hotelSelect.innerHTML = '<option value="">-- Pilih Hotel --</option>'; 
+                    hotels.forEach(hotel => {
+                        const option = document.createElement('option');
+                        option.value = hotel.id;
+                        option.textContent = hotel.name;
+                        hotelSelect.appendChild(option);
+                    });
+
+                    if (hotelIdFromUrl) {
+                        const hotelExists = hotels.some(h => h.id == hotelIdFromUrl);
+                        if (hotelExists) {
+                            // Setel dropdown ke hotel yang benar dan nonaktifkan
+                            hotelSelect.value = hotelIdFromUrl;
+                            hotelSelect.disabled = true;
+                            // Tambahkan style agar terlihat nonaktif
+                            hotelSelect.classList.add('bg-slate-100', 'cursor-not-allowed');
+
+                            loadFormSettings(hotelIdFromUrl);
+                        } else {
+                            console.error(`Hotel with ID ${hotelIdFromUrl} not found.`);
+                            // Keep dropdown visible for manual selection
+                        }
+                    }
+                } catch (error) {
+                    console.error(error);
+                    hotelSelect.innerHTML = '<option value="">Gagal memuat hotel</option>';
+                }
+            }
+
+            async function loadFormSettings(hotelId) {
+                if (!hotelId) return;
+                try {
+                    const settings = await fetchAPI(`/api/reviews/settings/${hotelId}`);
+                    
+                    const logoEl = document.getElementById('review-form-logo');
+                    logoEl.src = settings.logo_url ? `${API_BASE_URL}${settings.logo_url}` : '';
+                    if (settings.logo_url) {
+                       logoEl.classList.remove('hidden');
+                    } else {
+                       logoEl.classList.add('hidden');
+                    }
+                    
+                    document.getElementById('review-form-header-text').textContent = settings.header_text || 'Bagaimana Pengalaman Anda?';
+                    document.getElementById('review-form-subheader-text').textContent = settings.subheader_text || '';
+
+                    const promoSection = document.getElementById('promo-section');
+                    if (settings.promo_enabled && settings.promo_image_url) {
+                        document.getElementById('promo-image').src = `${API_BASE_URL}${settings.promo_image_url}`;
+                        document.getElementById('promo-title').textContent = settings.promo_title || '';
+                        document.getElementById('promo-description').textContent = settings.promo_description || '';
+                        promoSection.classList.remove('hidden');
+                    } else {
+                        promoSection.classList.add('hidden');
+                    }
+                } catch (error) {
+                    console.error('Gagal memuat pengaturan form:', error);
+                    document.getElementById('review-form-header-text').textContent = 'Gagal Memuat Form';
+                    document.getElementById('review-form-subheader-text').textContent = 'Tidak dapat mengambil pengaturan untuk hotel ini.';
+                }
+            }
+
+            if (!hotelIdFromUrl) {
+                hotelSelect.addEventListener('change', (e) => loadFormSettings(e.target.value));
+            }
+
+            // BARU: Tambahkan event listener ke semua radio button rating detail
+            detailRatingNames.forEach(name => {
+                form.querySelectorAll(`input[name="${name}"]`).forEach(radio => radio.addEventListener('change', updateOverallRating));
+            });
+
+            mediaInput.addEventListener('change', function (event) {
+                handleFiles(event.target.files);
+            });
+
+            async function handleFiles(files) {
+                if (mediaFiles.length + files.length > 5) {
+                    alert('Anda hanya dapat mengunggah maksimal 5 file.');
+                    mediaInput.value = '';
+                    return;
+                }
+
+                for (const file of files) {
+                    if (mediaFiles.length >= 5) break;
+
+                    const fileId = Date.now() + '-' + Math.random();
+                    if (file.type.startsWith('image/')) {
+                        try {
+                            const compressedBlob = await compressImage(file);
+                            addPreview(URL.createObjectURL(compressedBlob), file.name, fileId, 'image');
+                            mediaFiles.push({ id: fileId, file: new File([compressedBlob], file.name, { type: 'image/jpeg' }), name: file.name });
+                        } catch (error) {
+                            console.error('Gagal mengompres gambar:', error);
+                            addPreview(URL.createObjectURL(file), file.name, fileId, 'image');
+                            mediaFiles.push({ id: fileId, file: file, name: file.name });
+                        }
+                    } else if (file.type.startsWith('video/')) {
+                        addPreview(URL.createObjectURL(file), file.name, fileId, 'video');
+                        mediaFiles.push({ id: fileId, file: file, name: file.name });
+                    }
+                }
+            }
+
+            function addPreview(url, name, fileId, type) {
+                const wrapper = document.createElement('div');
+                wrapper.className = 'relative group';
+                wrapper.dataset.fileId = fileId;
+
+                let mediaElement;
+                if (type === 'image') {
+                    mediaElement = document.createElement('img');
+                    mediaElement.src = url;
+                    mediaElement.className = 'h-24 w-full object-cover rounded-md shadow-sm';
+                } else {
+                    mediaElement = document.createElement('video');
+                    mediaElement.src = url;
+                    mediaElement.className = 'h-24 w-full object-cover rounded-md shadow-sm';
+                    mediaElement.muted = true;
+                    mediaElement.playsInline = true;
+                }
+
+                const removeBtn = document.createElement('button');
+                removeBtn.type = 'button';
+                removeBtn.innerHTML = '<i class="fas fa-times"></i>';
+                removeBtn.className = 'absolute top-1 right-1 bg-black/50 text-white w-5 h-5 rounded-full flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity';
+                removeBtn.onclick = function () {
+                    mediaFiles = mediaFiles.filter(f => f.id !== fileId);
+                    wrapper.remove();
+                    URL.revokeObjectURL(url);
+                };
+
+                wrapper.appendChild(mediaElement);
+                wrapper.appendChild(removeBtn);
+                previewContainer.appendChild(wrapper);
+            }
+
+            function compressImage(file, quality = 0.7, maxWidth = 1280) {
+                return new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.readAsDataURL(file);
+                    reader.onload = event => {
+                        const img = new Image();
+                        img.src = event.target.result;
+                        img.onload = () => {
+                            const canvas = document.createElement('canvas');
+                            const scale = Math.min(1, maxWidth / img.width);
+                            canvas.width = img.width * scale;
+                            canvas.height = img.height * scale;
+                            const ctx = canvas.getContext('2d');
+                            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                            canvas.toBlob(blob => {
+                                resolve(blob);
+                            }, 'image/jpeg', quality);
+                        };
+                        img.onerror = error => reject(error);
+                    };
+                    reader.onerror = error => reject(error);
+                });
+            }
+
+            form.addEventListener('submit', async function (event) {
+                event.preventDefault();
+
+                const submitButton = form.querySelector('button[type="submit"]');
+                const originalButtonText = submitButton.innerHTML;
+
+                // Validasi rating detail, bukan rating keseluruhan
+                const cleanlinessRating = form.querySelector('input[name="cleanliness"]:checked');
+                const serviceRating = form.querySelector('input[name="service"]:checked');
+                const facilitiesRating = form.querySelector('input[name="facilities"]:checked');
+
+                if (!cleanlinessRating || !serviceRating || !facilitiesRating) {
+                    alert('Mohon berikan rating untuk Kebersihan, Pelayanan, dan Fasilitas.');
+                    return;
+                }
+
+                submitButton.disabled = true;
+                submitButton.innerHTML = `<i class="fas fa-spinner fa-spin mr-2"></i> Mengirim...`;
+
+                const formData = new FormData(form); 
+
+                if (hotelSelect.disabled) {
+                    formData.set('hotel_id', hotelSelect.value);
+                }
+                // More robust way to get all form data
+
+                // Remove the original file input from form data if it exists
+                formData.delete('media_upload');
+
+                // Append files from our managed array
+                mediaFiles.forEach((mediaFile) => {
+                    formData.append('media[]', mediaFile.file, mediaFile.name);
+                });
+
+                try {
+                    const response = await fetch(`${API_BASE_URL}/api/reviews/submit`, {
+                        method: 'POST',
+                        body: formData,
+                    });
+
+                    if (!response.ok) {
+                        const errorResult = await response.json().catch(() => ({ message: 'Gagal mengirim ulasan.' }));
+                        throw new Error(errorResult.message);
+                    }
+
+                    const result = await response.json();
+                    const userEmail = formData.get('guest_email'); // Ambil email dari form data
+
+                    const container = document.querySelector('.w-full.max-w-2xl');
+                    container.innerHTML = ''; // Kosongkan kontainer
+
+                    const successDiv = document.createElement('div');
+                    successDiv.className = 'text-center';
+
+                    const emailStrong = document.createElement('strong');
+                    emailStrong.className = 'font-medium text-slate-800';
+                    emailStrong.textContent = userEmail; // Gunakan textContent untuk keamanan
+
+                    const successMessage = document.createElement('p');
+                    successMessage.className = 'text-slate-600 mt-4 text-sm';
+                    successMessage.textContent = 'Salinan ulasan dan voucher telah kami kirimkan ke email Anda di ';
+                    successMessage.appendChild(emailStrong);
+                    successMessage.append('. Silakan periksa kotak masuk Anda.');
+
+                    successDiv.innerHTML = `<i class="fas fa-check-circle text-green-500 text-5xl mb-4"></i><h1 class="text-2xl font-bold text-slate-800">Terima Kasih!</h1><p class="text-slate-500 mt-2">Ulasan Anda telah berhasil dikirim. Kami sangat menghargai masukan Anda.</p>`;
+                    successDiv.appendChild(successMessage);
+                    container.appendChild(successDiv);
+
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('Terjadi kesalahan saat mengirim ulasan: ' + error.message);
+                    submitButton.disabled = false;
+                    submitButton.innerHTML = originalButtonText;
+                }
+            });
+
+            // Inisialisasi rating saat halaman dimuat
+            updateOverallRating();
+            loadHotelsAndInitialize();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,40 @@
+.trial-balance-card {
+    background-color: #fff;
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    overflow: hidden;
+    transition: box-shadow 0.3s ease-in-out;
+}
+
+.trial-balance-card:hover {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.trial-balance-card a {
+    display: block;
+    text-decoration: none;
+}
+
+.trial-balance-card img {
+    width: 100%;
+    height: 12rem;
+    object-fit: cover;
+}
+
+.trial-balance-card .card-content {
+    padding: 1rem;
+}
+
+.trial-balance-card .card-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.trial-balance-card .card-description {
+    font-size: 0.875rem;
+    color: #6b7280;
+}
