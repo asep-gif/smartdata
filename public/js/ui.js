@@ -29,7 +29,7 @@ function showPage(pageId) {
         'agenda-audit': 'Agenda Audit', // BARU
         'audit-calendar': 'Kalender Audit' // BARU
     };
-    document.getElementById('header-title').textContent = pageTitles[pageId] || 'Smartdata';
+    document.getElementById('header-title').textContent = pageTitles[pageId] || 'Kagum Smartdata';
 
     document.querySelectorAll('.page-content-wrapper').forEach(el => {
         el.classList.add('hidden');
