@@ -1,18 +1,17 @@
 const express = require('express');
 const router = express.Router();
 const pool = require('../config/db'); // PERBAIKAN: Path ke file koneksi database
-const { authenticateToken } = require('../middleware/auth'); // PERBAIKAN: Path dan nama file middleware
+const { authenticateToken, authorize } = require('../middleware/auth');
+const { getHotelsForReview, submitGuestReview, getReviewSettings, updateReviewSettings, getVouchers, useVoucher, replyToGuestReview } = require('../controllers/reviewController');
 
-// --- KODE BARU: Diambil dari reviewRoutes.js untuk sentralisasi ---
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
-const { getHotelsForReview, submitGuestReview, getReviewSettings, updateReviewSettings } = require('../controllers/reviewController');
 
 // Konfigurasi Multer untuk penyimpanan file
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        const uploadPath = path.join(__dirname, '../../public/uploads');
+        const uploadPath = path.join(__dirname, '../../public/uploads/reviews');
         fs.mkdirSync(uploadPath, { recursive: true });
         cb(null, uploadPath);
     },
@@ -111,6 +110,8 @@ router.get('/', authenticateToken, async (req, res) => {
             SELECT 
                 r.*,
                 h.name as hotel_name,
+                s.promo_title,
+                s.promo_description,
                 (
                     SELECT COALESCE(json_agg(json_build_object('file_path', m.file_path)), '[]'::json)
                     FROM review_media m
@@ -120,6 +121,8 @@ router.get('/', authenticateToken, async (req, res) => {
                 guest_reviews r
             LEFT JOIN 
                 hotels h ON r.hotel_id = h.id
+            LEFT JOIN
+                guest_review_settings s ON r.hotel_id = s.hotel_id
             ${whereString}
             ORDER BY 
                 r.created_at DESC
@@ -146,49 +149,10 @@ router.get('/', authenticateToken, async (req, res) => {
  * @desc    Submit a reply to a guest review
  * @access  Private
  */
-router.post('/:id/reply', authenticateToken, async (req, res) => {
-    const { id } = req.params;
-    const { reply_text } = req.body;
-
-    if (!reply_text || reply_text.trim() === '') {
-        return res.status(400).json({ msg: 'Teks balasan tidak boleh kosong.' });
-    }
-
-    try {
-        const updateQuery = `
-            UPDATE guest_reviews
-            SET reply_text = $1, replied_at = NOW()
-            WHERE id = $2
-            RETURNING *;
-        `;
-
-        const updatedReviewResult = await pool.query(updateQuery, [reply_text, id]);
-
-        if (updatedReviewResult.rows.length === 0) {
-            return res.status(404).json({ msg: 'Ulasan tidak ditemukan.' });
-        }
-
-        // Mengambil data yang diperbarui dengan join untuk dikirim kembali ke frontend
-        // Ini memastikan frontend bisa me-render ulang kartu dengan data lengkap (termasuk nama hotel dan media)
-        const finalReview = await pool.query(`
-            SELECT r.*, h.name as hotel_name, (SELECT COALESCE(json_agg(json_build_object('file_path', m.file_path)), '[]'::json) FROM review_media m WHERE m.review_id = r.id) as media
-            FROM guest_reviews r LEFT JOIN hotels h ON r.hotel_id = h.id
-            WHERE r.id = $1
-        `, [id]);
-
-        res.json({ review: finalReview.rows[0] });
-
-    } catch (err) {
-        console.error('Error submitting review reply:', err.message);
-        res.status(500).send('Server Error');
-    }
-});
+router.post('/:id/reply', authenticateToken, authorize(['submenu:guest_review_replies']), replyToGuestReview);
 
 // BARU: Rute untuk menyimpan pengaturan form review (perlu token)
-router.post('/settings', authenticateToken, upload.fields([
-    { name: 'logo', maxCount: 1 },
-    { name: 'promo_image', maxCount: 1 }
-]), updateReviewSettings);
+router.post('/settings', authenticateToken, updateReviewSettings);
 
 /**
  * @route   PUT /api/reviews/:id/approve
@@ -358,5 +322,19 @@ router.get('/stats', authenticateToken, async (req, res) => {
         res.status(500).json({ message: 'Gagal mengambil statistik ulasan.' });
     }
 });
+
+/**
+ * @route   GET /api/reviews/vouchers
+ * @desc    Get all guest reviews with voucher data (for verification dashboard)
+ * @access  Private
+ */
+router.get('/vouchers', authenticateToken, getVouchers);
+
+/**
+ * @route   POST /api/reviews/vouchers/use
+ * @desc    Mark a guest review voucher as used
+ * @access  Private
+ */
+router.post('/vouchers/use', authenticateToken, useVoucher);
 
 module.exports = router;

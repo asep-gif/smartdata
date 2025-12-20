@@ -116,6 +116,38 @@ const getDsrData = (tableName) => async (req, res, next) => {
 exports.getDsrBudget = getDsrData('budget_dsr');
 exports.getDsrActual = getDsrData('actual_dsr');
 
+exports.getDsrActualRange = async (req, res, next) => {
+    const { hotel_id, startDate, endDate } = req.query;
+    if (!hotel_id || !startDate || !endDate) {
+        return res.status(400).json({ message: 'Hotel ID and date range are required.' });
+    }
+    try {
+        const query = `
+            SELECT
+                SUM(room_available) as room_available,
+                SUM(room_sold) as room_sold,
+                SUM(room_revenue) as room_revenue
+            FROM actual_dsr
+            WHERE hotel_id = $1 AND date BETWEEN $2 AND $3;
+        `;
+        const { rows } = await pool.query(query, [hotel_id, startDate, endDate]);
+        
+        const aggregatedData = rows[0] || { room_available: 0, room_sold: 0, room_revenue: 0 };
+
+        const hotelInfo = await pool.query('SELECT number_of_rooms FROM hotels WHERE id = $1', [hotel_id]);
+        aggregatedData.number_of_rooms = hotelInfo.rows.length > 0 ? (hotelInfo.rows[0].number_of_rooms || 0) : 0;
+
+        // Convert potential BigInts from SUM to numbers
+        for (const key in aggregatedData) {
+            aggregatedData[key] = aggregatedData[key] !== null ? Number(aggregatedData[key]) : 0;
+        }
+
+        res.json(aggregatedData);
+    } catch (error) {
+        next(error);
+    }
+};
+
 exports.getOpeningBalances = async (req, res, next) => {
     try {
         const query = `SELECT h.id as hotel_id, h.name as hotel_name, ob.effective_date, ob.balance_value FROM hotels h LEFT JOIN dsr_opening_balances ob ON h.id = ob.hotel_id ORDER BY h.name ASC;`;

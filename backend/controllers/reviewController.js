@@ -48,7 +48,7 @@ const submitGuestReview = async (req, res) => {
             INSERT INTO guest_reviews 
                 (hotel_id, guest_name, room_number, guest_email, checkin_date, rating,
                  cleanliness_rating, service_rating, facilities_rating, comment, status)
-            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, 'pending')
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, 'approved')
             RETURNING id, (SELECT name FROM hotels WHERE id = $1) as hotel_name;
         `;
         const reviewValues = [hotel_id, guest_name, room_number, guest_email, checkin_date, rating, cleanliness, service, facilities, comment];
@@ -62,7 +62,7 @@ const submitGuestReview = async (req, res) => {
                 VALUES ($1, $2, $3);
             `;
             for (const file of req.files) {
-                const fileUrl = `/uploads/${file.filename}`;
+                const fileUrl = `/uploads/reviews/${file.filename}`;
                 const mediaType = file.mimetype.split('/')[0];
                 await client.query(mediaQuery, [newReviewId, fileUrl, mediaType]);
             }
@@ -70,8 +70,32 @@ const submitGuestReview = async (req, res) => {
 
         await client.query('COMMIT');
 
+        // --- BARU: Fetch promo settings and generate voucher ---
+        const settingsResult = await client.query(
+            'SELECT promo_title, promo_description FROM guest_review_settings WHERE hotel_id = $1 AND promo_enabled = true',
+            [hotel_id]
+        );
+        const promoDetails = settingsResult.rows[0] || { promo_title: 'Diskon Spesial', promo_description: 'Untuk kunjungan Anda berikutnya.' }; // Default promo
+
+        const hotelInitials = hotelName.match(/\b\w/g)?.join('').toUpperCase() || 'VCR';
+        const dateStr = new Date().toISOString().slice(2, 10).replace(/-/g, ''); // YYMMDD
+        const voucherCode = `${hotelInitials}-${newReviewId}${dateStr}`;
+
+        // BARU: Simpan voucher_code ke dalam tabel guest_reviews
+        await client.query(
+            'UPDATE guest_reviews SET voucher_number = $1 WHERE id = $2',
+            [voucherCode, newReviewId]
+        );
+        // --- AKHIR BARU ---
+
         // Kirim response ke client terlebih dahulu
-        res.status(201).json({ message: 'Ulasan berhasil dikirim!', reviewId: newReviewId });
+        res.status(201).json({
+            message: 'Ulasan berhasil dikirim!',
+            reviewId: newReviewId,
+            hotelName,
+            promoDetails,
+            voucherCode
+        });
 
         // --- Kirim email di latar belakang ---
         try {
@@ -91,10 +115,13 @@ const submitGuestReview = async (req, res) => {
                         <li><strong>Komentar:</strong> ${comment || '<em>Tidak ada komentar</em>'}</li>
                     </ul>
                     <hr>
-                    <p>Sebagai tanda terima kasih, kami telah menyertakan sebuah voucher spesial untuk kunjungan Anda berikutnya. Cukup tunjukkan email ini saat melakukan reservasi kembali.</p>
-                    <div style="border: 2px dashed #ccc; padding: 15px; text-align: center; margin-top: 20px;">
-                        <h3 style="margin: 0; color: #333;">VOUCHER DISKON 15%</h3>
-                        <p style="margin: 5px 0 0 0;">Untuk Kunjungan Berikutnya</p>
+                    <p>Sebagai tanda terima kasih, kami telah menyertakan sebuah voucher spesial untuk kunjungan Anda berikutnya. Cukup tunjukkan email ini atau kode voucher di bawah saat melakukan reservasi kembali.</p>
+                    <div style="border: 2px dashed #ccc; padding: 15px; text-align: center; margin-top: 20px; background-color: #f9f9f9;">
+                        <h3 style="margin: 0; color: #333;">${promoDetails.promo_title}</h3>
+                        <p style="margin: 5px 0 15px 0;">${promoDetails.promo_description}</p>
+                        <div style="background-color: #e0e0e0; padding: 10px; border-radius: 5px; display: inline-block;">
+                            <span style="font-size: 1.2em; font-weight: bold; color: #000; letter-spacing: 2px;">${voucherCode}</span>
+                        </div>
                     </div>
                     <p>Kami berharap dapat menyambut Anda kembali di ${hotelName} dalam waktu dekat!</p>
                     <br>
@@ -107,7 +134,7 @@ const submitGuestReview = async (req, res) => {
                 to: guest_email,
                 subject: subject,
                 html: html,
-                text: `Halo ${guest_name}, terima kasih atas ulasan Anda di ${hotelName}. Kami telah mengirimkan voucher sebagai tanda terima kasih.`
+                text: `Halo ${guest_name}, terima kasih atas ulasan Anda di ${hotelName}. Kode voucher Anda adalah ${voucherCode}.`
             });
         } catch (emailError) {
             // Jika pengiriman email gagal, cukup catat log error tanpa mengganggu response utama
@@ -156,18 +183,23 @@ const getReviewSettings = async (req, res) => {
  * @access  Private (Admin/Manager)
  */
 const updateReviewSettings = async (req, res) => {
-    console.log('--- Update Review Settings ---');
-    console.log('req.body:', req.body);
-    console.log('req.files:', req.files);
-    console.log('-----------------------------');
+    // The frontend now sends JSON, so req.files will be undefined.
+    // We get all data from req.body.
+    const {
+        hotel_id,
+        header_text,
+        subheader_text,
+        promo_enabled,
+        promo_title,
+        promo_description,
+        logo_url,
+        promo_image_url
+    } = req.body;
 
-    // PERBAIKAN: Pastikan req.body ada, jika tidak, gunakan objek kosong.
-    const body = req.body || {};
-    const { hotel_id, header_text, subheader_text, promo_enabled, promo_title, promo_description } = body;
-
-    // Dapatkan path file dari multer
-    const logoUrl = req.files?.logo?.[0] ? `/uploads/reviews/${req.files.logo[0].filename}` : body.existing_logo_url;
-    const promoImageUrl = req.files?.promo_image?.[0] ? `/uploads/reviews/${req.files.promo_image[0].filename}` : body.existing_promo_image_url;
+    // Basic validation
+    if (!hotel_id) {
+        return res.status(400).json({ message: 'Hotel ID is required.' });
+    }
 
     const query = `
         INSERT INTO guest_review_settings (hotel_id, logo_url, header_text, subheader_text, promo_enabled, promo_title, promo_description, promo_image_url)
@@ -185,7 +217,18 @@ const updateReviewSettings = async (req, res) => {
     `;
 
     try {
-        const values = [hotel_id, logoUrl, header_text, subheader_text, promo_enabled === 'true', promo_title, promo_description, promoImageUrl];
+        // Use the URL fields from the body directly. Default to empty string if null/undefined.
+        const values = [
+            hotel_id,
+            logo_url || '',
+            header_text || '',
+            subheader_text || '',
+            promo_enabled === true || promo_enabled === 'true', // Handle boolean and string 'true'
+            promo_title || '',
+            promo_description || '',
+            promo_image_url || ''
+        ];
+        
         const result = await pool.query(query, values);
         res.status(200).json({ message: 'Pengaturan berhasil disimpan!', settings: result.rows[0] });
     } catch (error) {
@@ -352,11 +395,193 @@ const getDashboardStats = async (req, res, next) => {
     }
 };
 
+/**
+ * @desc    Mengambil daftar ulasan yang memiliki voucher untuk verifikasi.
+ * @route   GET /api/reviews/vouchers
+ * @access  Private (e-commerce)
+ */
+const getVouchers = async (req, res, next) => {
+    const { hotel_id, status, search, page = 1, limit = 15 } = req.query;
+
+    try {
+        const offset = (page - 1) * limit;
+        let queryParams = [];
+        let paramIndex = 1;
+
+        let baseQuery = `
+            FROM guest_reviews gr
+            JOIN hotels h ON gr.hotel_id = h.id
+            WHERE gr.voucher_number IS NOT NULL AND gr.voucher_number != '' AND gr.status = 'approved'
+        `;
+
+        // Filters
+        if (hotel_id && hotel_id !== 'all') {
+            baseQuery += ` AND gr.hotel_id = $${paramIndex++}`;
+            queryParams.push(hotel_id);
+        }
+        if (status === 'used') {
+            baseQuery += ` AND gr.voucher_used_at IS NOT NULL`;
+        } else if (status === 'available') {
+            baseQuery += ` AND gr.voucher_used_at IS NULL`;
+        }
+        if (search) {
+            baseQuery += ` AND (gr.guest_name ILIKE $${paramIndex++} OR gr.voucher_number ILIKE $${paramIndex++})`;
+            queryParams.push(`%${search}%`, `%${search}%`);
+        }
+
+        // Count total
+        const totalResult = await pool.query(`SELECT COUNT(*) ${baseQuery}`, queryParams);
+        const totalItems = parseInt(totalResult.rows[0].count, 10);
+
+        // Get paginated data
+        const dataQuery = `
+            SELECT 
+                gr.id,
+                gr.guest_name,
+                h.name as hotel_name,
+                gr.voucher_number,
+                gr.created_at,
+                gr.voucher_used_at,
+                gr.voucher_used_by_guest,
+                gr.voucher_used_room_number,
+                gr.voucher_used_folio_number
+            ${baseQuery}
+            ORDER BY gr.created_at DESC
+            LIMIT $${paramIndex++} OFFSET $${paramIndex++}
+        `;
+        queryParams.push(limit, offset);
+
+        const result = await pool.query(dataQuery, queryParams);
+
+        res.json({
+            data: result.rows,
+            pagination: {
+                totalItems,
+                currentPage: parseInt(page, 10),
+                totalPages: Math.ceil(totalItems / limit),
+                limit: parseInt(limit, 10)
+            }
+        });
+
+    } catch (error) {
+        console.error('Error fetching vouchers:', error);
+        next(error);
+    }
+};
+
+/**
+ * @desc    Memverifikasi dan menandai voucher sebagai telah digunakan.
+ * @route   POST /api/reviews/vouchers/use
+ * @access  Private (e-commerce)
+ */
+const useVoucher = async (req, res, next) => {
+    const { reviewId, use_date, guest_name_used, room_number, folio_number } = req.body;
+
+    if (!reviewId || !use_date || !guest_name_used || !room_number || !folio_number) {
+        return res.status(400).json({ message: 'Semua field verifikasi wajib diisi.' });
+    }
+
+    try {
+        const checkQuery = 'SELECT voucher_used_at FROM guest_reviews WHERE id = $1';
+        const checkResult = await pool.query(checkQuery, [reviewId]);
+
+        if (checkResult.rows.length === 0) { return res.status(404).json({ message: 'Ulasan atau voucher tidak ditemukan.' }); }
+        if (checkResult.rows[0].voucher_used_at !== null) { return res.status(409).json({ message: 'Voucher ini sudah pernah digunakan.' }); }
+
+        const updateQuery = `UPDATE guest_reviews SET voucher_used_at = $1, voucher_used_by_guest = $2, voucher_used_room_number = $3, voucher_used_folio_number = $4, updated_at = NOW() WHERE id = $5 RETURNING *;`;
+        const values = [use_date, guest_name_used, room_number, folio_number, reviewId];
+        const result = await pool.query(updateQuery, values);
+
+        res.status(200).json({ message: 'Voucher berhasil diverifikasi dan digunakan.', data: result.rows[0] });
+    } catch (error) {
+        console.error('Error using voucher:', error);
+        next(error);
+    }
+    useVoucher
+};
+
+/**
+ * @desc    Membalas ulasan tamu dan mengirim email balasan.
+ * @route   POST /api/reviews/reply/:reviewId
+ * @access  Private (Admin/Manager/E-commerce)
+ */
+const replyToGuestReview = async (req, res, next) => {
+    const { reviewId } = req.params;
+    const { replyText, bccEmail } = req.body; // bccEmail bisa opsional
+
+    if (!replyText) {
+        return res.status(400).json({ message: 'Teks balasan wajib diisi.' });
+    }
+
+    try {
+        // 1. Ambil detail ulasan tamu
+        const reviewResult = await pool.query(
+            `SELECT gr.guest_email, gr.guest_name, gr.hotel_id, gr.voucher_number, h.name as hotel_name
+             FROM guest_reviews gr
+             JOIN hotels h ON gr.hotel_id = h.id
+             WHERE gr.id = $1`,
+            [reviewId]
+        );
+
+        if (reviewResult.rows.length === 0) {
+            return res.status(404).json({ message: 'Ulasan tidak ditemukan.' });
+        }
+        const review = reviewResult.rows[0];
+
+        // 2. Update tabel guest_reviews dengan balasan
+        await pool.query(
+            'UPDATE guest_reviews SET reply_text = $1, replied_at = NOW(), updated_at = NOW() WHERE id = $2',
+            [replyText, reviewId]
+        );
+
+        // 3. Kirim email balasan ke tamu
+        const subject = `Balasan untuk Ulasan Anda di ${review.hotel_name}`;
+        const html = `
+            <div style="font-family: Arial, sans-serif; line-height: 1.6;">
+                <h2>Halo ${review.guest_name},</h2>
+                <p>Terima kasih atas ulasan Anda baru-baru ini mengenai pengalaman menginap di <strong>${review.hotel_name}</strong>.</p>
+                <p>Kami telah membaca ulasan Anda dan ingin memberikan balasan sebagai berikut:</p>
+                <div style="border-left: 3px solid #ccc; padding-left: 10px; margin: 20px 0;">
+                    <em>"${replyText}"</em>
+                </div>
+                <p>Kami sangat menghargai masukan Anda dan berharap dapat menyambut Anda kembali.</p>
+                <br>
+                ${review.voucher_number ? `<p>Ingat, Anda masih memiliki voucher spesial: <strong>${review.voucher_number}</strong></p>` : ''}
+                <br>
+                <p>Hormat kami,</p>
+                <p><strong>Manajemen ${review.hotel_name}</strong></p>
+            </div>
+        `;
+        const text = `Halo ${review.guest_name},\n\nTerima Kasih atas ulasan Anda di ${review.hotel_name}. Kami telah membalas ulasan Anda:\n"${replyText}"\n\nHormat kami,\nManajemen ${review.hotel_name}`;
+
+        const emailOptions = {
+            to: review.guest_email,
+            subject: subject,
+            html: html,
+            text: text
+        };
+
+        if (bccEmail) {
+            emailOptions.bcc = bccEmail;
+        }
+
+        await sendEmail(emailOptions);
+
+        res.status(200).json({ message: 'Balasan berhasil dikirim dan email telah terkirim.' });
+
+    } catch (error) {
+        console.error('Error replying to guest review:', error);
+        next(error);
+    }
+};
 
 module.exports = {
     getHotelsForReview,
     submitGuestReview,
     getReviewSettings,
     updateReviewSettings,
-    getDashboardStats
+    getDashboardStats,
+    getVouchers,
+    useVoucher,
+    replyToGuestReview
 };

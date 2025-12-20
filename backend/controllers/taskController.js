@@ -68,7 +68,7 @@ exports.getTaskById = async (req, res, next) => {
                 i.inspection_date
             FROM inspection_tasks t
             JOIN hotels h ON t.hotel_id = h.id
-            JOIN inspections i ON t.inspection_id = i.id
+            LEFT JOIN inspections i ON t.inspection_id = i.id
             JOIN inspection_items ii ON t.item_id = ii.id
             JOIN inspection_types it ON i.inspection_type_id = it.id
             WHERE t.id = $1;

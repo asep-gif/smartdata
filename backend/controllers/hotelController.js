@@ -4,7 +4,7 @@ const pool = require('../config/db');
 exports.getAllHotels = async (req, res) => {
     try {
         const user = req.user;
-        let query = 'SELECT id, name, brand, city, address, created_at FROM hotels';
+        let query = 'SELECT id, name, brand, city, address, number_of_rooms, created_at FROM hotels';
         const queryParams = [];
 
         // Jika pengguna bukan admin, hanya tampilkan hotel yang bisa mereka akses

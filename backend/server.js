@@ -28,6 +28,7 @@ const reviewsAdminRoutes = require('./routes/reviews'); // BARU: Untuk dasbor ad
 const auditAgendaRoutes = require('./routes/auditAgendaRoutes'); // BARU: Untuk Agenda Audit
 const auditChecklistRoutes = require('./routes/auditChecklistRoutes'); // BARU: Untuk Kelola Checklist Audit
 const auditResultRoutes = require('./routes/auditResultRoutes'); // BARU: Untuk Hasil Checklist Audit
+const competitorRoutes = require('./routes/competitorRoutes');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -43,16 +44,13 @@ app.use(express.static(path.join(__dirname, '../public')));
 // Ini akan membuat file seperti thumbnail ebook dapat diakses melalui URL /uploads/...
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// BARU: Daftarkan rute yang menggunakan multipart/form-data SEBELUM express.json()
-// Ini memastikan multer menangani request sebelum body-parser JSON.
-app.use('/api', reviewRoutes); // Mengandung /submit-review dan /reviews/settings (menggunakan multer)
-
-// Middleware body-parser setelah rute file upload
+// Middleware body-parser should be placed before route handlers
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
 // --- GUNAKAN ROUTER ---
 // Rute-rute lain yang menggunakan JSON bisa diletakkan di sini
+app.use('/api', reviewRoutes); // Mengandung /submit-review dan /reviews/settings (menggunakan multer)
 app.use('/api/users', userRoutes);
 app.use('/api/hotels', hotelRoutes);
 app.use('/api/books', bookRoutes);
@@ -70,6 +68,7 @@ app.use('/api/reviews', reviewsAdminRoutes); // BARU: Daftarkan rute admin untuk
 app.use('/api/audit-agendas', auditAgendaRoutes); // BARU: Untuk Agenda Audit
 app.use('/api/audit-checklists', auditChecklistRoutes); // BARU: Untuk Kelola Checklist Audit
 app.use('/api/audit-results', auditResultRoutes); // BARU: Untuk Hasil Checklist Audit
+app.use('/api/competitor', competitorRoutes);
 app.use('/api', authRoutes); // e.g., /api/login
 
 // =================================================================

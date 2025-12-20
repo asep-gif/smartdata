@@ -21,17 +21,21 @@ const authenticateToken = async (req, res, next) => {
         const userQuery = `
             SELECT 
                 u.id, u.username, u.email, u.full_name, r.name as role,
-                COALESCE(
-                    jsonb_agg(DISTINCT p.action) FILTER (WHERE p.action IS NOT NULL), 
-                    '[]'::jsonb
-                ) as permissions
-            FROM users u
-            JOIN roles r ON u.role::text = r.name
-            LEFT JOIN role_permissions rp ON r.id = rp.role_id
-            LEFT JOIN permissions p ON rp.permission_id = p.id
-            WHERE u.id = $1
-            GROUP BY u.id, r.name;
-        `;
+                            COALESCE(
+                                jsonb_agg(DISTINCT p.action) FILTER (WHERE p.action IS NOT NULL), 
+                                '[]'::jsonb
+                            ) as permissions,
+                            COALESCE(
+                                jsonb_agg(DISTINCT uha.hotel_id) FILTER (WHERE uha.hotel_id IS NOT NULL),
+                                '[]'::jsonb
+                            ) as accessible_hotel_ids
+                            FROM users u
+                            JOIN roles r ON u.role::text = r.name
+                            LEFT JOIN role_permissions rp ON r.id = rp.role_id
+                            LEFT JOIN permissions p ON rp.permission_id = p.id
+                            LEFT JOIN user_hotel_access uha ON u.id = uha.user_id
+                            WHERE u.id = $1
+                            GROUP BY u.id, r.name;        `;
         
         const { rows } = await pool.query(userQuery, [decoded.id]);
 
