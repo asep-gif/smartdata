@@ -64,7 +64,7 @@ async function handleLoadActual() {
     clearTable('actual');
 
     try {
-        const actualData = await fetchAPI(`/api/actuals?hotel_id=${hotelId}&year=${year}`);
+        const actualData = await fetchAPI(`/api/financials/actuals?hotel_id=${hotelId}&year=${year}`);
 
         if (Object.keys(actualData).length > 0) {
             populateTable(actualData, 'actual');
@@ -126,7 +126,7 @@ async function handleSaveActual() {
     saveBtn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Menyimpan...';
 
     try {
-        await fetchAPI('/api/actuals', {
+        await fetchAPI('/api/financials/actuals', {
             method: 'POST',
             body: JSON.stringify(payload)
         });

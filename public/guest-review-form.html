@@ -278,9 +278,10 @@
                     const settings = await fetchAPI(`/api/reviews/settings/${hotelId}`);
                     
                     const logoEl = document.getElementById('review-form-logo');
-                    logoEl.src = settings.logo_url ? `${API_BASE_URL}${settings.logo_url}` : '';
-                    if (settings.logo_url) {
-                       logoEl.classList.remove('hidden');
+                    const logoUrl = settings.logo_url;
+                    if (logoUrl) {
+                        logoEl.src = (logoUrl.startsWith('http') || logoUrl.startsWith('/')) ? logoUrl : `${API_BASE_URL}${logoUrl}`;
+                        logoEl.classList.remove('hidden');
                     } else {
                        logoEl.classList.add('hidden');
                     }
@@ -289,8 +290,9 @@
                     document.getElementById('review-form-subheader-text').textContent = settings.subheader_text || '';
 
                     const promoSection = document.getElementById('promo-section');
-                    if (settings.promo_enabled && settings.promo_image_url) {
-                        document.getElementById('promo-image').src = `${API_BASE_URL}${settings.promo_image_url}`;
+                    const promoUrl = settings.promo_image_url;
+                    if (settings.promo_enabled && promoUrl) {
+                        document.getElementById('promo-image').src = (promoUrl.startsWith('http') || promoUrl.startsWith('/')) ? promoUrl : `${API_BASE_URL}${promoUrl}`;
                         document.getElementById('promo-title').textContent = settings.promo_title || '';
                         document.getElementById('promo-description').textContent = settings.promo_description || '';
                         promoSection.classList.remove('hidden');
@@ -448,27 +450,34 @@
                     }
 
                     const result = await response.json();
-                    const userEmail = formData.get('guest_email'); // Ambil email dari form data
+                    const userEmail = formData.get('guest_email');
 
                     const container = document.querySelector('.w-full.max-w-2xl');
-                    container.innerHTML = ''; // Kosongkan kontainer
+                    
+                    let voucherHtml = '';
+                    if (result.promoDetails && result.voucherCode) {
+                        voucherHtml = `
+                            <div class="mt-6 border-t pt-6">
+                                <h2 class="text-xl font-bold text-slate-800">${result.promoDetails.promo_title}</h2>
+                                <p class="text-slate-600 mt-2">${result.promoDetails.promo_description}</p>
 
-                    const successDiv = document.createElement('div');
-                    successDiv.className = 'text-center';
+                                <div class="my-4 p-4 border-2 border-dashed border-blue-400 bg-blue-50 rounded-lg">
+                                    <p class="text-sm text-slate-600">Kode Voucher Anda:</p>
+                                    <p class="text-2xl font-bold text-blue-600 tracking-wider">${result.voucherCode}</p>
+                                </div>
+                            </div>
+                        `;
+                    }
 
-                    const emailStrong = document.createElement('strong');
-                    emailStrong.className = 'font-medium text-slate-800';
-                    emailStrong.textContent = userEmail; // Gunakan textContent untuk keamanan
-
-                    const successMessage = document.createElement('p');
-                    successMessage.className = 'text-slate-600 mt-4 text-sm';
-                    successMessage.textContent = 'Salinan ulasan dan voucher telah kami kirimkan ke email Anda di ';
-                    successMessage.appendChild(emailStrong);
-                    successMessage.append('. Silakan periksa kotak masuk Anda.');
-
-                    successDiv.innerHTML = `<i class="fas fa-check-circle text-green-500 text-5xl mb-4"></i><h1 class="text-2xl font-bold text-slate-800">Terima Kasih!</h1><p class="text-slate-500 mt-2">Ulasan Anda telah berhasil dikirim. Kami sangat menghargai masukan Anda.</p>`;
-                    successDiv.appendChild(successMessage);
-                    container.appendChild(successDiv);
+                    container.innerHTML = `
+                        <div class="text-center">
+                            <i class="fas fa-check-circle text-green-500 text-5xl mb-4"></i>
+                            <h1 class="text-2xl font-bold text-slate-800">Terima Kasih!</h1>
+                            <p class="text-slate-500 mt-2">Ulasan Anda telah berhasil dikirim. Kami sangat menghargai masukan Anda.</p>
+                            ${voucherHtml}
+                            <p class="text-slate-500 mt-4 text-sm">Salinan ulasan dan voucher telah kami kirimkan ke email Anda di <strong>${userEmail}</strong>. Silakan periksa kotak masuk Anda.</p>
+                        </div>
+                    `;
 
                 } catch (error) {
                     console.error('Error:', error);

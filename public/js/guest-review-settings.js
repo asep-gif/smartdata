@@ -51,14 +51,15 @@ function initGuestReviewSettingsPage() {
             document.getElementById('review-settings-header').value = settings.header_text || '';
             document.getElementById('review-settings-subheader').value = settings.subheader_text || '';
             
-            logoPreview.src = settings.logo_url ? `${API_BASE_URL}${settings.logo_url}` : 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjE1MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTUwIiBoZWlnaHQ9IjE1MCIgZmlsbD0iI2U1ZTdlYiIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNiIgZmlsbD0iIzljYTNhZiIgZG9taW5hbnQtYmFzZWxpbmU9Im1pZGRsZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+MTUweDE1MDwvdGV4dD48L3N2Zz4=';
-            document.getElementById('review-settings-existing-logo-url').value = settings.logo_url || '';
-
+            logoInput.value = settings.logo_url || '';
+            logoPreview.src = settings.logo_url ? (settings.logo_url.startsWith('http') ? settings.logo_url : `${API_BASE_URL}${settings.logo_url}`) : 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjE1MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTUwIiBoZWlnaHQ9IjE1MCIgZmlsbD0iI2U1ZTdlYiIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNiIgZmlsbD0iIzljYTNhZiIgZG9taW5hbnQtYmFzZWxpbmU9Im1pZGRsZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+MTUweDE1MDwvdGV4dD48L3N2Zz4=';
+            
             promoEnabledCheckbox.checked = settings.promo_enabled || false;
             document.getElementById('review-settings-promo-title').value = settings.promo_title || '';
             document.getElementById('review-settings-promo-desc').value = settings.promo_description || '';
-            promoPreview.src = settings.promo_image_url ? `${API_BASE_URL}${settings.promo_image_url}` : 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2U1ZTdlYiIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNiIgZmlsbD0iIzljYTNhZiIgZG9taW5hbnQtYmFzZWxpbmU9Im1pZGRsZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+MzAweDIwMDwvdGV4dD48L3N2Zz4=';
-            document.getElementById('review-settings-existing-promo-image-url').value = settings.promo_image_url || '';
+
+            promoInput.value = settings.promo_image_url || '';
+            promoPreview.src = settings.promo_image_url ? (settings.promo_image_url.startsWith('http') ? settings.promo_image_url : `${API_BASE_URL}${settings.promo_image_url}`) : 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2U1ZTdlYiIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNiIgZmlsbD0iIzljYTNhZiIgZG9taW5hbnQtYmFzZWxpbmU9Im1pZGRsZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+MzAweDIwMDwvdGV4dD48L3N2Zz4=';
 
             togglePromoFields();
 
@@ -78,14 +79,24 @@ function initGuestReviewSettingsPage() {
 
         const formData = new FormData(settingsForm);
 
+        // Create a plain object from FormData
+        const settingsData = Object.fromEntries(formData.entries());
+        
+        // Ensure promo_enabled is sent correctly (it's only present if checked)
+        settingsData.promo_enabled = promoEnabledCheckbox.checked;
+
+
         try {
             await fetchAPI('/api/reviews/settings', {
                 method: 'POST',
-                body: formData,
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(settingsData),
             });
 
             showToast('Pengaturan berhasil disimpan!', 'success');
-            loadSettingsForHotel(formData.get('hotel_id'));
+            loadSettingsForHotel(settingsData.hotel_id);
 
         } catch (error) {
             showToast(error.message || 'Gagal menyimpan pengaturan.', 'error');
@@ -103,11 +114,14 @@ function initGuestReviewSettingsPage() {
         }
     }
 
-    function setupImagePreview(input, preview) {
-        input.addEventListener('change', () => {
-            const file = input.files[0];
-            if (file) {
-                preview.src = URL.createObjectURL(file);
+    function setupImageUrlPreview(input, preview) {
+        input.addEventListener('input', () => {
+            const url = input.value.trim();
+            if (url) {
+                preview.src = url;
+            } else {
+                // You can set a placeholder image if the URL is cleared
+                preview.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjE1MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTUwIiBoZWlnaHQ9IjE1MCIgZmlsbD0iI2U1ZTdlYiIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNiIgZmlsbD0iIzljYTNhZiIgZG9taW5hbnQtYmFzZWxpbmU9Im1pZGRsZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+MTUweDE1MDwvdGV4dD48L3N2Zz4=';
             }
         });
     }
@@ -123,8 +137,8 @@ function initGuestReviewSettingsPage() {
     hotelSelect.addEventListener('change', () => loadSettingsForHotel(hotelSelect.value));
     promoEnabledCheckbox.addEventListener('change', togglePromoFields);
     settingsForm.addEventListener('submit', handleSaveSettings);
-    setupImagePreview(logoInput, logoPreview);
-    setupImagePreview(promoInput, promoPreview);
+    setupImageUrlPreview(logoInput, logoPreview);
+    setupImageUrlPreview(promoInput, promoPreview);
     copyLinkBtn.addEventListener('click', copyLinkToClipboard); // BARU
 
     // Initial call

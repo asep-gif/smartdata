@@ -101,6 +101,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     if (document.getElementById('page-input-room-production')) initRoomProductionPage();
     if (document.getElementById('page-input-ar-aging')) initArAgingPage();
+    if (document.getElementById('page-input-hotel-competitor')) initHotelCompetitorPage();
 
     // Inisialisasi halaman slides
     if (document.getElementById('page-slides')) initSlidesPage();

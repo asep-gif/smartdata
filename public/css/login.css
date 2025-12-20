@@ -1,6 +1,37 @@
-/* Menambahkan style umum untuk input form */
-.form-input {
-    @apply shadow-sm appearance-none border border-slate-300 rounded-lg w-full py-3 px-4 text-slate-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition;
+/* Menggunakan Tailwind base styles jika diperlukan */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Pastikan body tidak menampilkan scrollbar dari animasi */
+body {
+    overflow: hidden;
 }
 
-/* Style tambahan bisa ditambahkan di sini jika diperlukan */
+/* Custom styles untuk form input agar konsisten */
+.form-input {
+    @apply shadow-sm appearance-none border border-slate-300 rounded-lg w-full py-2 px-3 text-slate-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition;
+}
+
+.form-checkbox {
+    @apply rounded border-slate-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-offset-0 focus:ring-blue-200 focus:ring-opacity-50;
+}
+
+/* Animasi untuk background zoom-out */
+@keyframes zoomOut {
+  from {
+    transform: scale(1.25);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+body::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: url('https://golden-flower.co.id/wp-content/uploads/2020/01/facade.jpg') no-repeat center center/cover;
+  animation: zoomOut 20s ease-in-out infinite alternate;
+  z-index: -1; /* Pastikan berada di belakang overlay */
+}

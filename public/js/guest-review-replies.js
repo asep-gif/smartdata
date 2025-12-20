@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const fetchAndRenderReviews = async (pageNumber = 1) => {
         reviewListContainer.innerHTML = '';
-        const loadingRow = `<tr><td colspan="7" class="text-center p-8"><div class="flex justify-center items-center gap-3"><i class="fa-solid fa-circle-notch fa-spin text-2xl text-blue-500"></i><span>Memuat ulasan...</span></div></td></tr>`;
+        const loadingRow = `<tr><td colspan="9" class="text-center p-8"><div class="flex justify-center items-center gap-3"><i class="fa-solid fa-circle-notch fa-spin text-2xl text-blue-500"></i><span>Memuat ulasan...</span></div></td></tr>`;
         reviewListContainer.innerHTML = loadingRow;
 
         const params = new URLSearchParams({
@@ -71,7 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     reviewListContainer.appendChild(reviewRow); // PERBAIKAN: Gunakan reviewListContainer
                 });
             } else {
-                const emptyRow = `<tr><td colspan="7" class="text-center p-8"><div class="flex flex-col items-center gap-3"><i class="fa-solid fa-comment-slash text-4xl text-slate-400"></i><span>Tidak ada ulasan yang cocok dengan filter Anda.</span></div></td></tr>`;
+                const emptyRow = `<tr><td colspan="9" class="text-center p-8"><div class="flex flex-col items-center gap-3"><i class="fa-solid fa-comment-slash text-4xl text-slate-400"></i><span>Tidak ada ulasan yang cocok dengan filter Anda.</span></div></td></tr>`;
                 reviewListContainer.innerHTML = emptyRow;
             }
 
@@ -82,7 +82,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         } catch (error) {
             console.error('Gagal mengambil data ulasan:', error);
-            const errorRow = `<tr><td colspan="7" class="text-center p-8 text-red-500"><div class="flex flex-col items-center gap-3"><i class="fa-solid fa-exclamation-triangle text-4xl"></i><span>Gagal mengambil data ulasan. Silakan coba lagi.</span></div></td></tr>`;
+            const errorRow = `<tr><td colspan="9" class="text-center p-8 text-red-500"><div class="flex flex-col items-center gap-3"><i class="fa-solid fa-exclamation-triangle text-4xl"></i><span>Gagal mengambil data ulasan. Silakan coba lagi.</span></div></td></tr>`;
             reviewListContainer.innerHTML = errorRow;
         }
     };
@@ -91,6 +91,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const row = document.createElement('tr');
         row.className = 'bg-white border-b hover:bg-slate-50';
         row.id = `review-row-${review.id}`;
+
+        // BARU: Format tanggal penggunaan voucher
+        const voucherUsedDate = review.voucher_used_at 
+            ? new Date(review.voucher_used_at).toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' }) 
+            : '-';
 
         let statusBadge = '';
         let actionButtons = '';
@@ -129,6 +134,8 @@ document.addEventListener('DOMContentLoaded', () => {
             </td>
             <td class="px-6 py-4">${review.hotel_name}</td>
             <td class="px-6 py-4 whitespace-nowrap">${review.checkin_date ? new Date(review.checkin_date).toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' }) : '-'}</td>
+            <td class="px-6 py-4 whitespace-nowrap">${review.voucher_number || '-'}</td>
+            <td class="px-6 py-4 whitespace-nowrap">${voucherUsedDate}</td>
             <td class="px-6 py-4 text-center whitespace-nowrap" title="Rating: ${review.rating || '-'}/5">
                 ${review.rating ? `
                     <div>
@@ -138,6 +145,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 ` : '<span class="text-slate-400">-</span>'}
             </td>
             <td class="px-6 py-4 max-w-xs truncate" title="${review.comment || ''}">${review.comment || '<i>Tidak ada komentar.</i>'}</td>
+            <td class="px-6 py-4 text-center">
+                ${review.media && review.media.length > 0 ? `<a href="${review.media[0].file_path}" target="_blank" class="block w-12 h-12 mx-auto rounded-md overflow-hidden border border-slate-200 hover:border-blue-500 transition-all"><img src="${review.media[0].file_path}" alt="Review Photo" class="w-full h-full object-cover"></a>` : `<span class="text-slate-400 text-xs">N/A</span>`}
+            </td>
             <td class="px-6 py-4 whitespace-nowrap">${new Date(review.created_at).toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' })}</td>
             <td class="px-6 py-4 text-center">${statusBadge}</td>
             <td class="px-6 py-4 text-center">
@@ -248,12 +258,22 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('modal-review-guest-name').textContent = `${review.guest_name} - Kamar ${review.room_number || '-'}`;
         document.getElementById('modal-review-rating').innerHTML = generateStarRating(review.rating);
         document.getElementById('modal-review-date').textContent = new Date(review.created_at).toLocaleString('id-ID');
+        document.getElementById('modal-review-voucher-number').textContent = review.voucher_number || '-';
         document.getElementById('modal-review-comment').textContent = review.comment || 'Tidak ada komentar.';
         document.getElementById('modal-review-id').value = review.id;
+
+        // BARU: Tampilkan email tamu
+        document.getElementById('modal-guest-email').textContent = review.guest_email || '-';
 
         // PERUBAHAN: Isi textarea jika ini adalah mode update/edit
         const replyTextarea = document.getElementById('modal-reply-text');
         replyTextarea.value = review.reply_text || '';
+
+        // BARU: Kosongkan input BCC setiap kali modal dibuka
+        const bccInput = document.getElementById('modal-bcc-email');
+        if (bccInput) {
+            bccInput.value = '';
+        }
 
         replyModal.classList.remove('hidden');
         replyModal.classList.add('flex');
@@ -276,11 +296,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const formData = new FormData(replyForm);
         const replyText = formData.get('reply_text');
+        const bccInput = document.getElementById('modal-bcc-email');
+        const bccEmail = bccInput ? bccInput.value : null; // Ambil nilai BCC
+
+        const requestBody = { reply_text: replyText };
+        if (bccEmail) {
+            requestBody.bccEmail = bccEmail; // Hanya tambahkan jika ada nilai
+        }
 
         try {
             const result = await fetchAPI(`/api/reviews/${reviewId}/reply`, {
                 method: 'POST',
-                body: { reply_text: replyText },
+                body: requestBody,
             });
 
             // Refresh only this card

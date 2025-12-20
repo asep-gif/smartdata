@@ -65,7 +65,7 @@ async function handleLoadBudget() {
     clearTable('budget');
 
     try {
-        const budgetData = await fetchAPI(`/api/budgets?hotel_id=${hotelId}&year=${year}`);
+        const budgetData = await fetchAPI(`/api/financials/budgets?hotel_id=${hotelId}&year=${year}`);
 
         if (Object.keys(budgetData).length > 0) {
             populateTable(budgetData, 'budget');
@@ -127,7 +127,7 @@ async function handleSaveBudget() {
     saveBtn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Menyimpan...';
 
     try {
-        await fetchAPI('/api/budgets', {
+        await fetchAPI('/api/financials/budgets', {
             method: 'POST',
             body: JSON.stringify(payload)
         });

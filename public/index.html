@@ -143,6 +143,7 @@
                         <li><button onclick="window.location.hash = '#input-budget-dsr'" class="w-full flex items-center gap-4 px-4 py-2.5 hover:bg-slate-200/60 border-l-4 border-transparent hover:border-blue-400 transition-colors text-sm" id="nav-input-budget-dsr"><div class="relative flex items-center gap-4" data-tooltip="Input Budget DSR"><i class="fa-solid fa-file-pen w-6 text-center"></i> <span class="nav-text">Input Budget DSR</span></div></button></li>
                         <li><button onclick="window.location.hash = '#input-actual-dsr'" class="w-full flex items-center gap-4 px-4 py-2.5 hover:bg-slate-200/60 border-l-4 border-transparent hover:border-blue-400 transition-colors text-sm" id="nav-input-actual-dsr"><div class="relative flex items-center gap-4" data-tooltip="Input Actual DSR"><i class="fa-solid fa-file-invoice w-6 text-center"></i> <span class="nav-text">Input Actual DSR</span></div></button></li>
                         <li><button onclick="window.location.hash = '#input-room-production'" class="w-full flex items-center gap-4 px-4 py-2.5 hover:bg-slate-200/60 border-l-4 border-transparent hover:border-blue-400 transition-colors text-sm" id="nav-input-room-production"><div class="relative flex items-center gap-4" data-tooltip="Input Room Production"><i class="fa-solid fa-person-shelter w-6 text-center"></i> <span class="nav-text">Input Room Production</span></div></button></li>
+                        <li><button onclick="window.location.hash = '#input-hotel-competitor'" class="w-full flex items-center gap-4 px-4 py-2.5 hover:bg-slate-200/60 border-l-4 border-transparent hover:border-blue-400 transition-colors text-sm" id="nav-input-hotel-competitor"><div class="relative flex items-center gap-4" data-tooltip="Input Hotel Competitor"><i class="fa-solid fa-hotel w-6 text-center"></i> <span class="nav-text">Input Hotel Competitor</span></div></button></li>
                     </ul>
                 </li>
                 <!-- Menu AR Aging (Dropdown) -->
@@ -202,6 +203,7 @@
                         <li><button onclick="window.location.hash = '#guest-review-dashboard'" class="w-full flex items-center gap-4 px-4 py-2.5 hover:bg-slate-200/60 border-l-4 border-transparent hover:border-blue-400 transition-colors text-sm" id="nav-guest-review-dashboard"><div class="relative flex items-center gap-4" data-tooltip="Dashboard"><i class="fa-solid fa-chart-bar w-6 text-center"></i> <span class="nav-text">Dashboard</span></div></button></li>
                         <li><button onclick="window.location.hash = '#guest-review-settings'" class="w-full flex items-center gap-4 px-4 py-2.5 hover:bg-slate-200/60 border-l-4 border-transparent hover:border-blue-400 transition-colors text-sm" id="nav-guest-review-settings"><div class="relative flex items-center gap-4" data-tooltip="Setting Form"><i class="fa-solid fa-cogs w-6 text-center"></i> <span class="nav-text">Setting Form</span></div></button></li>
                         <li><button onclick="window.location.hash = '#guest-review-replies'" class="w-full flex items-center gap-4 px-4 py-2.5 hover:bg-slate-200/60 border-l-4 border-transparent hover:border-blue-400 transition-colors text-sm" id="nav-guest-review-replies"><div class="relative flex items-center gap-4" data-tooltip="Replies"><i class="fa-solid fa-reply-all w-6 text-center"></i> <span class="nav-text">Replies</span></div></button></li>
+                        <li><button onclick="window.location.hash = '#guest-review-vouchers'" class="w-full flex items-center gap-4 px-4 py-2.5 hover:bg-slate-200/60 border-l-4 border-transparent hover:border-blue-400 transition-colors text-sm" id="nav-guest-review-vouchers"><div class="relative flex items-center gap-4" data-tooltip="Voucher Use"><i class="fa-solid fa-ticket w-6 text-center"></i> <span class="nav-text">Voucher Use</span></div></button></li>
                     </ul>
                 </li>
                 <li><button onclick="window.location.hash = '#reports'" class="w-full flex items-center gap-4 px-6 py-3 hover:bg-slate-100 border-l-4 border-transparent hover:border-blue-400 transition-colors" id="nav-reports"><div class="relative flex items-center gap-4" data-tooltip="Reports"><i class="fa-solid fa-file-contract w-6 text-center"></i> <span class="nav-text">Reports</span></div></button></li>
@@ -712,6 +714,19 @@
                         </div>
                     </button>
 
+                    <!-- BARU: Kartu Kelola Hotel Competitor -->
+                    <button onclick="window.location.hash = '#settings/competitors'" class="text-left bg-white p-6 rounded-xl shadow-sm border border-slate-100 hover:shadow-md hover:-translate-y-1 transition-all duration-300">
+                        <div class="flex items-center gap-4 mb-4">
+                            <div class="w-12 h-12 bg-indigo-100 text-indigo-600 rounded-lg flex items-center justify-center flex-shrink-0">
+                                <i class="fa-solid fa-hotel text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-lg">Kelola Hotel Competitor</h3>
+                                <p class="text-sm text-slate-500">Tentukan daftar kompetitor untuk setiap hotel.</p>
+                            </div>
+                        </div>
+                    </button>
+
                     <!-- Kartu pengaturan lainnya bisa ditambahkan di sini -->
                 </div>
 
@@ -765,6 +780,66 @@
                             <tbody id="opening-balance-table-body"></tbody>
                         </table>
                     </div>
+            </div>
+
+            <!-- BARU: Bagian Kelola Hotel Competitor (awalnya tersembunyi) -->
+            <div id="competitor-settings-section" class="hidden bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+                <div class="flex justify-between items-center mb-6 pb-4 border-b border-slate-200">
+                    <div>
+                        <h3 class="text-xl font-bold">Kelola Daftar Kompetitor</h3>
+                        <p class="text-sm text-slate-500">Atur siapa saja kompetitor untuk hotel Anda.</p>
+                    </div>
+                    <button onclick="window.location.hash = '#settings'" class="bg-slate-100 hover:bg-slate-200 text-slate-600 text-sm px-4 py-2 rounded-md shadow-sm transition flex-shrink-0">
+                        <i class="fa-solid fa-arrow-left mr-2"></i> Kembali
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <!-- Kolom Kiri: Pilih Hotel & Tambah Kompetitor -->
+                    <div class="lg:col-span-1 space-y-6">
+                        <div>
+                            <label for="comp-setting-hotel-select" class="block text-sm font-medium text-slate-700 mb-1">Pilih Hotel (Subject)</label>
+                            <select id="comp-setting-hotel-select" class="form-input w-full"></select>
+                        </div>
+
+                        <div class="bg-slate-50 p-4 rounded-lg border border-slate-200">
+                            <h4 class="font-semibold text-slate-700 mb-3">Tambah Kompetitor Baru</h4>
+                            <div class="space-y-3">
+                                <div>
+                                    <label class="block text-xs font-medium text-slate-600 mb-1">Pilih dari Daftar Hotel Sistem</label>
+                                    <select id="comp-setting-existing-hotel" class="form-input w-full text-sm mb-2"></select>
+                                    <button id="add-existing-comp-btn" class="w-full bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold py-2 rounded transition">Tambah dari Daftar</button>
+                                </div>
+                                <div class="relative flex py-2 items-center"><div class="flex-grow border-t border-slate-300"></div><span class="flex-shrink-0 mx-2 text-slate-400 text-xs">ATAU</span><div class="flex-grow border-t border-slate-300"></div></div>
+                                <div>
+                                    <label class="block text-xs font-medium text-slate-600 mb-1">Input Manual (Hotel Luar)</label>
+                                    <input type="text" id="comp-setting-manual-name" class="form-input w-full text-sm mb-2" placeholder="Nama Hotel Kompetitor">
+                                    <input type="number" id="comp-setting-manual-rooms" class="form-input w-full text-sm mb-2" placeholder="Jumlah Kamar">
+                                    <button id="add-manual-comp-btn" class="w-full bg-green-600 hover:bg-green-700 text-white text-xs font-bold py-2 rounded transition">Tambah Manual</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Kolom Kanan: Daftar Kompetitor -->
+                    <div class="lg:col-span-2">
+                        <h4 class="font-semibold text-slate-700 mb-3">Daftar Kompetitor Aktif</h4>
+                        <div class="overflow-hidden rounded-lg border border-slate-200">
+                            <table class="w-full text-sm text-left text-slate-500">
+                                <thead class="text-xs text-slate-700 uppercase bg-slate-50">
+                                    <tr>
+                                        <th scope="col" class="px-6 py-3">Nama Kompetitor</th>
+                                        <th scope="col" class="px-6 py-3">Jumlah Kamar</th>
+                                        <th scope="col" class="px-6 py-3 text-center">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="competitor-list-body">
+                                    <tr><td colspan="2" class="p-4 text-center text-slate-400">Silakan pilih hotel terlebih dahulu.</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- BARU: Bagian Kelola Role & Hak Akses (awalnya tersembunyi) -->
@@ -1219,8 +1294,104 @@
                 </div>
             </section>
 
-            <!-- 11. INPUT ROOM PRODUCTION -->
-            <section id="page-input-room-production" class="page-content-wrapper hidden fade-in">
+            <!-- BARU: 8. INPUT HOTEL COMPETITOR -->
+            <section id="page-input-hotel-competitor" class="page-content-wrapper hidden fade-in">
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+                    <!-- Selection Header -->
+                    <div id="hotel-competitor-selection-header" class="mb-6 pb-6 border-b border-slate-200">
+                        <div class="grid grid-cols-1 md:grid-cols-5 gap-4 items-end">
+                             <div class="md:col-span-2">
+                                <label class="block text-sm font-medium text-slate-700 mb-1">Rentang Tanggal</label>
+                                <div class="flex items-center gap-2">
+                                    <input type="date" id="hotel-competitor-start-date" class="form-input w-full">
+                                    <span class="text-slate-500">-</span>
+                                    <input type="date" id="hotel-competitor-end-date" class="form-input w-full">
+                                </div>
+                            </div>
+                             <div>
+                                <label for="hotel-competitor-hotel-select" class="block text-sm font-medium text-slate-700 mb-1">Hotel</label>
+                                <select id="hotel-competitor-hotel-select" class="form-input w-full"></select>
+                            </div>
+                            <div>
+                                <button id="load-hotel-competitor-btn" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg transition">
+                                    <i class="fa-solid fa-sync-alt mr-1"></i> Muat Data
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Hotel Competitor Editor Container (hidden by default) -->
+                    <div id="hotel-competitor-editor-container" class="hidden">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-xl font-bold">Input Data Hotel Competitor</h3>
+                            <div class="flex items-center gap-2">
+                                <button id="add-hotel-competitor-row-btn" class="bg-blue-600 hover:bg-blue-700 text-white text-sm px-4 py-2 rounded-md shadow transition"><i class="fa-solid fa-plus mr-1"></i> Tambah Baris</button>
+                                <button id="save-hotel-competitor-btn" class="bg-green-600 hover:bg-green-700 text-white text-sm px-4 py-2 rounded-md shadow transition"><i class="fa-solid fa-save mr-1"></i> Simpan Data</button>
+                            </div>
+                        </div>
+                        <div class="overflow-auto max-h-[65vh]">
+                            <table id="hotel-competitor-table" class="w-full text-sm text-left text-slate-500">
+                                <thead class="text-xs text-slate-700 uppercase bg-slate-50 sticky top-0 z-10">
+                                    <tr>
+                                        <th class="px-4 py-3 min-w-[150px]">HOTEL NAME</th>
+                                        <th class="px-4 py-3 min-w-[100px] text-center"># ROOM</th>
+                                        <th class="px-4 py-3 min-w-[150px] text-center">ROOM AVAILABLE</th>
+                                        <th class="px-4 py-3 min-w-[150px] text-center">ROOM SOLD</th>
+                                        <th class="px-4 py-3 min-w-[100px] text-center">% OCC</th>
+                                        <th class="px-4 py-3 min-w-[150px] text-center">ARR</th>
+                                        <th class="px-4 py-3 min-w-[150px] text-center">RevPAR</th>
+                                        <th class="px-4 py-3 min-w-[150px] text-center">REVENUE</th>
+                                        <th class="px-4 py-3 min-w-[120px] text-center">MARKET SHARE</th>
+                                        <th class="px-4 py-3 min-w-[100px] text-center">ARI</th>
+                                        <th class="px-4 py-3 min-w-[100px] text-center">RGI</th>
+                                        <th class="px-4 py-3 min-w-[100px] text-center">MPI</th>
+                                        <th class="px-4 py-3 min-w-[100px] text-center">RANK MPI</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="hotel-competitor-table-body">
+                                </tbody>
+                                <tfoot id="hotel-competitor-table-foot" class="bg-slate-100 font-bold">
+                                    <!-- Total row will be generated here by JavaScript -->
+                                </tfoot>
+                            </table>
+                        </div>
+                        <!-- BARU: Kontainer untuk Grafik -->
+                        <div id="hotel-competitor-charts-container" class="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-6 hidden">
+                            <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 h-96 flex flex-col">
+                                <h4 class="font-bold mb-4 text-slate-700">Market Share</h4>
+                                <div class="relative flex-1">
+                                    <canvas id="competitor-market-share-chart"></canvas>
+                                </div>
+                            </div>
+                            <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 h-96 flex flex-col">
+                                <div class="flex justify-between items-center mb-4">
+                                    <h4 class="font-bold text-slate-700">Analisis Indeks</h4>
+                                    <!-- BARU: Tombol Toggle Grafik Indeks -->
+                                    <div id="competitor-index-chart-toggles" class="inline-flex rounded-md shadow-sm" role="group">
+                                        <button type="button" data-type="mpi" class="stat-toggle-btn active-stat-toggle-btn rounded-l-lg border border-slate-300 bg-white px-3 py-1.5 text-xs font-medium text-slate-900 hover:bg-slate-50 focus:z-10">
+                                            MPI
+                                        </button>
+                                        <button type="button" data-type="ari" class="stat-toggle-btn border-y border-slate-300 bg-white px-3 py-1.5 text-xs font-medium text-slate-900 hover:bg-slate-50 focus:z-10">
+                                            ARI
+                                        </button>
+                                        <button type="button" data-type="rgi" class="stat-toggle-btn border-y border-l border-slate-300 bg-white px-3 py-1.5 text-xs font-medium text-slate-900 hover:bg-slate-50 focus:z-10">
+                                            RGI
+                                        </button>
+                                        <button type="button" data-type="all" class="stat-toggle-btn rounded-r-md border border-slate-300 bg-white px-3 py-1.5 text-xs font-medium text-slate-900 hover:bg-slate-50 focus:z-10">
+                                            All
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="relative flex-1">
+                                    <canvas id="competitor-mpi-chart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+			
+			<section id="page-input-room-production" class="page-content-wrapper hidden fade-in">
                 <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100">
                     <!-- Selection Header -->
                     <div id="rp-selection-header" class="mb-6 pb-6 border-b border-slate-200">
@@ -2213,9 +2384,9 @@
                         <!-- Logo & Header -->
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                             <div class="md:col-span-1">
-                                <label class="block text-sm font-medium text-slate-700 mb-1">Logo Hotel</label>
+                                <label class="block text-sm font-medium text-slate-700 mb-1">URL Logo Hotel</label>
                                 <img id="review-settings-logo-preview" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjE1MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTUwIiBoZWlnaHQ9IjE1MCIgZmlsbD0iI2U1ZTdlYiIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNiIgZmlsbD0iIzljYTNhZiIgZG9taW5hbnQtYmFzZWxpbmU9Im1pZGRsZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+MTUweDE1MDwvdGV4dD48L3N2Zz4=" alt="Logo Preview" class="w-32 h-32 object-contain rounded-md border p-2 bg-slate-50 mb-2">
-                                <input type="file" id="review-settings-logo-input" name="logo" class="form-input-file" accept="image/*">
+                                <input type="url" id="review-settings-logo-input" name="logo_url" class="form-input w-full" placeholder="https://example.com/logo.png">
                             </div>
                             <div class="md:col-span-2 space-y-4">
                                 <div>
@@ -2237,9 +2408,9 @@
                             </div>
                             <div id="review-settings-promo-fields" class="hidden mt-4 grid grid-cols-1 md:grid-cols-3 gap-6">
                                 <div class="md:col-span-1">
-                                    <label class="block text-sm font-medium text-slate-700 mb-1">Gambar Promo</label>
+                                    <label class="block text-sm font-medium text-slate-700 mb-1">URL Gambar Promo</label>
                                     <img id="review-settings-promo-preview" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2U1ZTdlYiIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNiIgZmlsbD0iIzljYTNhZiIgZG9taW5hbnQtYmFzZWxpbmU9Im1pZGRsZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+MzAweDIwMDwvdGV4dD48L3N2Zz4=" alt="Promo Preview" class="w-full h-auto object-cover rounded-md border p-2 bg-slate-50 mb-2">
-                                    <input type="file" id="review-settings-promo-input" name="promo_image" class="form-input-file" accept="image/*">
+                                    <input type="url" id="review-settings-promo-input" name="promo_image_url" class="form-input w-full" placeholder="https://example.com/promo.jpg">
                                 </div>
                                 <div class="md:col-span-2 space-y-4">
                                     <div><label for="review-settings-promo-title" class="block text-sm font-medium text-slate-700 mb-1">Judul Promo</label><input type="text" id="review-settings-promo-title" name="promo_title" class="form-input w-full"></div>
@@ -2313,8 +2484,11 @@
                                     <th scope="col" class="px-6 py-3">Tamu</th>
                                     <th scope="col" class="px-6 py-3">Hotel</th>
                                     <th scope="col" class="px-6 py-3">Check-in</th>
+                                    <th scope="col" class="px-6 py-3">Nomor Voucher</th>
+                                    <th scope="col" class="px-6 py-3">Tgl. Penggunaan</th>
                                     <th scope="col" class="px-6 py-3 text-center">Rating</th>
                                     <th scope="col" class="px-6 py-3">Komentar</th>
+                                    <th scope="col" class="px-6 py-3 text-center">Foto</th>
                                     <th scope="col" class="px-6 py-3">Tanggal</th>
                                     <th scope="col" class="px-6 py-3 text-center">Status</th>
                                     <th scope="col" class="px-6 py-3 text-center">Aksi</th>
@@ -2329,6 +2503,48 @@
                         <div id="review-replies-pagination-info" class="text-sm text-slate-700"></div>
                         <div id="review-replies-pagination-controls"></div>
                     </div>
+                </div>
+            </section>
+            <section id="page-guest-review-vouchers" class="page-content-wrapper hidden fade-in">
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+                    <!-- Header dan Filter -->
+                    <div class="mb-6 pb-4 border-b border-slate-200">
+                        <h3 class="text-xl font-bold text-slate-800">Verifikasi Penggunaan Voucher</h3>
+                        <p class="text-sm text-slate-500 mt-1">Kelola dan verifikasi voucher yang digunakan oleh tamu.</p>
+                        
+                        <!-- Filter -->
+                        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mt-4 pt-4 border-t border-slate-100">
+                            <div>
+                                <label for="voucher-use-hotel-filter" class="text-xs font-medium text-slate-600">Hotel</label>
+                                <select id="voucher-use-hotel-filter" class="form-input w-full mt-1 text-sm"></select>
+                            </div>
+                            <div>
+                                <label for="voucher-use-status-filter" class="text-xs font-medium text-slate-600">Status Voucher</label>
+                                <select id="voucher-use-status-filter" class="form-input w-full mt-1 text-sm">
+                                    <option value="all">Semua</option>
+                                    <option value="available" selected>Tersedia</option>
+                                    <option value="used">Sudah Digunakan</option>
+                                </select>
+                            </div>
+                            <div class="col-span-2 lg:col-span-3">
+                                <label for="voucher-use-search-input" class="text-xs font-medium text-slate-600">Cari (Nama Tamu / No. Voucher)</label>
+                                <input type="text" id="voucher-use-search-input" class="form-input w-full mt-1 text-sm" placeholder="Ketik untuk mencari...">
+                            </div>
+                        </div>
+                    </div>
+            
+                    <!-- Daftar Voucher -->
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm text-left text-slate-500">
+                            <thead class="text-xs text-slate-700 uppercase bg-slate-50">
+                                <tr><th scope="col" class="px-6 py-3">Tamu</th><th scope="col" class="px-6 py-3">Hotel</th><th scope="col" class="px-6 py-3">Nomor Voucher</th><th scope="col" class="px-6 py-3">Tanggal Ulasan</th><th scope="col" class="px-6 py-3 text-center">Status</th><th scope="col" class="px-6 py-3 text-center">Aksi</th></tr>
+                            </thead>
+                            <tbody id="voucher-use-list-body"></tbody>
+                        </table>
+                    </div>
+            
+                    <!-- Paginasi -->
+                    <div class="flex items-center justify-between border-t border-slate-200 bg-white px-4 py-3 sm:px-6 mt-6 rounded-b-lg"><div id="voucher-use-pagination-info" class="text-sm text-slate-700"></div><div id="voucher-use-pagination-controls"></div></div>
                 </div>
             </section>
 
@@ -2349,6 +2565,8 @@
                                 <p class="text-amber-500 font-bold" id="modal-review-rating">★★★★★</p>
                             </div>
                             <p class="text-xs text-slate-500" id="modal-review-date">Tanggal Ulasan</p>
+                            <p class="text-xs text-slate-500 mt-1">No. Voucher: <span id="modal-review-voucher-number" class="font-medium text-slate-700"></span></p>
+                            <p class="text-xs text-slate-500 mt-1">Email Tamu: <span id="modal-guest-email" class="font-medium text-slate-700"></span></p>
                             <blockquote class="mt-2 text-slate-700 border-l-4 border-slate-300 pl-4 italic" id="modal-review-comment">
                                 Isi komentar tamu akan ditampilkan di sini.
                             </blockquote>
@@ -2358,11 +2576,55 @@
                             <input type="hidden" id="modal-review-id" name="reviewId">
                             <label for="modal-reply-text" class="block text-sm font-medium text-slate-700">Tulis Balasan Anda</label>
                             <textarea id="modal-reply-text" name="reply_text" rows="5" class="form-input w-full" placeholder="Terima kasih atas ulasan Anda..." required></textarea>
+                            <!-- BARU: BCC Email Input -->
+                            <div class="mt-4">
+                                <label for="modal-bcc-email" class="block text-sm font-medium text-slate-700">BCC (Opsional)</label>
+                                <div class="mt-1">
+                                    <input type="email" name="bcc_email" id="modal-bcc-email" class="form-input w-full" placeholder="Kirim salinan balasan ke email ini...">
+                                    <p class="mt-1 text-xs text-slate-500">Email ini akan menerima salinan balasan, tetapi tidak akan terlihat oleh tamu.</p>
+                                </div>
+                            </div>
                             <div class="pt-2 flex justify-end">
                                 <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition">Kirim Balasan</button>
                             </div>
                         </form>
                     </div>
+                </div>
+            </div>
+
+            <!-- MODAL VERIFIKASI VOUCHER -->
+            <div id="verify-voucher-modal" class="fixed inset-0 z-50 bg-slate-900/70 hidden items-center justify-center backdrop-blur-sm p-4">
+                <div class="max-w-lg w-full bg-white rounded-xl shadow-2xl border border-slate-200 relative fade-in flex flex-col">
+                    <!-- Header -->
+                    <div class="flex justify-between items-center p-5 border-b border-slate-200">
+                        <h3 class="text-lg font-bold text-slate-800">Verifikasi Penggunaan Voucher</h3>
+                        <button onclick="closeVerifyVoucherModal()" class="w-8 h-8 bg-slate-100 hover:bg-slate-200 rounded-full flex items-center justify-center transition"><i class="fa-solid fa-xmark text-slate-600"></i></button>
+                    </div>
+                    <!-- Body -->
+                    <form id="verify-voucher-form" class="p-6 space-y-4">
+                        <input type="hidden" id="modal-voucher-review-id">
+                        
+                        <div class="bg-slate-50 p-4 rounded-lg border border-slate-200">
+                            <p class="text-sm">Voucher: <strong id="modal-voucher-code" class="text-blue-600"></strong></p>
+                            <p class="text-sm">Atas Nama: <strong id="modal-voucher-guest-name"></strong></p>
+                        </div>
+            
+                        <div>
+                            <label for="modal-voucher-use-date" class="block text-sm font-medium text-slate-700 mb-1">Tanggal Penggunaan <span class="text-red-500">*</span></label>
+                            <input type="date" id="modal-voucher-use-date" name="use_date" class="form-input w-full" required>
+                        </div>
+                        <div>
+                            <label for="modal-voucher-guest-name-used" class="block text-sm font-medium text-slate-700 mb-1">Nama Tamu (yang menggunakan) <span class="text-red-500">*</span></label>
+                            <input type="text" id="modal-voucher-guest-name-used" name="guest_name_used" class="form-input w-full" placeholder="Nama tamu yang check-in" required>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div><label for="modal-voucher-room-number" class="block text-sm font-medium text-slate-700 mb-1">Nomor Kamar <span class="text-red-500">*</span></label><input type="text" id="modal-voucher-room-number" name="room_number" class="form-input w-full" placeholder="Contoh: 101" required></div>
+                            <div><label for="modal-voucher-folio-number" class="block text-sm font-medium text-slate-700 mb-1">Nomor Folio <span class="text-red-500">*</span></label><input type="text" id="modal-voucher-folio-number" name="folio_number" class="form-input w-full" placeholder="Nomor folio dari PMS" required></div>
+                        </div>
+                        
+                        <!-- Footer -->
+                        <div class="pt-4 flex justify-end"><button type="submit" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg transition"><i class="fa-solid fa-check-circle mr-2"></i>Verifikasi & Gunakan Voucher</button></div>
+                    </form>
                 </div>
             </div>
 
@@ -3368,15 +3630,18 @@
     <script src="js/input-actual-pl.js?v=1"></script>
     <script src="js/input-room-production.js?v=1"></script>
     <script src="js/input-ar-aging.js?v=1"></script>
+    <script src="js/input-hotel-competitor.js?v=1"></script>
     <script src="js/guest-review-dashboard.js"></script>
-    <script src="js/guest-review-replies.js"></script>
+    <script src="js/guest-review-replies.js"></script>    
     <!-- BARU: Script untuk fitur Inspection -->
+    <script src="js/guest-review-vouchers.js"></script>
     <script src="js/guest-review-settings.js"></script>
     <script src="js/inspection.js"></script>
     <script src="js/audit-checklist.js"></script> <!-- BARU -->
     <script src="js/audit.js"></script>
     <script src="js/audit-calendar.js"></script> <!-- BARU -->
     <script src="js/trial-balance.js"></script>
+    <script src="js/competitor-settings.js"></script> <!-- BARU -->
     <script src="js/script.js"></script>
 </body>
 </html>

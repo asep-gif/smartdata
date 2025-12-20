@@ -230,6 +230,35 @@ window.formatTimeAgo = function(date) {
     return 'Baru saja';
 };
 
+/**
+ * BARU: Menampilkan indikator loading di dalam sebuah kontainer (biasanya tbody tabel).
+ * @param {HTMLElement} container - Elemen DOM tempat indikator loading akan ditampilkan.
+ * @param {number} colspan - Jumlah kolom yang akan digabungkan (untuk tabel).
+ */
+function showLoading(container, colspan = 1) {
+    container.innerHTML = `<tr><td colspan="${colspan}" class="text-center p-8"><div class="flex justify-center items-center gap-3"><i class="fa-solid fa-circle-notch fa-spin text-2xl text-blue-500"></i><span>Memuat data...</span></div></td></tr>`;
+}
+
+/**
+ * BARU: Mengatur status loading pada sebuah tombol.
+ * @param {HTMLButtonElement} button - Tombol yang akan diatur status loadingnya.
+ * @param {string} loadingText - Teks yang akan ditampilkan saat loading.
+ */
+function setLoading(button, loadingText) {
+    button.disabled = true;
+    button.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i> ${loadingText}`;
+}
+
+/**
+ * BARU: Mengembalikan status tombol dari loading ke normal.
+ * @param {HTMLButtonElement} button - Tombol yang akan dikembalikan statusnya.
+ * @param {string} originalHTML - Konten HTML asli dari tombol.
+ */
+function resetLoading(button, originalHTML) {
+    button.disabled = false;
+    button.innerHTML = originalHTML;
+}
+
 // --- HELPER FORMAT ANGKA ---
 
 /**

@@ -17,6 +17,7 @@ function showPage(pageId) {
         'input-actual-dsr': 'Input Actual DSR',
         'input-room-production': 'Input Room Production',
         'input-ar-aging': 'Input AR Aging',
+        'input-hotel-competitor': 'Input Hotel Competitor',
         'slides': 'Slides Hotel',
         'ar-summary': 'AR Aging Summary',
         'slides-corporate': 'Slides Corporate',
@@ -26,6 +27,7 @@ function showPage(pageId) {
         'guest-review-dashboard': 'Dashboard Guest Review',
         'guest-review-settings': 'Pengaturan Form Guest Review',
         'guest-review-replies': 'Balasan Guest Review',
+        'guest-review-vouchers': 'Verifikasi Voucher',
         'agenda-audit': 'Agenda Audit', // BARU
         'audit-calendar': 'Kalender Audit' // BARU
     };
@@ -86,10 +88,6 @@ function toggleSidebar(forceOpen = null) {
     }
 }
 
-/**
- * BARU: Menerapkan hak akses pengguna dengan menampilkan/menyembunyikan item menu.
- * Fungsi ini membaca izin dari localStorage dan menyesuaikan visibilitas sidebar.
- */
 function applyUserPermissions() {
     const user = JSON.parse(localStorage.getItem('user'));
     // Jika tidak ada data user atau permissions, paksa logout sebagai fallback aman.
@@ -107,7 +105,7 @@ function applyUserPermissions() {
 
     // BARU: Jika pengguna adalah admin, tampilkan semua item menu dan sub-menu
     if (user.role === 'admin') {
-        document.querySelectorAll('aside nav ul li').forEach(li => {
+        document.querySelectorAll('aside nav ul > li').forEach(li => {
             li.classList.remove('hidden');
         });
         return; // Hentikan eksekusi lebih lanjut untuk admin
@@ -118,51 +116,60 @@ function applyUserPermissions() {
     // Mapping dari string permission di DB ke ID elemen di HTML
     const permissionMap = {
         'menu:dashboard': 'nav-dashboard',
-        'menu:achievement': 'nav-achievement',
+        'menu:achievement': 'nav-achievement-parent',
         'submenu:slides_corporate': 'nav-slides-corporate',
         'submenu:slides_hotel': 'nav-slides',
         'submenu:ebook': 'nav-ebook',
         'submenu:input_budget_pl': 'nav-input-budget',
         'submenu:input_actual_pl': 'nav-input-actual',
-        'menu:daily_income': 'nav-daily_income',
+        'menu:daily_income': 'nav-daily-income-parent',
         'submenu:daily_income_dashboard': 'nav-daily-income-dashboard',
         'submenu:input_budget_dsr': 'nav-input-budget-dsr',
         'submenu:input_actual_dsr': 'nav-input-actual-dsr',
         'submenu:input_room_production': 'nav-input-room-production',
-        'menu:ar_aging': 'nav-ar_aging',
+        'menu:ar_aging': 'nav-input-ar-aging-parent',
         'submenu:input_ar_aging': 'nav-input-ar-aging',
         'submenu:ar_summary': 'nav-ar-summary',
-        'menu:inspection': 'nav-inspection',
+        'menu:inspection': 'nav-inspection-parent',
         'submenu:inspection_dashboard': 'nav-inspection-dashboard',
         'submenu:hotel_inspection': 'nav-hotel-inspection',
         'submenu:task_to_do': 'nav-task-to-do',
         'menu:reports': 'nav-reports',
         'menu:settings': 'nav-settings',
-        'menu:trial_balance': 'nav-trial-balance',
-        'menu:guest_review': 'nav-guest-review',
+        'menu:guest_review': 'nav-guest-review-parent',
         'submenu:guest_review_dashboard': 'nav-guest-review-dashboard',
         'submenu:guest_review_settings': 'nav-guest-review-settings',
         'submenu:guest_review_replies': 'nav-guest-review-replies',
-        'menu:audit': 'nav-audit',
+        'submenu:guest_review_vouchers': 'nav-guest-review-vouchers',
+        'menu:audit': 'nav-internal-audit-parent',
         'submenu:agenda_audit': 'nav-agenda-audit',
-        'submenu:audit_calendar': 'nav-audit-calendar'
+        'submenu:audit_calendar': 'nav-audit-calendar',
+        'submenu:trial_balance': 'nav-trial-balance'
     };
 
-    // Sembunyikan semua item menu yang ada di map terlebih dahulu
-    document.querySelectorAll('aside nav ul li').forEach(li => li.classList.add('hidden'));
+    // Sembunyikan semua item menu dan submenu di awal
+    document.querySelectorAll('aside nav ul > li, aside nav ul ul li').forEach(li => {
+        li.classList.add('hidden');
+    });
 
-    // Tampilkan item menu yang dimiliki pengguna
+    // Tampilkan item berdasarkan hak akses
     permissions.forEach(permission => {
         const elementId = permissionMap[permission];
         const element = elementId ? document.getElementById(elementId) : null;
+        
         if (element) {
-            const parentLi = element.closest('li');
-            if (parentLi) {
-                parentLi.classList.remove('hidden');
-                // Juga tampilkan parent menu dropdown jika ada submenu yang terlihat
-                const parentDropdown = parentLi.closest('li.relative.group');
-                if (parentDropdown) {
-                    parentDropdown.classList.remove('hidden');
+            // Dapatkan elemen <li> terdekat, baik itu item tunggal atau item submenu
+            const targetLi = element.closest('li');
+            if (targetLi) {
+                targetLi.classList.remove('hidden');
+
+                // Jika ini adalah item submenu, pastikan juga parent dropdown-nya terlihat
+                const parentUl = targetLi.parentElement;
+                if (parentUl && parentUl.tagName === 'UL') {
+                    const parentLi = parentUl.closest('li');
+                    if (parentLi) {
+                        parentLi.classList.remove('hidden');
+                    }
                 }
             }
         }
@@ -273,6 +280,10 @@ function handleHashChange() {
         showPage('input-room-production');
         showMainSettings();
         showMainReports();
+    } else if (hash === '#input-hotel-competitor') {
+        showPage('input-hotel-competitor');
+        showMainSettings();
+        showMainReports();
     } else if (hash === '#input-actual-dsr') {
         showPage('input-actual-dsr');
         showMainSettings();
@@ -323,6 +334,13 @@ function handleHashChange() {
     } else if (hash === '#guest-review-replies') {
         showPage('guest-review-replies');
         initGuestReviewRepliesPage(); // PERBAIKAN: Panggil fungsi inisialisasi dari sini
+        showMainSettings();
+        showMainReports();
+    } else if (hash === '#guest-review-vouchers') {
+        showPage('guest-review-vouchers');
+        if (typeof initVoucherUsePage === 'function') {
+            initVoucherUsePage();
+        }
         showMainSettings();
         showMainReports();
     } else if (hash === '#agenda-audit') { // BARU
@@ -384,6 +402,8 @@ function handleHashChange() {
             showInspectionTypesManagement();
         } else if (hash === '#settings/roles') {
             showRoleManagement();
+        } else if (hash === '#settings/competitors') {
+            showCompetitorManagement();
         } else {
             showMainSettings();
         }
@@ -410,9 +430,6 @@ function showReportDetail(reportName) {
     document.getElementById(`report-${reportName}`).classList.remove('hidden');
 }
 
-/**
- * Menampilkan menu utama di halaman Pengaturan.
- */
 function showMainSettings() {
     document.getElementById('settings-grid').classList.remove('hidden');
     document.getElementById('user-management-section').classList.add('hidden');
@@ -421,6 +438,19 @@ function showMainSettings() {
     document.getElementById('audit-checklists-management-section')?.classList.add('hidden'); // BARU
     document.getElementById('inspection-types-management-section').classList.add('hidden');
     document.getElementById('role-management-section').classList.add('hidden');
+    document.getElementById('competitor-settings-section').classList.add('hidden');
+}
+
+/**
+ * Menampilkan bagian Kelola Hotel Competitor dan menyembunyikan yang lain.
+ */
+function showCompetitorManagement() {
+    showMainSettings(); // Sembunyikan semua dulu
+    document.getElementById('settings-grid').classList.add('hidden');
+    document.getElementById('competitor-settings-section').classList.remove('hidden');
+    if (typeof initCompetitorSettingsPage === 'function') {
+        initCompetitorSettingsPage();
+    }
 }
 
 /**
