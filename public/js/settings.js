@@ -702,19 +702,20 @@ async function handleDeleteUser(userId, username) {
 async function loadHotelsTable() {
     const tableBody = document.getElementById('hotel-table-body');
     if (!tableBody) return;
-    tableBody.innerHTML = '<tr><td colspan="5" class="text-center p-4">Memuat data hotel...</td></tr>';
+    tableBody.innerHTML = '<tr><td colspan="6" class="text-center p-4">Memuat data hotel...</td></tr>';
     
     try {
         const hotels = await fetchAPI('/api/hotels');
         if (hotels.length === 0) {
-            tableBody.innerHTML = '<tr><td colspan="5" class="text-center p-4">Belum ada hotel terdaftar.</td></tr>';
+            tableBody.innerHTML = '<tr><td colspan="6" class="text-center p-4">Belum ada hotel terdaftar.</td></tr>';
             return;
         }
 
         tableBody.innerHTML = '';
-        hotels.forEach(hotel => {
+        hotels.forEach((hotel, index) => {
             const tr = document.createElement('tr');
             tr.innerHTML = `
+                <td class="px-6 py-4">${index + 1}</td>
                 <td class="px-6 py-4 font-medium">${hotel.name}</td>
                 <td class="px-6 py-4">${hotel.brand || '-'}</td>
                 <td class="px-6 py-4">${hotel.city || '-'}</td>
@@ -727,7 +728,7 @@ async function loadHotelsTable() {
             tableBody.appendChild(tr);
         });
     } catch (error) {
-        tableBody.innerHTML = `<tr><td colspan="5" class="text-center p-4 text-red-500">Gagal memuat data: ${error.message}</td></tr>`;
+        tableBody.innerHTML = `<tr><td colspan="6" class="text-center p-4 text-red-500">Gagal memuat data: ${error.message}</td></tr>`;
     }
 }
 
@@ -739,7 +740,18 @@ function openEditHotelModal(hotel) {
     document.getElementById('edit-hotel-address').value = hotel.address || '';
     
     const modal = document.getElementById('edit-hotel-modal');
-    if (modal) modal.classList.add('flex');
+    if (modal) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+    }
+}
+
+function closeEditHotelModal() {
+    const modal = document.getElementById('edit-hotel-modal');
+    if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+    }
 }
 
 async function handleDeleteHotel(hotelId, hotelName) {

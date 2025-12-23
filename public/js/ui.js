@@ -215,6 +215,30 @@ function closeEditUserModal() {
 }
 
 /**
+ * BARU: Membuka modal untuk menambah hotel baru.
+ */
+function openAddHotelModal() {
+    const modal = document.getElementById('add-hotel-modal');
+    if (modal) {
+        document.getElementById('add-hotel-form').reset();
+        document.getElementById('add-hotel-error').classList.add('hidden');
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+    }
+}
+
+/**
+ * BARU: Menutup modal tambah hotel.
+ */
+function closeAddHotelModal() {
+    const modal = document.getElementById('add-hotel-modal');
+    if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+    }
+}
+
+/**
  * BARU: Membuka modal untuk menambah Trial Balance.
  * Fungsi ini juga me-reset form ke keadaan awal.
  * @param {boolean} isEditMode - Jika true, form tidak akan di-reset.
@@ -290,10 +314,12 @@ function handleHashChange() {
         showMainReports();
     } else if (hash === '#slides') {
         showPage('slides');
+        initSlidesPage(); // Panggil inisialisasi di sini
         showMainSettings();
         showMainReports();
     } else if (hash === '#slides-corporate') {
         showPage('slides-corporate');
+        initSlidesCorporatePage(); // Panggil inisialisasi di sini
         showMainSettings();
         showMainReports();
     } else if (hash === '#input-ar-aging') {

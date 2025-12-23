@@ -103,10 +103,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (document.getElementById('page-input-ar-aging')) initArAgingPage();
     if (document.getElementById('page-input-hotel-competitor')) initHotelCompetitorPage();
 
-    // Inisialisasi halaman slides
-    if (document.getElementById('page-slides')) initSlidesPage();
-    if (document.getElementById('page-slides-corporate')) initSlidesCorporatePage();
-    
     // Inisialisasi dashboard lain
     if (document.getElementById('page-daily-income-dashboard')) initDailyIncomeDashboard();
 
