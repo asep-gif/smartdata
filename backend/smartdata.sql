@@ -2,12 +2,12 @@
 -- PostgreSQL database dump
 --
 
-\restrict RL4PA0R9WwkBLVlRaCAAuwAHKNcqesyJ4LBC3KMZBrMoL1tafsgow8Hp92UOUo5
+\restrict PlXbsMvVG8g760idg9E951DTuN4jVrjTxIdP6MDjeARbBfhQXrfRulsj8WQy8Lx
 
 -- Dumped from database version 17.6
 -- Dumped by pg_dump version 17.6
 
--- Started on 2025-12-19 14:40:48
+-- Started on 2025-12-23 16:50:17
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -22,7 +22,7 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 --
--- TOC entry 990 (class 1247 OID 35312)
+-- TOC entry 994 (class 1247 OID 35312)
 -- Name: audit_agenda_status; Type: TYPE; Schema: public; Owner: postgres
 --
 
@@ -37,7 +37,7 @@ CREATE TYPE public.audit_agenda_status AS ENUM (
 ALTER TYPE public.audit_agenda_status OWNER TO postgres;
 
 --
--- TOC entry 1002 (class 1247 OID 35382)
+-- TOC entry 1006 (class 1247 OID 35382)
 -- Name: audit_result_status; Type: TYPE; Schema: public; Owner: postgres
 --
 
@@ -51,7 +51,7 @@ CREATE TYPE public.audit_result_status AS ENUM (
 ALTER TYPE public.audit_result_status OWNER TO postgres;
 
 --
--- TOC entry 972 (class 1247 OID 35116)
+-- TOC entry 976 (class 1247 OID 35116)
 -- Name: audit_status; Type: TYPE; Schema: public; Owner: postgres
 --
 
@@ -65,7 +65,7 @@ CREATE TYPE public.audit_status AS ENUM (
 ALTER TYPE public.audit_status OWNER TO postgres;
 
 --
--- TOC entry 954 (class 1247 OID 34771)
+-- TOC entry 958 (class 1247 OID 34771)
 -- Name: inspection_status; Type: TYPE; Schema: public; Owner: postgres
 --
 
@@ -79,7 +79,7 @@ CREATE TYPE public.inspection_status AS ENUM (
 ALTER TYPE public.inspection_status OWNER TO postgres;
 
 --
--- TOC entry 978 (class 1247 OID 35192)
+-- TOC entry 982 (class 1247 OID 35192)
 -- Name: review_status; Type: TYPE; Schema: public; Owner: postgres
 --
 
@@ -93,7 +93,7 @@ CREATE TYPE public.review_status AS ENUM (
 ALTER TYPE public.review_status OWNER TO postgres;
 
 --
--- TOC entry 966 (class 1247 OID 34832)
+-- TOC entry 970 (class 1247 OID 34832)
 -- Name: task_priority; Type: TYPE; Schema: public; Owner: postgres
 --
 
@@ -107,7 +107,7 @@ CREATE TYPE public.task_priority AS ENUM (
 ALTER TYPE public.task_priority OWNER TO postgres;
 
 --
--- TOC entry 963 (class 1247 OID 34822)
+-- TOC entry 967 (class 1247 OID 34822)
 -- Name: task_status; Type: TYPE; Schema: public; Owner: postgres
 --
 
@@ -122,7 +122,7 @@ CREATE TYPE public.task_status AS ENUM (
 ALTER TYPE public.task_status OWNER TO postgres;
 
 --
--- TOC entry 903 (class 1247 OID 34435)
+-- TOC entry 907 (class 1247 OID 34435)
 -- Name: user_role; Type: TYPE; Schema: public; Owner: postgres
 --
 
@@ -138,7 +138,7 @@ CREATE TYPE public.user_role AS ENUM (
 ALTER TYPE public.user_role OWNER TO postgres;
 
 --
--- TOC entry 271 (class 1255 OID 34459)
+-- TOC entry 275 (class 1255 OID 34459)
 -- Name: trigger_set_timestamp(); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -224,7 +224,7 @@ CREATE SEQUENCE public.actual_dsr_id_seq
 ALTER SEQUENCE public.actual_dsr_id_seq OWNER TO postgres;
 
 --
--- TOC entry 5400 (class 0 OID 0)
+-- TOC entry 5432 (class 0 OID 0)
 -- Dependencies: 228
 -- Name: actual_dsr_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -266,7 +266,7 @@ CREATE SEQUENCE public.actuals_id_seq
 ALTER SEQUENCE public.actuals_id_seq OWNER TO postgres;
 
 --
--- TOC entry 5401 (class 0 OID 0)
+-- TOC entry 5433 (class 0 OID 0)
 -- Dependencies: 230
 -- Name: actuals_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -317,7 +317,7 @@ CREATE SEQUENCE public.ar_aging_id_seq
 ALTER SEQUENCE public.ar_aging_id_seq OWNER TO postgres;
 
 --
--- TOC entry 5402 (class 0 OID 0)
+-- TOC entry 5434 (class 0 OID 0)
 -- Dependencies: 241
 -- Name: ar_aging_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -361,7 +361,7 @@ CREATE SEQUENCE public.audit_agendas_id_seq
 ALTER SEQUENCE public.audit_agendas_id_seq OWNER TO postgres;
 
 --
--- TOC entry 5403 (class 0 OID 0)
+-- TOC entry 5435 (class 0 OID 0)
 -- Dependencies: 263
 -- Name: audit_agendas_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -402,7 +402,7 @@ CREATE SEQUENCE public.audit_checklist_categories_id_seq
 ALTER SEQUENCE public.audit_checklist_categories_id_seq OWNER TO postgres;
 
 --
--- TOC entry 5404 (class 0 OID 0)
+-- TOC entry 5436 (class 0 OID 0)
 -- Dependencies: 265
 -- Name: audit_checklist_categories_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -446,7 +446,7 @@ CREATE SEQUENCE public.audit_checklist_items_id_seq
 ALTER SEQUENCE public.audit_checklist_items_id_seq OWNER TO postgres;
 
 --
--- TOC entry 5405 (class 0 OID 0)
+-- TOC entry 5437 (class 0 OID 0)
 -- Dependencies: 267
 -- Name: audit_checklist_items_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -490,7 +490,7 @@ CREATE SEQUENCE public.audit_results_id_seq
 ALTER SEQUENCE public.audit_results_id_seq OWNER TO postgres;
 
 --
--- TOC entry 5406 (class 0 OID 0)
+-- TOC entry 5438 (class 0 OID 0)
 -- Dependencies: 269
 -- Name: audit_results_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -532,7 +532,7 @@ CREATE SEQUENCE public.books_id_seq
 ALTER SEQUENCE public.books_id_seq OWNER TO postgres;
 
 --
--- TOC entry 5407 (class 0 OID 0)
+-- TOC entry 5439 (class 0 OID 0)
 -- Dependencies: 217
 -- Name: books_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -606,7 +606,7 @@ CREATE SEQUENCE public.budget_dsr_id_seq
 ALTER SEQUENCE public.budget_dsr_id_seq OWNER TO postgres;
 
 --
--- TOC entry 5408 (class 0 OID 0)
+-- TOC entry 5440 (class 0 OID 0)
 -- Dependencies: 226
 -- Name: budget_dsr_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -648,7 +648,7 @@ CREATE SEQUENCE public.budgets_id_seq
 ALTER SEQUENCE public.budgets_id_seq OWNER TO postgres;
 
 --
--- TOC entry 5409 (class 0 OID 0)
+-- TOC entry 5441 (class 0 OID 0)
 -- Dependencies: 224
 -- Name: budgets_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -690,7 +690,7 @@ CREATE SEQUENCE public.dsr_opening_balances_id_seq
 ALTER SEQUENCE public.dsr_opening_balances_id_seq OWNER TO postgres;
 
 --
--- TOC entry 5410 (class 0 OID 0)
+-- TOC entry 5442 (class 0 OID 0)
 -- Dependencies: 232
 -- Name: dsr_opening_balances_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -737,7 +737,7 @@ CREATE SEQUENCE public.guest_review_settings_id_seq
 ALTER SEQUENCE public.guest_review_settings_id_seq OWNER TO postgres;
 
 --
--- TOC entry 5411 (class 0 OID 0)
+-- TOC entry 5443 (class 0 OID 0)
 -- Dependencies: 261
 -- Name: guest_review_settings_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -767,6 +767,11 @@ CREATE TABLE public.guest_reviews (
     guest_email character varying(255),
     reply_text text,
     replied_at timestamp with time zone,
+    voucher_number character varying(100),
+    voucher_used_at timestamp with time zone,
+    voucher_used_by_guest character varying(255),
+    voucher_used_room_number character varying(50),
+    voucher_used_folio_number character varying(100),
     CONSTRAINT guest_reviews_cleanliness_rating_check CHECK (((cleanliness_rating >= 1) AND (cleanliness_rating <= 5))),
     CONSTRAINT guest_reviews_facilities_rating_check CHECK (((facilities_rating >= 1) AND (facilities_rating <= 5))),
     CONSTRAINT guest_reviews_overall_rating_check CHECK (((rating >= 1) AND (rating <= 5))),
@@ -793,12 +798,108 @@ CREATE SEQUENCE public.guest_reviews_id_seq
 ALTER SEQUENCE public.guest_reviews_id_seq OWNER TO postgres;
 
 --
--- TOC entry 5412 (class 0 OID 0)
+-- TOC entry 5444 (class 0 OID 0)
 -- Dependencies: 257
 -- Name: guest_reviews_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
 ALTER SEQUENCE public.guest_reviews_id_seq OWNED BY public.guest_reviews.id;
+
+
+--
+-- TOC entry 272 (class 1259 OID 35518)
+-- Name: hotel_competitor_data; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.hotel_competitor_data (
+    id integer NOT NULL,
+    hotel_id integer NOT NULL,
+    date date NOT NULL,
+    competitor_name character varying(255) NOT NULL,
+    number_of_rooms integer,
+    room_available integer,
+    room_sold integer,
+    occupancy_percent numeric(5,2),
+    arr numeric(15,2),
+    revpar numeric(15,2),
+    revenue numeric(15,2),
+    ari numeric(15,2),
+    rgi numeric(15,2),
+    mpi numeric(15,2),
+    rank_mpi integer,
+    created_at timestamp with time zone DEFAULT now(),
+    updated_at timestamp with time zone DEFAULT now()
+);
+
+
+ALTER TABLE public.hotel_competitor_data OWNER TO postgres;
+
+--
+-- TOC entry 271 (class 1259 OID 35517)
+-- Name: hotel_competitor_data_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.hotel_competitor_data_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.hotel_competitor_data_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 5445 (class 0 OID 0)
+-- Dependencies: 271
+-- Name: hotel_competitor_data_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.hotel_competitor_data_id_seq OWNED BY public.hotel_competitor_data.id;
+
+
+--
+-- TOC entry 274 (class 1259 OID 35556)
+-- Name: hotel_competitors; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.hotel_competitors (
+    id integer NOT NULL,
+    hotel_id integer NOT NULL,
+    competitor_name character varying(255) NOT NULL,
+    created_at timestamp with time zone DEFAULT now(),
+    updated_at timestamp with time zone DEFAULT now(),
+    number_of_rooms integer,
+    display_order integer
+);
+
+
+ALTER TABLE public.hotel_competitors OWNER TO postgres;
+
+--
+-- TOC entry 273 (class 1259 OID 35555)
+-- Name: hotel_competitors_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.hotel_competitors_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.hotel_competitors_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 5446 (class 0 OID 0)
+-- Dependencies: 273
+-- Name: hotel_competitors_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.hotel_competitors_id_seq OWNED BY public.hotel_competitors.id;
 
 
 --
@@ -814,7 +915,8 @@ CREATE TABLE public.hotels (
     address text,
     brand character varying(100),
     city character varying(100),
-    thumbnail_url text
+    thumbnail_url text,
+    number_of_rooms integer
 );
 
 
@@ -837,7 +939,7 @@ CREATE SEQUENCE public.hotels_id_seq
 ALTER SEQUENCE public.hotels_id_seq OWNER TO postgres;
 
 --
--- TOC entry 5413 (class 0 OID 0)
+-- TOC entry 5447 (class 0 OID 0)
 -- Dependencies: 221
 -- Name: hotels_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -881,7 +983,7 @@ CREATE SEQUENCE public.inspection_items_id_seq
 ALTER SEQUENCE public.inspection_items_id_seq OWNER TO postgres;
 
 --
--- TOC entry 5414 (class 0 OID 0)
+-- TOC entry 5448 (class 0 OID 0)
 -- Dependencies: 247
 -- Name: inspection_items_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -924,7 +1026,7 @@ CREATE SEQUENCE public.inspection_results_id_seq
 ALTER SEQUENCE public.inspection_results_id_seq OWNER TO postgres;
 
 --
--- TOC entry 5415 (class 0 OID 0)
+-- TOC entry 5449 (class 0 OID 0)
 -- Dependencies: 251
 -- Name: inspection_results_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -974,7 +1076,7 @@ CREATE SEQUENCE public.inspection_tasks_id_seq
 ALTER SEQUENCE public.inspection_tasks_id_seq OWNER TO postgres;
 
 --
--- TOC entry 5416 (class 0 OID 0)
+-- TOC entry 5450 (class 0 OID 0)
 -- Dependencies: 253
 -- Name: inspection_tasks_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -1014,7 +1116,7 @@ CREATE SEQUENCE public.inspection_types_id_seq
 ALTER SEQUENCE public.inspection_types_id_seq OWNER TO postgres;
 
 --
--- TOC entry 5417 (class 0 OID 0)
+-- TOC entry 5451 (class 0 OID 0)
 -- Dependencies: 245
 -- Name: inspection_types_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -1063,7 +1165,7 @@ CREATE SEQUENCE public.inspections_id_seq
 ALTER SEQUENCE public.inspections_id_seq OWNER TO postgres;
 
 --
--- TOC entry 5418 (class 0 OID 0)
+-- TOC entry 5452 (class 0 OID 0)
 -- Dependencies: 249
 -- Name: inspections_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -1103,7 +1205,7 @@ CREATE SEQUENCE public.permissions_id_seq
 ALTER SEQUENCE public.permissions_id_seq OWNER TO postgres;
 
 --
--- TOC entry 5419 (class 0 OID 0)
+-- TOC entry 5453 (class 0 OID 0)
 -- Dependencies: 238
 -- Name: permissions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -1144,7 +1246,7 @@ CREATE SEQUENCE public.review_media_id_seq
 ALTER SEQUENCE public.review_media_id_seq OWNER TO postgres;
 
 --
--- TOC entry 5420 (class 0 OID 0)
+-- TOC entry 5454 (class 0 OID 0)
 -- Dependencies: 259
 -- Name: review_media_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -1198,7 +1300,7 @@ CREATE SEQUENCE public.roles_id_seq
 ALTER SEQUENCE public.roles_id_seq OWNER TO postgres;
 
 --
--- TOC entry 5421 (class 0 OID 0)
+-- TOC entry 5455 (class 0 OID 0)
 -- Dependencies: 236
 -- Name: roles_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -1246,7 +1348,7 @@ CREATE SEQUENCE public.room_production_id_seq
 ALTER SEQUENCE public.room_production_id_seq OWNER TO postgres;
 
 --
--- TOC entry 5422 (class 0 OID 0)
+-- TOC entry 5456 (class 0 OID 0)
 -- Dependencies: 234
 -- Name: room_production_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -1290,7 +1392,7 @@ CREATE SEQUENCE public.slides_id_seq
 ALTER SEQUENCE public.slides_id_seq OWNER TO postgres;
 
 --
--- TOC entry 5423 (class 0 OID 0)
+-- TOC entry 5457 (class 0 OID 0)
 -- Dependencies: 243
 -- Name: slides_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -1335,7 +1437,7 @@ CREATE SEQUENCE public.trial_balances_id_seq
 ALTER SEQUENCE public.trial_balances_id_seq OWNER TO postgres;
 
 --
--- TOC entry 5424 (class 0 OID 0)
+-- TOC entry 5458 (class 0 OID 0)
 -- Dependencies: 255
 -- Name: trial_balances_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -1369,7 +1471,9 @@ CREATE TABLE public.users (
     full_name character varying(100),
     role public.user_role NOT NULL,
     hotel_id integer,
-    created_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP
+    created_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP,
+    reset_password_token text,
+    reset_password_expires timestamp with time zone
 );
 
 
@@ -1392,7 +1496,7 @@ CREATE SEQUENCE public.users_id_seq
 ALTER SEQUENCE public.users_id_seq OWNER TO postgres;
 
 --
--- TOC entry 5425 (class 0 OID 0)
+-- TOC entry 5459 (class 0 OID 0)
 -- Dependencies: 219
 -- Name: users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -1401,7 +1505,7 @@ ALTER SEQUENCE public.users_id_seq OWNED BY public.users.id;
 
 
 --
--- TOC entry 4945 (class 2604 OID 34559)
+-- TOC entry 4955 (class 2604 OID 34559)
 -- Name: actual_dsr id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -1409,7 +1513,7 @@ ALTER TABLE ONLY public.actual_dsr ALTER COLUMN id SET DEFAULT nextval('public.a
 
 
 --
--- TOC entry 4981 (class 2604 OID 34608)
+-- TOC entry 4991 (class 2604 OID 34608)
 -- Name: actuals id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -1417,7 +1521,7 @@ ALTER TABLE ONLY public.actuals ALTER COLUMN id SET DEFAULT nextval('public.actu
 
 
 --
--- TOC entry 4998 (class 2604 OID 34705)
+-- TOC entry 5008 (class 2604 OID 34705)
 -- Name: ar_aging id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -1425,7 +1529,7 @@ ALTER TABLE ONLY public.ar_aging ALTER COLUMN id SET DEFAULT nextval('public.ar_
 
 
 --
--- TOC entry 5044 (class 2604 OID 35325)
+-- TOC entry 5054 (class 2604 OID 35325)
 -- Name: audit_agendas id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -1433,7 +1537,7 @@ ALTER TABLE ONLY public.audit_agendas ALTER COLUMN id SET DEFAULT nextval('publi
 
 
 --
--- TOC entry 5048 (class 2604 OID 35353)
+-- TOC entry 5058 (class 2604 OID 35353)
 -- Name: audit_checklist_categories id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -1441,7 +1545,7 @@ ALTER TABLE ONLY public.audit_checklist_categories ALTER COLUMN id SET DEFAULT n
 
 
 --
--- TOC entry 5052 (class 2604 OID 35366)
+-- TOC entry 5062 (class 2604 OID 35366)
 -- Name: audit_checklist_items id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -1449,7 +1553,7 @@ ALTER TABLE ONLY public.audit_checklist_items ALTER COLUMN id SET DEFAULT nextva
 
 
 --
--- TOC entry 5057 (class 2604 OID 35393)
+-- TOC entry 5067 (class 2604 OID 35393)
 -- Name: audit_results id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -1457,7 +1561,7 @@ ALTER TABLE ONLY public.audit_results ALTER COLUMN id SET DEFAULT nextval('publi
 
 
 --
--- TOC entry 4900 (class 2604 OID 34428)
+-- TOC entry 4910 (class 2604 OID 34428)
 -- Name: books id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -1465,7 +1569,7 @@ ALTER TABLE ONLY public.books ALTER COLUMN id SET DEFAULT nextval('public.books_
 
 
 --
--- TOC entry 4909 (class 2604 OID 34510)
+-- TOC entry 4919 (class 2604 OID 34510)
 -- Name: budget_dsr id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -1473,7 +1577,7 @@ ALTER TABLE ONLY public.budget_dsr ALTER COLUMN id SET DEFAULT nextval('public.b
 
 
 --
--- TOC entry 4907 (class 2604 OID 34493)
+-- TOC entry 4917 (class 2604 OID 34493)
 -- Name: budgets id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -1481,7 +1585,7 @@ ALTER TABLE ONLY public.budgets ALTER COLUMN id SET DEFAULT nextval('public.budg
 
 
 --
--- TOC entry 4983 (class 2604 OID 34625)
+-- TOC entry 4993 (class 2604 OID 34625)
 -- Name: dsr_opening_balances id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -1489,7 +1593,7 @@ ALTER TABLE ONLY public.dsr_opening_balances ALTER COLUMN id SET DEFAULT nextval
 
 
 --
--- TOC entry 5038 (class 2604 OID 35248)
+-- TOC entry 5048 (class 2604 OID 35248)
 -- Name: guest_review_settings id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -1497,7 +1601,7 @@ ALTER TABLE ONLY public.guest_review_settings ALTER COLUMN id SET DEFAULT nextva
 
 
 --
--- TOC entry 5032 (class 2604 OID 35203)
+-- TOC entry 5042 (class 2604 OID 35203)
 -- Name: guest_reviews id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -1505,7 +1609,23 @@ ALTER TABLE ONLY public.guest_reviews ALTER COLUMN id SET DEFAULT nextval('publi
 
 
 --
--- TOC entry 4904 (class 2604 OID 34464)
+-- TOC entry 5070 (class 2604 OID 35521)
+-- Name: hotel_competitor_data id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.hotel_competitor_data ALTER COLUMN id SET DEFAULT nextval('public.hotel_competitor_data_id_seq'::regclass);
+
+
+--
+-- TOC entry 5073 (class 2604 OID 35559)
+-- Name: hotel_competitors id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.hotel_competitors ALTER COLUMN id SET DEFAULT nextval('public.hotel_competitors_id_seq'::regclass);
+
+
+--
+-- TOC entry 4914 (class 2604 OID 34464)
 -- Name: hotels id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -1513,7 +1633,7 @@ ALTER TABLE ONLY public.hotels ALTER COLUMN id SET DEFAULT nextval('public.hotel
 
 
 --
--- TOC entry 5012 (class 2604 OID 34756)
+-- TOC entry 5022 (class 2604 OID 34756)
 -- Name: inspection_items id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -1521,7 +1641,7 @@ ALTER TABLE ONLY public.inspection_items ALTER COLUMN id SET DEFAULT nextval('pu
 
 
 --
--- TOC entry 5021 (class 2604 OID 34804)
+-- TOC entry 5031 (class 2604 OID 34804)
 -- Name: inspection_results id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -1529,7 +1649,7 @@ ALTER TABLE ONLY public.inspection_results ALTER COLUMN id SET DEFAULT nextval('
 
 
 --
--- TOC entry 5023 (class 2604 OID 34843)
+-- TOC entry 5033 (class 2604 OID 34843)
 -- Name: inspection_tasks id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -1537,7 +1657,7 @@ ALTER TABLE ONLY public.inspection_tasks ALTER COLUMN id SET DEFAULT nextval('pu
 
 
 --
--- TOC entry 5009 (class 2604 OID 34744)
+-- TOC entry 5019 (class 2604 OID 34744)
 -- Name: inspection_types id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -1545,7 +1665,7 @@ ALTER TABLE ONLY public.inspection_types ALTER COLUMN id SET DEFAULT nextval('pu
 
 
 --
--- TOC entry 5016 (class 2604 OID 34781)
+-- TOC entry 5026 (class 2604 OID 34781)
 -- Name: inspections id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -1553,7 +1673,7 @@ ALTER TABLE ONLY public.inspections ALTER COLUMN id SET DEFAULT nextval('public.
 
 
 --
--- TOC entry 4997 (class 2604 OID 34679)
+-- TOC entry 5007 (class 2604 OID 34679)
 -- Name: permissions id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -1561,7 +1681,7 @@ ALTER TABLE ONLY public.permissions ALTER COLUMN id SET DEFAULT nextval('public.
 
 
 --
--- TOC entry 5036 (class 2604 OID 35224)
+-- TOC entry 5046 (class 2604 OID 35224)
 -- Name: review_media id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -1569,7 +1689,7 @@ ALTER TABLE ONLY public.review_media ALTER COLUMN id SET DEFAULT nextval('public
 
 
 --
--- TOC entry 4994 (class 2604 OID 34665)
+-- TOC entry 5004 (class 2604 OID 34665)
 -- Name: roles id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -1577,7 +1697,7 @@ ALTER TABLE ONLY public.roles ALTER COLUMN id SET DEFAULT nextval('public.roles_
 
 
 --
--- TOC entry 4987 (class 2604 OID 34642)
+-- TOC entry 4997 (class 2604 OID 34642)
 -- Name: room_production id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -1585,7 +1705,7 @@ ALTER TABLE ONLY public.room_production ALTER COLUMN id SET DEFAULT nextval('pub
 
 
 --
--- TOC entry 5006 (class 2604 OID 34726)
+-- TOC entry 5016 (class 2604 OID 34726)
 -- Name: slides id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -1593,7 +1713,7 @@ ALTER TABLE ONLY public.slides ALTER COLUMN id SET DEFAULT nextval('public.slide
 
 
 --
--- TOC entry 5028 (class 2604 OID 35127)
+-- TOC entry 5038 (class 2604 OID 35127)
 -- Name: trial_balances id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -1601,7 +1721,7 @@ ALTER TABLE ONLY public.trial_balances ALTER COLUMN id SET DEFAULT nextval('publ
 
 
 --
--- TOC entry 4902 (class 2604 OID 34449)
+-- TOC entry 4912 (class 2604 OID 34449)
 -- Name: users id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -1609,7 +1729,7 @@ ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_
 
 
 --
--- TOC entry 5353 (class 0 OID 34556)
+-- TOC entry 5381 (class 0 OID 34556)
 -- Dependencies: 229
 -- Data for Name: actual_dsr; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -1650,7 +1770,7 @@ COPY public.actual_dsr (id, hotel_id, date, room_available, room_ooo, room_com_a
 
 
 --
--- TOC entry 5355 (class 0 OID 34605)
+-- TOC entry 5383 (class 0 OID 34605)
 -- Dependencies: 231
 -- Data for Name: actuals; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -1744,7 +1864,7 @@ COPY public.actuals (id, hotel_id, year, account_code, "values", created_at) FRO
 
 
 --
--- TOC entry 5366 (class 0 OID 34702)
+-- TOC entry 5394 (class 0 OID 34702)
 -- Dependencies: 242
 -- Data for Name: ar_aging; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -1774,7 +1894,7 @@ COPY public.ar_aging (id, hotel_id, year, month, company_name, invoice_number, i
 
 
 --
--- TOC entry 5388 (class 0 OID 35322)
+-- TOC entry 5416 (class 0 OID 35322)
 -- Dependencies: 264
 -- Data for Name: audit_agendas; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -1785,7 +1905,7 @@ COPY public.audit_agendas (id, date, hotel_id, auditor, status, notes, created_a
 
 
 --
--- TOC entry 5390 (class 0 OID 35350)
+-- TOC entry 5418 (class 0 OID 35350)
 -- Dependencies: 266
 -- Data for Name: audit_checklist_categories; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -1796,7 +1916,7 @@ COPY public.audit_checklist_categories (id, name, "position", created_at, update
 
 
 --
--- TOC entry 5392 (class 0 OID 35363)
+-- TOC entry 5420 (class 0 OID 35363)
 -- Dependencies: 268
 -- Data for Name: audit_checklist_items; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -1808,7 +1928,7 @@ COPY public.audit_checklist_items (id, category_id, name, standard, "position", 
 
 
 --
--- TOC entry 5394 (class 0 OID 35390)
+-- TOC entry 5422 (class 0 OID 35390)
 -- Dependencies: 270
 -- Data for Name: audit_results; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -1818,18 +1938,18 @@ COPY public.audit_results (id, agenda_id, item_id, result, notes, image_url, cre
 
 
 --
--- TOC entry 5342 (class 0 OID 34425)
+-- TOC entry 5370 (class 0 OID 34425)
 -- Dependencies: 218
 -- Data for Name: books; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 COPY public.books (id, title, file_paths, thumbnail_url, created_at, hotel_id) FROM stdin;
-5	Budget 2026 Golden Flower	["pdfFiles-1766045278246-689076014.pdf", "pdfFiles-1766045278251-6464975.pdf", "pdfFiles-1766045278255-80779510.pdf", "pdfFiles-1766045278260-315985712.pdf", "pdfFiles-1766045278264-427390833.pdf", "pdfFiles-1766045278273-131528391.pdf", "pdfFiles-1766045278278-398321767.pdf", "pdfFiles-1766045278283-669268243.pdf", "pdfFiles-1766045278288-774546389.pdf"]	thumb-1766045278291.png	2025-12-18 15:07:58.330155+07	\N
+6	Budget 2026 Golden Flower	["pdfFiles-1766213067006-18353380.pdf", "pdfFiles-1766213067013-712935797.pdf", "pdfFiles-1766213067015-887553968.pdf", "pdfFiles-1766213067015-775108525.pdf", "pdfFiles-1766213067020-523027733.pdf", "pdfFiles-1766213067027-851042462.pdf", "pdfFiles-1766213067033-302264102.pdf", "pdfFiles-1766213067039-870580589.pdf", "pdfFiles-1766213067043-778041521.pdf"]	thumb-1766213067045.png	2025-12-20 13:44:27.047684+07	\N
 \.
 
 
 --
--- TOC entry 5351 (class 0 OID 34507)
+-- TOC entry 5379 (class 0 OID 34507)
 -- Dependencies: 227
 -- Data for Name: budget_dsr; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -1839,7 +1959,7 @@ COPY public.budget_dsr (id, hotel_id, date, room_available, room_ooo, room_com_a
 
 
 --
--- TOC entry 5349 (class 0 OID 34490)
+-- TOC entry 5377 (class 0 OID 34490)
 -- Dependencies: 225
 -- Data for Name: budgets; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -1954,7 +2074,7 @@ COPY public.budgets (id, hotel_id, year, account_code, "values", created_at) FRO
 
 
 --
--- TOC entry 5357 (class 0 OID 34622)
+-- TOC entry 5385 (class 0 OID 34622)
 -- Dependencies: 233
 -- Data for Name: dsr_opening_balances; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -1964,142 +2084,162 @@ COPY public.dsr_opening_balances (id, hotel_id, effective_date, balance_value, c
 
 
 --
--- TOC entry 5386 (class 0 OID 35245)
+-- TOC entry 5414 (class 0 OID 35245)
 -- Dependencies: 262
 -- Data for Name: guest_review_settings; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 COPY public.guest_review_settings (id, hotel_id, logo_url, header_text, subheader_text, promo_enabled, promo_title, promo_description, promo_image_url, created_at, updated_at) FROM stdin;
-3	2	/uploads/reviews/logo-1766034055660-604380609.jpg	Bagaimana Pengalaman Menginap Anda?	Kami sangat menghargai masukan Anda untuk menjadi lebih baik.	t	Discount Hari Senin	Silahkan tunjukan promo ini ketika anda kembali di hotel kami 	/uploads/reviews/promo_image-1766036102882-665674260.jpg	2025-12-18 12:00:55.669361+07	2025-12-18 12:35:02.927497+07
+3	2	https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnvqhsyaCGFTmhyDbqJ3VSbyoGw_hWeFWi9Q&s	Bagaimana Pengalaman Menginap Anda?	Kami sangat menghargai masukan Anda untuk menjadi lebih baik.	t	Discount Hari Senin - Kamis	Silahkan tunjukan promo ini ketika anda kembali di hotel kami 	https://pbs.twimg.com/media/Dq9u3DNVAAAM7il.jpg	2025-12-18 12:00:55.669361+07	2025-12-20 12:19:27.652292+07
 \.
 
 
 --
--- TOC entry 5382 (class 0 OID 35200)
+-- TOC entry 5410 (class 0 OID 35200)
 -- Dependencies: 258
 -- Data for Name: guest_reviews; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.guest_reviews (id, hotel_id, guest_name, room_number, checkin_date, rating, cleanliness_rating, service_rating, facilities_rating, comment, status, created_at, updated_at, guest_email, reply_text, replied_at) FROM stdin;
-11	2	Asep Suhendar	109	2025-12-03	3	2	3	4	ada rambut	approved	2025-12-19 12:51:38.454889+07	2025-12-19 13:01:50.132311+07	asep3580@gmail.com	\N	\N
+COPY public.guest_reviews (id, hotel_id, guest_name, room_number, checkin_date, rating, cleanliness_rating, service_rating, facilities_rating, comment, status, created_at, updated_at, guest_email, reply_text, replied_at, voucher_number, voucher_used_at, voucher_used_by_guest, voucher_used_room_number, voucher_used_folio_number) FROM stdin;
+13	2	Asep Suhendar	109	2025-12-03	5	4	5	5	Ada rambut di kasur	approved	2025-12-20 12:47:00.363951+07	2025-12-20 13:07:17.19936+07	asep3580@gmail.com	\N	\N	FBH-13251220	\N	\N	\N	\N
 \.
 
 
 --
--- TOC entry 5346 (class 0 OID 34461)
+-- TOC entry 5424 (class 0 OID 35518)
+-- Dependencies: 272
+-- Data for Name: hotel_competitor_data; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.hotel_competitor_data (id, hotel_id, date, competitor_name, number_of_rooms, room_available, room_sold, occupancy_percent, arr, revpar, revenue, ari, rgi, mpi, rank_mpi, created_at, updated_at) FROM stdin;
+1	2	2025-12-01	Feruci Braga Hotel	131	\N	\N	\N	\N	\N	\N	\N	\N	\N	2	2025-12-20 07:32:32.830045+07	2025-12-20 15:18:05.15041+07
+2	2	2025-12-01	Kimaya Hotel	193	\N	\N	\N	\N	\N	\N	\N	\N	\N	3	2025-12-20 07:32:32.830045+07	2025-12-20 15:18:05.15041+07
+3	2	2025-12-01	De Braga Hotel	112	\N	\N	\N	\N	\N	\N	\N	\N	\N	4	2025-12-20 07:32:32.830045+07	2025-12-20 15:18:05.15041+07
+4	2	2025-12-01	Grand Dafam Hotel	111	\N	\N	\N	\N	\N	\N	\N	\N	\N	5	2025-12-20 07:32:32.830045+07	2025-12-20 15:18:05.15041+07
+5	2	2025-12-01	Kedaton Hotel	110	\N	\N	\N	\N	\N	\N	\N	\N	\N	6	2025-12-20 07:32:32.830045+07	2025-12-20 15:18:05.15041+07
+6	2	2025-12-01	El Royal Hotel	492	\N	\N	\N	\N	\N	\N	\N	\N	\N	7	2025-12-20 07:32:32.830045+07	2025-12-20 15:18:05.15041+07
+\.
+
+
+--
+-- TOC entry 5426 (class 0 OID 35556)
+-- Dependencies: 274
+-- Data for Name: hotel_competitors; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.hotel_competitors (id, hotel_id, competitor_name, created_at, updated_at, number_of_rooms, display_order) FROM stdin;
+12	2	Kimaya Hotel	2025-12-20 07:30:00.247876+07	2025-12-20 07:30:43.281674+07	193	2
+11	2	De Braga Hotel	2025-12-20 07:29:45.977378+07	2025-12-20 07:30:43.281674+07	112	3
+10	2	Grand Dafam Hotel	2025-12-20 07:29:28.641894+07	2025-12-20 07:30:43.281674+07	111	4
+9	2	Kedaton Hotel	2025-12-20 07:29:13.883827+07	2025-12-20 07:30:43.281674+07	110	5
+8	2	El Royal Hotel	2025-12-20 07:28:58.887518+07	2025-12-20 07:30:43.281674+07	492	6
+13	2	Feruci Braga Hotel	2025-12-20 07:30:36.605735+07	2025-12-20 10:27:50.522248+07	131	1
+\.
+
+
+--
+-- TOC entry 5374 (class 0 OID 34461)
 -- Dependencies: 222
 -- Data for Name: hotels; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.hotels (id, name, created_at, updated_at, address, brand, city, thumbnail_url) FROM stdin;
-2	Feruci Braga Hotel	2025-12-14 18:30:03.507909+07	2025-12-14 18:30:03.507909+07	Jl. Braga No.67, Braga, Kec. Sumur Bandung, Kota Bandung, Jawa Barat 40111	Unique	Bandung	\N
-1	Golden Flower Hotel	2025-12-14 16:03:34.967876+07	2025-12-14 18:34:14.050842+07	Jl. Asia Afrika No.15-17, Braga, Kec. Sumur Bandung, Kota Bandung, Jawa Barat 40111	Unique	Bandung	\N
-4	Grand Serela Setiabudhi Hotel	2025-12-14 18:32:05.204941+07	2025-12-14 18:34:34.436635+07	Jl. Hegarmanah No.15 No. 9, Hegarmanah, Cidadap, Bandung City, West Java 12630	Unique	Bandung	\N
-5	Grand Serela Yogyakarta Hotel	2025-12-14 18:36:06.298849+07	2025-12-14 18:36:06.298849+07	Jl. Magelang KM 4 No.145 Sleman Yogyakarta 55284 Indonesia,	Unique	Yogyakarta	\N
-6	Gino Villa Ubud	2025-12-14 18:40:35.401969+07	2025-12-14 18:40:35.401969+07	F756+QFP, Jalan A A Gede Rai, Banjar Tengah, Lodtunduh, Gianyar Regency, Bali 80571	Unique	Bali	\N
-7	Gino Feruci Cianjur Hotel	2025-12-14 18:41:28.349778+07	2025-12-14 18:41:28.349778+07	Jl. KH Abdullah Bin Nuh No.46, Pamoyanan, Kec. Cianjur, Kabupaten Cianjur, Jawa Barat 43211	Unique	Cianjur	\N
-9	Serela Riau Hotel	2025-12-14 18:43:21.358846+07	2025-12-14 18:43:21.358846+07	LLRE Martadinata St No.56, Citarum, Bandung Wetan, Bandung City, West Java 40115	Serela	Bandung	\N
-8	Serela Cihampelas Hotel	2025-12-14 18:42:21.739315+07	2025-12-14 18:43:30.336335+07	Jl. Cihampelas No.147, Cipaganti, Kecamatan Coblong, Kota Bandung, Jawa Barat 40131	Serela	Bandung	\N
-10	Serela Merdeka Hotel	2025-12-14 18:44:18.126623+07	2025-12-14 18:44:18.126623+07	Jl. Purnawarman No.23, Tamansari, Kec. Bandung Wetan, Kota Bandung, Jawa Barat 40116	Serela	Bandung	\N
-11	Serela Waringin Hotel	2025-12-14 18:44:58.311091+07	2025-12-14 18:44:58.311091+07	Jl. Kelenteng No.30-33, Ciroyom, Kec. Andir, Kota Bandung, Jawa Barat 40181	Serela	Bandung	\N
-12	Serela Kuta Hotel	2025-12-14 18:45:33.721977+07	2025-12-14 18:45:33.721977+07	No Jl. Raya Kuta, Kuta, Kec. Kuta, Kabupaten Badung, Bali 80361	Serela	Bali	\N
-13	Zodiak Asia Afrika Hotel	2025-12-14 18:47:09.077322+07	2025-12-14 18:47:09.077322+07	Jl. Asia Afrika No.34, Balonggede, Kec. Regol, Kota Bandung, Jawa Barat 40251	Zodiak	Bandung	\N
-14	Zodiak Kebon Kawung Hotel	2025-12-14 18:47:44.21034+07	2025-12-14 18:47:44.21034+07	Jl. Kebon Kawung No.54, Bandung, Jawa Barat, Kota Bandung, Jawa Barat 40171	Zodiak	Bandung	\N
-15	Zodiak Kebonjati Hotel	2025-12-14 18:48:23.034375+07	2025-12-14 18:48:23.034375+07	Jl. Kebon Jati No.34, Kb. Jeruk, Kec. Andir, Kota Bandung, Jawa Barat 40181	Zodiak	Bandung	\N
-3	Opera White Hotel	2025-12-14 18:31:10.063492+07	2025-12-14 18:48:47.744215+07	Jl. Kebon Jati No.71-75, Kb. Jeruk, Kec. Andir, Kota Bandung, Jawa Barat 40171	Unique	Bandung	\N
-16	Zodiak Sutami Hotel	2025-12-14 18:49:24.577949+07	2025-12-14 18:49:24.577949+07	Jl. Prof. Dr. Sutami No.97, Sukarasa, Kec. Sukasari, Kota Bandung, Jawa Barat 40163	Zodiak	Bandung	\N
-17	Zodiak Paskal Hotel	2025-12-14 18:50:03.191664+07	2025-12-14 18:50:03.191664+07	Jl. Pasir Kaliki No.50, Pasir Kaliki, Kec. Cicendo, Kota Bandung, Jawa Barat 40171	Zodiak	Bandung	\N
-18	Zodiak MT Haryono Hotel	2025-12-14 18:51:03.224243+07	2025-12-14 18:51:03.224243+07	Jl. Otista Raya No.60 11, RT.11/RW.12, Bidara Cina, Kecamatan Jatinegara, Kota Jakarta Timur, Daerah Khusus Ibukota Jakarta 13330	Zodiak	Jakarta	\N
-19	Parlezo Hotel	2025-12-14 18:52:12.137134+07	2025-12-14 18:52:12.137134+07	GV6M+282, Labuan Bajo, Komodo, West Manggarai Regency, East Nusa Tenggara	Serela	Labuan Bajo NTT	\N
-20	The Naripan Hotel	2025-12-14 18:52:53.100867+07	2025-12-14 18:52:53.100867+07	Jl. Naripan No.31-35, Braga, Kec. Sumur Bandung, Kota Bandung, Jawa Barat 40111	Serela	Bandung	\N
+COPY public.hotels (id, name, created_at, updated_at, address, brand, city, thumbnail_url, number_of_rooms) FROM stdin;
+1	Golden Flower Hotel	2025-12-14 16:03:34.967876+07	2025-12-14 18:34:14.050842+07	Jl. Asia Afrika No.15-17, Braga, Kec. Sumur Bandung, Kota Bandung, Jawa Barat 40111	Unique	Bandung	\N	\N
+4	Grand Serela Setiabudhi Hotel	2025-12-14 18:32:05.204941+07	2025-12-14 18:34:34.436635+07	Jl. Hegarmanah No.15 No. 9, Hegarmanah, Cidadap, Bandung City, West Java 12630	Unique	Bandung	\N	\N
+5	Grand Serela Yogyakarta Hotel	2025-12-14 18:36:06.298849+07	2025-12-14 18:36:06.298849+07	Jl. Magelang KM 4 No.145 Sleman Yogyakarta 55284 Indonesia,	Unique	Yogyakarta	\N	\N
+6	Gino Villa Ubud	2025-12-14 18:40:35.401969+07	2025-12-14 18:40:35.401969+07	F756+QFP, Jalan A A Gede Rai, Banjar Tengah, Lodtunduh, Gianyar Regency, Bali 80571	Unique	Bali	\N	\N
+7	Gino Feruci Cianjur Hotel	2025-12-14 18:41:28.349778+07	2025-12-14 18:41:28.349778+07	Jl. KH Abdullah Bin Nuh No.46, Pamoyanan, Kec. Cianjur, Kabupaten Cianjur, Jawa Barat 43211	Unique	Cianjur	\N	\N
+9	Serela Riau Hotel	2025-12-14 18:43:21.358846+07	2025-12-14 18:43:21.358846+07	LLRE Martadinata St No.56, Citarum, Bandung Wetan, Bandung City, West Java 40115	Serela	Bandung	\N	\N
+8	Serela Cihampelas Hotel	2025-12-14 18:42:21.739315+07	2025-12-14 18:43:30.336335+07	Jl. Cihampelas No.147, Cipaganti, Kecamatan Coblong, Kota Bandung, Jawa Barat 40131	Serela	Bandung	\N	\N
+10	Serela Merdeka Hotel	2025-12-14 18:44:18.126623+07	2025-12-14 18:44:18.126623+07	Jl. Purnawarman No.23, Tamansari, Kec. Bandung Wetan, Kota Bandung, Jawa Barat 40116	Serela	Bandung	\N	\N
+11	Serela Waringin Hotel	2025-12-14 18:44:58.311091+07	2025-12-14 18:44:58.311091+07	Jl. Kelenteng No.30-33, Ciroyom, Kec. Andir, Kota Bandung, Jawa Barat 40181	Serela	Bandung	\N	\N
+12	Serela Kuta Hotel	2025-12-14 18:45:33.721977+07	2025-12-14 18:45:33.721977+07	No Jl. Raya Kuta, Kuta, Kec. Kuta, Kabupaten Badung, Bali 80361	Serela	Bali	\N	\N
+13	Zodiak Asia Afrika Hotel	2025-12-14 18:47:09.077322+07	2025-12-14 18:47:09.077322+07	Jl. Asia Afrika No.34, Balonggede, Kec. Regol, Kota Bandung, Jawa Barat 40251	Zodiak	Bandung	\N	\N
+14	Zodiak Kebon Kawung Hotel	2025-12-14 18:47:44.21034+07	2025-12-14 18:47:44.21034+07	Jl. Kebon Kawung No.54, Bandung, Jawa Barat, Kota Bandung, Jawa Barat 40171	Zodiak	Bandung	\N	\N
+15	Zodiak Kebonjati Hotel	2025-12-14 18:48:23.034375+07	2025-12-14 18:48:23.034375+07	Jl. Kebon Jati No.34, Kb. Jeruk, Kec. Andir, Kota Bandung, Jawa Barat 40181	Zodiak	Bandung	\N	\N
+3	Opera White Hotel	2025-12-14 18:31:10.063492+07	2025-12-14 18:48:47.744215+07	Jl. Kebon Jati No.71-75, Kb. Jeruk, Kec. Andir, Kota Bandung, Jawa Barat 40171	Unique	Bandung	\N	\N
+16	Zodiak Sutami Hotel	2025-12-14 18:49:24.577949+07	2025-12-14 18:49:24.577949+07	Jl. Prof. Dr. Sutami No.97, Sukarasa, Kec. Sukasari, Kota Bandung, Jawa Barat 40163	Zodiak	Bandung	\N	\N
+17	Zodiak Paskal Hotel	2025-12-14 18:50:03.191664+07	2025-12-14 18:50:03.191664+07	Jl. Pasir Kaliki No.50, Pasir Kaliki, Kec. Cicendo, Kota Bandung, Jawa Barat 40171	Zodiak	Bandung	\N	\N
+18	Zodiak MT Haryono Hotel	2025-12-14 18:51:03.224243+07	2025-12-14 18:51:03.224243+07	Jl. Otista Raya No.60 11, RT.11/RW.12, Bidara Cina, Kecamatan Jatinegara, Kota Jakarta Timur, Daerah Khusus Ibukota Jakarta 13330	Zodiak	Jakarta	\N	\N
+19	Parlezo Hotel	2025-12-14 18:52:12.137134+07	2025-12-14 18:52:12.137134+07	GV6M+282, Labuan Bajo, Komodo, West Manggarai Regency, East Nusa Tenggara	Serela	Labuan Bajo NTT	\N	\N
+20	The Naripan Hotel	2025-12-14 18:52:53.100867+07	2025-12-14 18:52:53.100867+07	Jl. Naripan No.31-35, Braga, Kec. Sumur Bandung, Kota Bandung, Jawa Barat 40111	Serela	Bandung	\N	\N
+2	Feruci Beraga Hotel	2025-12-14 18:30:03.507909+07	2025-12-23 16:29:47.169472+07	Jl. Braga No.67, Braga, Kec. Sumur Bandung, Kota Bandung, Jawa Barat 40111	Unique	Bandung	\N	\N
 \.
 
 
 --
--- TOC entry 5372 (class 0 OID 34753)
+-- TOC entry 5400 (class 0 OID 34753)
 -- Dependencies: 248
 -- Data for Name: inspection_items; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 COPY public.inspection_items (id, inspection_type_id, category, name, standard, "position", created_at, updated_at) FROM stdin;
-487	1	Kebersihan	Lantai bersih dan tidak berdebu	Lantai harus disapu dan dipel, bebas dari kotoran dan debu.	1	2025-12-19 14:07:04.203798+07	2025-12-19 14:07:04.203798+07
-488	1	Kebersihan	Jendela dan cermin bersih	Tidak ada noda, sidik jari, atau debu pada permukaan kaca.	2	2025-12-19 14:07:04.203798+07	2025-12-19 14:07:04.203798+07
-489	1	Kebersihan	Tempat tidur rapi dan sprei bersih	Sprei dan bed cover terpasang kencang, rapi, dan tidak ada noda.	3	2025-12-19 14:07:04.203798+07	2025-12-19 14:07:04.203798+07
-490	1	Kebersihan	Tidak ada sarang laba-laba	Periksa seluruh sudut ruangan, langit-langit, dan di balik perabotan.	4	2025-12-19 14:07:04.203798+07	2025-12-19 14:07:04.203798+07
-491	1	Fasilitas Kamar	AC berfungsi dengan baik	AC menyala, suhu bisa diatur, dan tidak mengeluarkan suara bising.	1	2025-12-19 14:07:04.203798+07	2025-12-19 14:07:04.203798+07
-492	1	Fasilitas Kamar	TV berfungsi dan remote tersedia	TV menyala, semua channel berfungsi, remote ada dan berfungsi.	2	2025-12-19 14:07:04.203798+07	2025-12-19 14:07:04.203798+07
-493	1	Fasilitas Kamar	Semua lampu berfungsi	Periksa semua lampu di kamar dan kamar mandi.	3	2025-12-19 14:07:04.203798+07	2025-12-19 14:07:04.203798+07
-494	1	Kamar Mandi	Toilet bersih dan higienis	Toilet bowl, seat, dan area sekitar bersih dan sudah disanitasi.	1	2025-12-19 14:07:04.203798+07	2025-12-19 14:07:04.203798+07
-495	1	Kamar Mandi	Shower berfungsi (air panas & dingin)	Aliran air lancar untuk panas dan dingin.	2	2025-12-19 14:07:04.203798+07	2025-12-19 14:07:04.203798+07
-496	1	Kamar Mandi	Handuk bersih dan lengkap	Tersedia handuk sesuai standar jumlah dan dalam kondisi bersih.	3	2025-12-19 14:07:04.203798+07	2025-12-19 14:07:04.203798+07
-497	2	Lobi	Kebersihan lantai lobi	Lantai lobi bersih, kering, dan tidak licin.	1	2025-12-19 14:07:04.203798+07	2025-12-19 14:07:04.203798+07
-498	2	Lobi	Kerapian sofa dan meja	Sofa dan meja tertata rapi, bebas dari debu dan sampah.	2	2025-12-19 14:07:04.203798+07	2025-12-19 14:07:04.203798+07
-499	2	Koridor	Penerangan koridor cukup	Semua lampu koridor menyala dan tidak ada yang redup atau mati.	1	2025-12-19 14:07:04.203798+07	2025-12-19 14:07:04.203798+07
-500	2	Koridor	Tidak ada barang penghalang	Koridor bebas dari troli, sampah, atau barang lain yang menghalangi jalan.	2	2025-12-19 14:07:04.203798+07	2025-12-19 14:07:04.203798+07
-501	3	Kebersihan Peralatan	Kompor dan oven bersih	Bebas dari sisa makanan, minyak, dan kerak.	1	2025-12-19 14:07:04.203798+07	2025-12-19 14:07:04.203798+07
-502	3	Kebersihan Peralatan	Kulkas dan Freezer bersih	Bersih dari tumpahan, tidak berbau, dan suhu sesuai standar.	2	2025-12-19 14:07:04.203798+07	2025-12-19 14:07:04.203798+07
-503	3	Penyimpanan Makanan	Penerapan sistem FIFO	Bahan makanan lama berada di depan untuk digunakan lebih dulu.	1	2025-12-19 14:07:04.203798+07	2025-12-19 14:07:04.203798+07
-504	3	Keamanan	Tabung pemadam api (APAR) tersedia	APAR berada di lokasi yang mudah dijangkau dan belum kedaluwarsa.	1	2025-12-19 14:07:04.203798+07	2025-12-19 14:07:04.203798+07
+649	1	Kebersihan	Lantai bersih dan tidak berdebu	Lantai harus disapu dan dipel, bebas dari kotoran dan debu.	1	2025-12-20 13:41:55.77116+07	2025-12-20 13:41:55.77116+07
+650	1	Kebersihan	Jendela dan cermin bersih	Tidak ada noda, sidik jari, atau debu pada permukaan kaca.	2	2025-12-20 13:41:55.77116+07	2025-12-20 13:41:55.77116+07
+651	1	Kebersihan	Tempat tidur rapi dan sprei bersih	Sprei dan bed cover terpasang kencang, rapi, dan tidak ada noda.	3	2025-12-20 13:41:55.77116+07	2025-12-20 13:41:55.77116+07
+652	1	Kebersihan	Tidak ada sarang laba-laba	Periksa seluruh sudut ruangan, langit-langit, dan di balik perabotan.	4	2025-12-20 13:41:55.77116+07	2025-12-20 13:41:55.77116+07
+653	1	Fasilitas Kamar	AC berfungsi dengan baik	AC menyala, suhu bisa diatur, dan tidak mengeluarkan suara bising.	1	2025-12-20 13:41:55.77116+07	2025-12-20 13:41:55.77116+07
+654	1	Fasilitas Kamar	TV berfungsi dan remote tersedia	TV menyala, semua channel berfungsi, remote ada dan berfungsi.	2	2025-12-20 13:41:55.77116+07	2025-12-20 13:41:55.77116+07
+655	1	Fasilitas Kamar	Semua lampu berfungsi	Periksa semua lampu di kamar dan kamar mandi.	3	2025-12-20 13:41:55.77116+07	2025-12-20 13:41:55.77116+07
+656	1	Kamar Mandi	Toilet bersih dan higienis	Toilet bowl, seat, dan area sekitar bersih dan sudah disanitasi.	1	2025-12-20 13:41:55.77116+07	2025-12-20 13:41:55.77116+07
+657	1	Kamar Mandi	Shower berfungsi (air panas & dingin)	Aliran air lancar untuk panas dan dingin.	2	2025-12-20 13:41:55.77116+07	2025-12-20 13:41:55.77116+07
+658	1	Kamar Mandi	Handuk bersih dan lengkap	Tersedia handuk sesuai standar jumlah dan dalam kondisi bersih.	3	2025-12-20 13:41:55.77116+07	2025-12-20 13:41:55.77116+07
+659	2	Lobi	Kebersihan lantai lobi	Lantai lobi bersih, kering, dan tidak licin.	1	2025-12-20 13:41:55.77116+07	2025-12-20 13:41:55.77116+07
+660	2	Lobi	Kerapian sofa dan meja	Sofa dan meja tertata rapi, bebas dari debu dan sampah.	2	2025-12-20 13:41:55.77116+07	2025-12-20 13:41:55.77116+07
+661	2	Koridor	Penerangan koridor cukup	Semua lampu koridor menyala dan tidak ada yang redup atau mati.	1	2025-12-20 13:41:55.77116+07	2025-12-20 13:41:55.77116+07
+662	2	Koridor	Tidak ada barang penghalang	Koridor bebas dari troli, sampah, atau barang lain yang menghalangi jalan.	2	2025-12-20 13:41:55.77116+07	2025-12-20 13:41:55.77116+07
+663	3	Kebersihan Peralatan	Kompor dan oven bersih	Bebas dari sisa makanan, minyak, dan kerak.	1	2025-12-20 13:41:55.77116+07	2025-12-20 13:41:55.77116+07
+664	3	Kebersihan Peralatan	Kulkas dan Freezer bersih	Bersih dari tumpahan, tidak berbau, dan suhu sesuai standar.	2	2025-12-20 13:41:55.77116+07	2025-12-20 13:41:55.77116+07
+665	3	Penyimpanan Makanan	Penerapan sistem FIFO	Bahan makanan lama berada di depan untuk digunakan lebih dulu.	1	2025-12-20 13:41:55.77116+07	2025-12-20 13:41:55.77116+07
+666	3	Keamanan	Tabung pemadam api (APAR) tersedia	APAR berada di lokasi yang mudah dijangkau dan belum kedaluwarsa.	1	2025-12-20 13:41:55.77116+07	2025-12-20 13:41:55.77116+07
 \.
 
 
 --
--- TOC entry 5376 (class 0 OID 34801)
+-- TOC entry 5404 (class 0 OID 34801)
 -- Dependencies: 252
 -- Data for Name: inspection_results; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 COPY public.inspection_results (id, inspection_id, item_id, result, notes, image_url, priority) FROM stdin;
-12	12	491	fail	tidak dingin	uploads/inspection-photo-1766128547581-144029199.png	medium
-14	12	492	pass	\N	\N	medium
-15	12	493	pass	\N	\N	medium
-16	12	494	pass	\N	\N	medium
-17	12	495	pass	\N	\N	medium
-18	12	496	pass	\N	\N	medium
-19	12	487	pass	\N	\N	medium
-20	12	488	pass	\N	\N	medium
-21	12	489	pass	\N	\N	medium
-22	12	490	pass	\N	\N	medium
 \.
 
 
 --
--- TOC entry 5378 (class 0 OID 34840)
+-- TOC entry 5406 (class 0 OID 34840)
 -- Dependencies: 254
 -- Data for Name: inspection_tasks; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 COPY public.inspection_tasks (id, inspection_id, item_id, hotel_id, description, notes, status, priority, assigned_to, due_date, completion_photo_url, completed_at, created_at, updated_at) FROM stdin;
-2	12	491	2	tidak dingin	AC berfungsi dengan baik	pending	medium	Asep Suhendar	\N	\N	\N	2025-12-19 14:16:23.635523+07	2025-12-19 14:16:23.635523+07
 \.
 
 
 --
--- TOC entry 5370 (class 0 OID 34741)
+-- TOC entry 5398 (class 0 OID 34741)
 -- Dependencies: 246
 -- Data for Name: inspection_types; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 COPY public.inspection_types (id, name, created_at, updated_at) FROM stdin;
-1	Inspeksi Kamar	2025-12-14 15:57:50.209381+07	2025-12-19 14:07:04.203798+07
-2	Inspeksi Area Publik	2025-12-14 15:57:50.209381+07	2025-12-19 14:07:04.203798+07
-3	Inspeksi Dapur	2025-12-14 15:57:50.209381+07	2025-12-19 14:07:04.203798+07
+1	Inspeksi Kamar	2025-12-14 15:57:50.209381+07	2025-12-20 13:41:55.77116+07
+2	Inspeksi Area Publik	2025-12-14 15:57:50.209381+07	2025-12-20 13:41:55.77116+07
+3	Inspeksi Dapur	2025-12-14 15:57:50.209381+07	2025-12-20 13:41:55.77116+07
 \.
 
 
 --
--- TOC entry 5374 (class 0 OID 34778)
+-- TOC entry 5402 (class 0 OID 34778)
 -- Dependencies: 250
 -- Data for Name: inspections; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 COPY public.inspections (id, hotel_id, inspection_type_id, room_number_or_area, inspection_date, status, score, created_at, updated_at, pic_name, inspector_id, notes, inspector_name) FROM stdin;
-12	2	1	109	2025-12-19 14:15:32.620944+07	completed	90.00	2025-12-19 14:15:32.620944+07	2025-12-19 14:16:23.635523+07	Asep Suhendar	\N	\N	Asep Suhendar
 \.
 
 
 --
--- TOC entry 5363 (class 0 OID 34676)
+-- TOC entry 5391 (class 0 OID 34676)
 -- Dependencies: 239
 -- Data for Name: permissions; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -2145,11 +2285,14 @@ COPY public.permissions (id, action, group_name, description) FROM stdin;
 98	financials:dsr:manage	Financials	Bisa input budget, actual, dan opening balance DSR
 99	financials:room_prod:manage	Financials	Bisa input data room production
 100	financials:ar_aging:manage	Financials	Bisa input data AR Aging
+113	submenu:input_hotel_competitor	Menu Access	Akses submenu Input Hotel Competitor
+142	financials:competitor:manage	Financials	Bisa input data hotel competitor
+185	submenu:guest_review_vouchers	Menu Access	Akses submenu Penggunaan Voucher
 \.
 
 
 --
--- TOC entry 5384 (class 0 OID 35221)
+-- TOC entry 5412 (class 0 OID 35221)
 -- Dependencies: 260
 -- Data for Name: review_media; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -2159,7 +2302,7 @@ COPY public.review_media (id, review_id, file_path, media_type, created_at) FROM
 
 
 --
--- TOC entry 5364 (class 0 OID 34686)
+-- TOC entry 5392 (class 0 OID 34686)
 -- Dependencies: 240
 -- Data for Name: role_permissions; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -2272,11 +2415,27 @@ COPY public.role_permissions (role_id, permission_id) FROM stdin;
 1	98
 1	99
 1	100
+7	51
+7	52
+7	53
+7	54
+2	113
+2	142
+1	113
+1	142
+1	185
+7	185
+8	8
+8	9
+8	10
+8	11
+8	12
+8	113
 \.
 
 
 --
--- TOC entry 5361 (class 0 OID 34662)
+-- TOC entry 5389 (class 0 OID 34662)
 -- Dependencies: 237
 -- Data for Name: roles; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -2288,11 +2447,13 @@ COPY public.roles (id, name, description, created_at, updated_at) FROM stdin;
 4	engineering	Akses ke dashboard inspeksi dan daftar tugas.	2025-12-14 15:57:50.209381+07	2025-12-14 15:57:50.209381+07
 5	direksi	Akses lihat-saja ke semua laporan dan dashboard.	2025-12-14 15:57:50.209381+07	2025-12-14 15:57:50.209381+07
 6	auditor	Akses untuk melakukan dan mengelola agenda audit.	2025-12-19 13:59:16.65619+07	2025-12-19 13:59:16.65619+07
+7	e-commerce	Akses hanya ke fitur Guest Review.	2025-12-20 05:50:04.785395+07	2025-12-20 05:50:04.785395+07
+8	night_audit	Akses ke menu Daily Income dan submenunya berdasarkan hotel.	2025-12-20 13:41:55.77116+07	2025-12-20 13:41:55.77116+07
 \.
 
 
 --
--- TOC entry 5359 (class 0 OID 34639)
+-- TOC entry 5387 (class 0 OID 34639)
 -- Dependencies: 235
 -- Data for Name: room_production; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -2302,7 +2463,7 @@ COPY public.room_production (id, hotel_id, date, segment, company, room, guest, 
 
 
 --
--- TOC entry 5368 (class 0 OID 34723)
+-- TOC entry 5396 (class 0 OID 34723)
 -- Dependencies: 244
 -- Data for Name: slides; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -2315,16 +2476,16 @@ COPY public.slides (id, hotel_id, title, link, thumbnail_url, "position", create
 22	16	Profit (loss) Nov 2025	https://docs.google.com/presentation/d/1F5IAjc61BlvM64NLEHQEQqDyqZ1SJHQy4AwYwhkgRUQ/edit?slide=id.p#slide=id.p	https://s-light.tiket.photos/t/01E25EBZS3W0FY9GTG6C42E1SE/t_htl-mobile/tix-hotel/images-web/2025/05/19/ff227716-a1f2-4a9e-b392-c0020f09d1e8-1747623428360-193950e2da247d17a3b93c61becb4566.jpg	12	2025-12-14 19:09:35.340379+07	2025-12-18 05:53:23.394083+07
 23	15	Profit (loss) Nov 2025	https://docs.google.com/presentation/d/1nX157L19lpTDJNPD0wxcYoYlJfxPDjIF1GJI1NNDO1Y/edit?slide=id.p#slide=id.p	https://pix10.agoda.net/hotelImages/551/551929/551929_16083011170045910927.jpg?ca=6&ce=1&s=414x232	13	2025-12-14 19:11:19.281181+07	2025-12-18 05:53:23.394083+07
 24	18	Profit (loss) Nov 2025	https://docs.google.com/presentation/d/1IUjbB6p-cs-SEkDm621qz_AV4g_M_zTyIlNsZrUTN8s/edit?slide=id.p#slide=id.p	https://s-light.tiket.photos/t/01E25EBZS3W0FY9GTG6C42E1SE/t_htl-dskt/tix-hotel/images-web/2020/10/31/e4fee307-e26f-47e5-baf6-4093b323bcb7-1604139122507-73c28690eddf1f80e572dea1adc5421f.jpg	16	2025-12-14 19:12:13.146918+07	2025-12-18 05:53:23.394083+07
+12	\N	Profit (loss) Dec 2025	https://docs.google.com/presentation/d/1skQwiO3azAHlGWTp6sFw0QFCJn89yl7TK_IRnipnrVU/edit?slide=id.p#slide=id.p	https://q-xx.bstatic.com/xdata/images/hotel/max500/181769144.jpg?k=935e5cd34b348bf5946f8f6e033d7876bb18284921a98505a0482e10dfcfbadb&o=	0	2025-12-14 18:55:47.637455+07	2025-12-23 16:39:22.526091+07
 25	20	Profit (loss) Nov 2025	https://docs.google.com/presentation/d/1udWYWSpQgJHZBA_nVrkNA6F036atBT9uiR-rXdB2qKM/edit?slide=id.p#slide=id.p	https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS3dBq6DUH-Y2Bpl42WheQn2mjnBRazIDg-GQ&s	17	2025-12-14 19:13:44.26518+07	2025-12-18 05:53:23.394083+07
 26	19	Profit (loss) Nov 2025	https://docs.google.com/presentation/d/1zrEabG9YVAIKU6RKBtoxkXbI-t3RBLqWLoWhqXowWVk/edit?slide=id.p#slide=id.p	https://dynamic-media-cdn.tripadvisor.com/media/photo-o/27/50/18/fb/facade.jpg?w=900&h=500&s=1	14	2025-12-14 19:14:43.069122+07	2025-12-18 05:53:23.394083+07
-7	1	Profit (loss) Nov 2025	https://docs.google.com/presentation/d/1xfl6-6LrAdPbmoCG0oJTBg_OK0fhx0sRnHVEA9QEJRs/edit?slide=id.p#slide=id.p	https://cf.bstatic.com/xdata/images/hotel/max1024x768/14322960.jpg?k=4cbec7d7e4cccef3bc4aa39bdc5b86dbf3e684d7520fbcad945b40a8478c93fa&o=	1	2025-12-14 17:58:54.759786+07	2025-12-18 05:53:23.394083+07
-11	2	Profit (loss) Nov 2025	https://docs.google.com/presentation/d/1RcMjri2_UxLJC8TS757AHOGjwCekcOrgDpbtNBcNWdo/edit?slide=id.p#slide=id.p	https://newsletter.kagumhotels.com/wp-content/uploads/2025/03/image-23-960x1000.png	2	2025-12-14 18:54:32.481137+07	2025-12-18 05:53:23.394083+07
-12	3	Profit (loss) Nov 2025	https://docs.google.com/presentation/d/1skQwiO3azAHlGWTp6sFw0QFCJn89yl7TK_IRnipnrVU/edit?slide=id.p#slide=id.p	https://q-xx.bstatic.com/xdata/images/hotel/max500/181769144.jpg?k=935e5cd34b348bf5946f8f6e033d7876bb18284921a98505a0482e10dfcfbadb&o=	0	2025-12-14 18:55:47.637455+07	2025-12-18 05:53:23.394083+07
 13	4	Profit (loss) Nov 2025	https://docs.google.com/presentation/d/1MdcMvQJ0sBUSyyh9_Xk-rGGfEhC1U-Fmg3ca6J7qDhs/edit?slide=id.p#slide=id.p	https://q-xx.bstatic.com/xdata/images/hotel/max500/20917113.jpg?k=c6923887c5ed9918cdec91e7bbbce2158ed6f39e751c50f6502bf26ae9f407ff&o=	4	2025-12-14 18:56:58.989201+07	2025-12-18 05:53:23.394083+07
 14	6	Profit (loss) Nov 2025	https://docs.google.com/presentation/d/1Zm1B04pzxwopf9qpsbadVLfb_wijx5Hng-5bTnlff-w/edit?slide=id.p#slide=id.p	https://ik.imagekit.io/tvlk/apr-asset/dgXfoyh24ryQLRcGq00cIdKHRmotrWLNlvG-TxlcLxGkiDwaUSggleJNPRgIHCX6/hotel/asset/10000122-1500x1001-FIT_AND_TRIM-d52e589b9fb8944e5fd8db97c963ba01.jpeg?tr=q-80,c-at_max,w-740,h-500&_src=imagekit	5	2025-12-14 18:59:02.511677+07	2025-12-18 05:53:23.394083+07
 15	8	Profit (loss) Nov 2025	https://docs.google.com/presentation/d/18OialgNZADHp2pmlJW5oq-fT6hq3lUFdz9EbxePsfxM/edit?slide=id.p#slide=id.p	https://dynamic-media-cdn.tripadvisor.com/media/photo-o/06/cf/0e/64/serela-cihampelas.jpg?w=900&h=500&s=1	11	2025-12-14 19:00:08.388966+07	2025-12-18 05:53:23.394083+07
 16	9	Profit (loss) Nov 2025	https://docs.google.com/presentation/d/1toJ00YZM2vgxuyBImn54DPzoLDiWn9gd08KiFtOINb0/edit?slide=id.p#slide=id.p	https://pbs.twimg.com/profile_images/459514844492754944/TTOq9Fhk_400x400.jpeg	15	2025-12-14 19:02:40.04383+07	2025-12-18 05:53:23.394083+07
 17	11	Profit (loss) Nov 2025	https://docs.google.com/presentation/d/1lfinvs5W3E83pJsIS8qeOhCmNGwStEmah8CHuK_znqg/edit?slide=id.p#slide=id.p	https://pix10.agoda.net/hotelImages/648/648807/648807_16092018170046686550.jpg?ca=6&ce=1&s=414x232	6	2025-12-14 19:03:37.136848+07	2025-12-18 05:53:23.394083+07
+7	\N	Profit (loss) Dec 2025	https://docs.google.com/presentation/d/1xfl6-6LrAdPbmoCG0oJTBg_OK0fhx0sRnHVEA9QEJRs/edit?slide=id.p#slide=id.p	https://cf.bstatic.com/xdata/images/hotel/max1024x768/14322960.jpg?k=4cbec7d7e4cccef3bc4aa39bdc5b86dbf3e684d7520fbcad945b40a8478c93fa&o=	1	2025-12-14 17:58:54.759786+07	2025-12-23 16:40:06.263179+07
+11	2	Profit (loss) Dec 2025	https://docs.google.com/presentation/d/1RcMjri2_UxLJC8TS757AHOGjwCekcOrgDpbtNBcNWdo/edit?slide=id.p#slide=id.p	https://newsletter.kagumhotels.com/wp-content/uploads/2025/03/image-23-960x1000.png	2	2025-12-14 18:54:32.481137+07	2025-12-23 16:47:55.539788+07
 18	10	Profit (loss) Nov 2025	https://docs.google.com/presentation/d/1B48nwEMiCx91cqiK-fayRkACUhV3wGGVcbQeFZEz4n8/edit?slide=id.p#slide=id.p	https://dynamic-media-cdn.tripadvisor.com/media/photo-o/04/c0/b0/b6/hotel-serela-merdeka.jpg?w=900&h=500&s=1	3	2025-12-14 19:05:03.492296+07	2025-12-18 05:53:23.394083+07
 19	12	Profit (loss) Nov 2025	https://docs.google.com/presentation/d/1_8BoF7fv85oX6Ck74dGGF-WIg5kEX-LYs1fgzCw98hc/edit?slide=id.p#slide=id.p	https://pix10.agoda.net/hotelImages/281/281587/281587_15070213590031558561.jpg?ca=4&ce=1&s=414x232	7	2025-12-14 19:06:03.565672+07	2025-12-18 05:53:23.394083+07
 20	13	Profit (loss) Nov 2025	https://docs.google.com/presentation/d/1dql5QK1hZB-BCz5z_HTEoddesocVYtfgyuZR2vC-eO8/edit?slide=id.p#slide=id.p	https://www.bandunghotels.net/data/Pics/OriginalPhoto/15845/1584551/1584551973/pic-zodiak-asia-afrika-by-kagum-hotels-bandung-1.JPEG	9	2025-12-14 19:07:10.771981+07	2025-12-18 05:53:23.394083+07
@@ -2333,23 +2494,24 @@ COPY public.slides (id, hotel_id, title, link, thumbnail_url, "position", create
 
 
 --
--- TOC entry 5380 (class 0 OID 35124)
+-- TOC entry 5408 (class 0 OID 35124)
 -- Dependencies: 256
 -- Data for Name: trial_balances; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 COPY public.trial_balances (id, title, link, status, created_at, updated_at, thumbnail_url, "position", drive_folder_link) FROM stdin;
-6	Trial Balance - Serela Riau Hotel	https://docs.google.com/spreadsheets/d/1ReBj1nUMcMRtulkKIef4w1qReFh5NtcLg2699CTeFsA/edit?gid=1048484551#gid=1048484551	in_audit	2025-12-18 05:32:39.536027+07	2025-12-18 06:34:04.004909+07	https://cf.bstatic.com/xdata/images/hotel/max500/81922714.jpg?k=2c8559234f736c6b4834686cdd8eb05a32edd92becc7c952f063205aab05381e&o=&hp=1	5	\N
-4	Trial Balance - Vismaya Ubud	https://docs.google.com/spreadsheets/d/1_R1R29_NbEUWv2lhjFfyqDsM_6gfj07rHM-wG6BvOZs/edit?gid=732429151#gid=732429151	not_audited	2025-12-18 05:28:23.611793+07	2025-12-18 06:34:04.004909+07	https://ik.imagekit.io/tvlk/apr-asset/dgXfoyh24ryQLRcGq00cIdKHRmotrWLNlvG-TxlcLxGkiDwaUSggleJNPRgIHCX6/hotel/asset/10000122-1500x1001-FIT_AND_TRIM-d52e589b9fb8944e5fd8db97c963ba01.jpeg?tr=q-80,c-at_max,w-740,h-500&_src=imagekit	1	\N
-3	Trial Balance - White Opera Hotel	https://docs.google.com/spreadsheets/d/1qfuegFl8Vzex0RbDFcZwPs2mUxDAjfWuYlCxYzi85fg/edit?gid=0#gid=0	not_audited	2025-12-18 05:25:21.726488+07	2025-12-18 06:34:04.004909+07	https://q-xx.bstatic.com/xdata/images/hotel/max500/181769144.jpg?k=935e5cd34b348bf5946f8f6e033d7876bb18284921a98505a0482e10dfcfbadb&o=	2	\N
+6	Trial Balance - Serela Riau Hotel	https://docs.google.com/spreadsheets/d/1ReBj1nUMcMRtulkKIef4w1qReFh5NtcLg2699CTeFsA/edit?gid=1048484551#gid=1048484551	closed	2025-12-18 05:32:39.536027+07	2025-12-23 16:17:23.219382+07	https://cf.bstatic.com/xdata/images/hotel/max500/81922714.jpg?k=2c8559234f736c6b4834686cdd8eb05a32edd92becc7c952f063205aab05381e&o=&hp=1	5	\N
+4	Trial Balance - Vismaya Ubud	https://docs.google.com/spreadsheets/d/1_R1R29_NbEUWv2lhjFfyqDsM_6gfj07rHM-wG6BvOZs/edit?gid=732429151#gid=732429151	in_audit	2025-12-18 05:28:23.611793+07	2025-12-23 16:17:30.528222+07	https://ik.imagekit.io/tvlk/apr-asset/dgXfoyh24ryQLRcGq00cIdKHRmotrWLNlvG-TxlcLxGkiDwaUSggleJNPRgIHCX6/hotel/asset/10000122-1500x1001-FIT_AND_TRIM-d52e589b9fb8944e5fd8db97c963ba01.jpeg?tr=q-80,c-at_max,w-740,h-500&_src=imagekit	1	\N
+3	Trial Balance - White Opera Hotel	https://docs.google.com/spreadsheets/d/1qfuegFl8Vzex0RbDFcZwPs2mUxDAjfWuYlCxYzi85fg/edit?gid=0#gid=0	in_audit	2025-12-18 05:25:21.726488+07	2025-12-23 16:17:36.497788+07	https://q-xx.bstatic.com/xdata/images/hotel/max500/181769144.jpg?k=935e5cd34b348bf5946f8f6e033d7876bb18284921a98505a0482e10dfcfbadb&o=	2	\N
 2	Trial Balance - Feruci Braga Hotel	https://docs.google.com/spreadsheets/d/1apIBoRuFOvAnvsplpaUiOqXtXVVW7SKXsZsqxhbJA2g/edit?gid=927072881#gid=927072881	closed	2025-12-18 05:13:46.265629+07	2025-12-18 06:34:04.004909+07	https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQveFRm4ltoCfzFmid-sfEdVYNesr7io26-Vw&s	3	\N
 1	Trial Balance - Golden Flower Hotel	https://docs.google.com/spreadsheets/d/1QKwiaJG5bk2vI9kp8OYbIGCs0f1QoUS8x2_CTKbBulY/edit?gid=239012900#gid=239012900	in_audit	2025-12-18 04:55:09.622465+07	2025-12-18 06:34:04.004909+07	https://cf.bstatic.com/xdata/images/hotel/max1024x768/14322960.jpg?k=4cbec7d7e4cccef3bc4aa39bdc5b86dbf3e684d7520fbcad945b40a8478c93fa&o=	4	\N
 5	Trial Balance - Grand Serela Setiabudhi Hotel	https://docs.google.com/spreadsheets/d/1e38pAZlIhxm7TUpKz6ITTB2L1eK29O4cBqxeWdZTOPI/edit?gid=2037499852#gid=2037499852	closed	2025-12-18 05:30:28.643383+07	2025-12-18 15:00:14.410213+07	https://q-xx.bstatic.com/xdata/images/hotel/max500/20917113.jpg?k=c6923887c5ed9918cdec91e7bbbce2158ed6f39e751c50f6502bf26ae9f407ff&o=	0	https://drive.google.com/drive/folders/1BtQCqgIVWqBIEJTrhAMjdUEEdHA78eY9?usp=sharing
+7	Trial Balance - Serela Merdeka	https://docs.google.com/spreadsheets/d/1jsQ3BkhFrhLoba3o7grxJgRIoajBD7__sE3YTc5aQq4/edit?gid=565464522#gid=565464522&range=A1	closed	2025-12-22 09:43:21.121643+07	2025-12-23 16:17:12.128719+07	https://dynamic-media-cdn.tripadvisor.com/media/photo-o/04/c0/b0/b6/hotel-serela-merdeka.jpg?w=900&h=500&s=1	\N	https://drive.google.com/drive/folders/1uHMp-DIKhNHKrO0VOK6b_RF-3iscIxsp
 \.
 
 
 --
--- TOC entry 5347 (class 0 OID 34474)
+-- TOC entry 5375 (class 0 OID 34474)
 -- Dependencies: 223
 -- Data for Name: user_hotel_access; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -2359,18 +2521,18 @@ COPY public.user_hotel_access (user_id, hotel_id) FROM stdin;
 
 
 --
--- TOC entry 5344 (class 0 OID 34446)
+-- TOC entry 5372 (class 0 OID 34446)
 -- Dependencies: 220
 -- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.users (id, username, email, password_hash, full_name, role, hotel_id, created_at) FROM stdin;
-1	admin	asep3580@gmail.com	$2b$10$00FzwbsZiHSjJaGpnreeSe6hsOTpzDRiYaf6EOoiGsPBb2wcQx1lu	Asep Suhendar	admin	\N	2025-12-14 15:59:13.293154+07
+COPY public.users (id, username, email, password_hash, full_name, role, hotel_id, created_at, reset_password_token, reset_password_expires) FROM stdin;
+1	admin	stealth3580@gmail.com	$2b$10$2eo6qyrz/kuvS28RHbaHQ.dDWcq1Urp4Vf7N/z.Y/hC2OTRMEVWOu	Admin Utama	admin	\N	2025-12-14 15:59:13.293154+07	080c691c679d8eb4e7800e9f2bfa1b60ce281f4882d8a4205a4900ce5d7f63c1	2025-12-20 06:17:19.107+07
 \.
 
 
 --
--- TOC entry 5426 (class 0 OID 0)
+-- TOC entry 5460 (class 0 OID 0)
 -- Dependencies: 228
 -- Name: actual_dsr_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -2379,7 +2541,7 @@ SELECT pg_catalog.setval('public.actual_dsr_id_seq', 31, true);
 
 
 --
--- TOC entry 5427 (class 0 OID 0)
+-- TOC entry 5461 (class 0 OID 0)
 -- Dependencies: 230
 -- Name: actuals_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -2388,7 +2550,7 @@ SELECT pg_catalog.setval('public.actuals_id_seq', 84, true);
 
 
 --
--- TOC entry 5428 (class 0 OID 0)
+-- TOC entry 5462 (class 0 OID 0)
 -- Dependencies: 241
 -- Name: ar_aging_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -2397,7 +2559,7 @@ SELECT pg_catalog.setval('public.ar_aging_id_seq', 60, true);
 
 
 --
--- TOC entry 5429 (class 0 OID 0)
+-- TOC entry 5463 (class 0 OID 0)
 -- Dependencies: 263
 -- Name: audit_agendas_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -2406,7 +2568,7 @@ SELECT pg_catalog.setval('public.audit_agendas_id_seq', 1, true);
 
 
 --
--- TOC entry 5430 (class 0 OID 0)
+-- TOC entry 5464 (class 0 OID 0)
 -- Dependencies: 265
 -- Name: audit_checklist_categories_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -2415,7 +2577,7 @@ SELECT pg_catalog.setval('public.audit_checklist_categories_id_seq', 1, true);
 
 
 --
--- TOC entry 5431 (class 0 OID 0)
+-- TOC entry 5465 (class 0 OID 0)
 -- Dependencies: 267
 -- Name: audit_checklist_items_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -2424,7 +2586,7 @@ SELECT pg_catalog.setval('public.audit_checklist_items_id_seq', 2, true);
 
 
 --
--- TOC entry 5432 (class 0 OID 0)
+-- TOC entry 5466 (class 0 OID 0)
 -- Dependencies: 269
 -- Name: audit_results_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -2433,16 +2595,16 @@ SELECT pg_catalog.setval('public.audit_results_id_seq', 1, false);
 
 
 --
--- TOC entry 5433 (class 0 OID 0)
+-- TOC entry 5467 (class 0 OID 0)
 -- Dependencies: 217
 -- Name: books_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.books_id_seq', 5, true);
+SELECT pg_catalog.setval('public.books_id_seq', 6, true);
 
 
 --
--- TOC entry 5434 (class 0 OID 0)
+-- TOC entry 5468 (class 0 OID 0)
 -- Dependencies: 226
 -- Name: budget_dsr_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -2451,7 +2613,7 @@ SELECT pg_catalog.setval('public.budget_dsr_id_seq', 1, false);
 
 
 --
--- TOC entry 5435 (class 0 OID 0)
+-- TOC entry 5469 (class 0 OID 0)
 -- Dependencies: 224
 -- Name: budgets_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -2460,7 +2622,7 @@ SELECT pg_catalog.setval('public.budgets_id_seq', 105, true);
 
 
 --
--- TOC entry 5436 (class 0 OID 0)
+-- TOC entry 5470 (class 0 OID 0)
 -- Dependencies: 232
 -- Name: dsr_opening_balances_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -2469,25 +2631,43 @@ SELECT pg_catalog.setval('public.dsr_opening_balances_id_seq', 1, false);
 
 
 --
--- TOC entry 5437 (class 0 OID 0)
+-- TOC entry 5471 (class 0 OID 0)
 -- Dependencies: 261
 -- Name: guest_review_settings_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.guest_review_settings_id_seq', 6, true);
+SELECT pg_catalog.setval('public.guest_review_settings_id_seq', 14, true);
 
 
 --
--- TOC entry 5438 (class 0 OID 0)
+-- TOC entry 5472 (class 0 OID 0)
 -- Dependencies: 257
 -- Name: guest_reviews_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.guest_reviews_id_seq', 11, true);
+SELECT pg_catalog.setval('public.guest_reviews_id_seq', 14, true);
 
 
 --
--- TOC entry 5439 (class 0 OID 0)
+-- TOC entry 5473 (class 0 OID 0)
+-- Dependencies: 271
+-- Name: hotel_competitor_data_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.hotel_competitor_data_id_seq', 42, true);
+
+
+--
+-- TOC entry 5474 (class 0 OID 0)
+-- Dependencies: 273
+-- Name: hotel_competitors_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.hotel_competitors_id_seq', 13, true);
+
+
+--
+-- TOC entry 5475 (class 0 OID 0)
 -- Dependencies: 221
 -- Name: hotels_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -2496,34 +2676,34 @@ SELECT pg_catalog.setval('public.hotels_id_seq', 20, true);
 
 
 --
--- TOC entry 5440 (class 0 OID 0)
+-- TOC entry 5476 (class 0 OID 0)
 -- Dependencies: 247
 -- Name: inspection_items_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.inspection_items_id_seq', 504, true);
+SELECT pg_catalog.setval('public.inspection_items_id_seq', 666, true);
 
 
 --
--- TOC entry 5441 (class 0 OID 0)
+-- TOC entry 5477 (class 0 OID 0)
 -- Dependencies: 251
 -- Name: inspection_results_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.inspection_results_id_seq', 22, true);
+SELECT pg_catalog.setval('public.inspection_results_id_seq', 33, true);
 
 
 --
--- TOC entry 5442 (class 0 OID 0)
+-- TOC entry 5478 (class 0 OID 0)
 -- Dependencies: 253
 -- Name: inspection_tasks_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.inspection_tasks_id_seq', 2, true);
+SELECT pg_catalog.setval('public.inspection_tasks_id_seq', 3, true);
 
 
 --
--- TOC entry 5443 (class 0 OID 0)
+-- TOC entry 5479 (class 0 OID 0)
 -- Dependencies: 245
 -- Name: inspection_types_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -2532,43 +2712,43 @@ SELECT pg_catalog.setval('public.inspection_types_id_seq', 3, true);
 
 
 --
--- TOC entry 5444 (class 0 OID 0)
+-- TOC entry 5480 (class 0 OID 0)
 -- Dependencies: 249
 -- Name: inspections_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.inspections_id_seq', 12, true);
+SELECT pg_catalog.setval('public.inspections_id_seq', 13, true);
 
 
 --
--- TOC entry 5445 (class 0 OID 0)
+-- TOC entry 5481 (class 0 OID 0)
 -- Dependencies: 238
 -- Name: permissions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.permissions_id_seq', 100, true);
+SELECT pg_catalog.setval('public.permissions_id_seq', 185, true);
 
 
 --
--- TOC entry 5446 (class 0 OID 0)
+-- TOC entry 5482 (class 0 OID 0)
 -- Dependencies: 259
 -- Name: review_media_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.review_media_id_seq', 5, true);
+SELECT pg_catalog.setval('public.review_media_id_seq', 6, true);
 
 
 --
--- TOC entry 5447 (class 0 OID 0)
+-- TOC entry 5483 (class 0 OID 0)
 -- Dependencies: 236
 -- Name: roles_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.roles_id_seq', 6, true);
+SELECT pg_catalog.setval('public.roles_id_seq', 8, true);
 
 
 --
--- TOC entry 5448 (class 0 OID 0)
+-- TOC entry 5484 (class 0 OID 0)
 -- Dependencies: 234
 -- Name: room_production_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -2577,7 +2757,7 @@ SELECT pg_catalog.setval('public.room_production_id_seq', 1, false);
 
 
 --
--- TOC entry 5449 (class 0 OID 0)
+-- TOC entry 5485 (class 0 OID 0)
 -- Dependencies: 243
 -- Name: slides_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -2586,25 +2766,25 @@ SELECT pg_catalog.setval('public.slides_id_seq', 27, true);
 
 
 --
--- TOC entry 5450 (class 0 OID 0)
+-- TOC entry 5486 (class 0 OID 0)
 -- Dependencies: 255
 -- Name: trial_balances_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.trial_balances_id_seq', 6, true);
+SELECT pg_catalog.setval('public.trial_balances_id_seq', 7, true);
 
 
 --
--- TOC entry 5451 (class 0 OID 0)
+-- TOC entry 5487 (class 0 OID 0)
 -- Dependencies: 219
 -- Name: users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.users_id_seq', 8, true);
+SELECT pg_catalog.setval('public.users_id_seq', 10, true);
 
 
 --
--- TOC entry 5087 (class 2606 OID 34598)
+-- TOC entry 5103 (class 2606 OID 34598)
 -- Name: actual_dsr actual_dsr_hotel_id_date_key; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -2613,7 +2793,7 @@ ALTER TABLE ONLY public.actual_dsr
 
 
 --
--- TOC entry 5089 (class 2606 OID 34596)
+-- TOC entry 5105 (class 2606 OID 34596)
 -- Name: actual_dsr actual_dsr_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -2622,7 +2802,7 @@ ALTER TABLE ONLY public.actual_dsr
 
 
 --
--- TOC entry 5091 (class 2606 OID 34615)
+-- TOC entry 5107 (class 2606 OID 34615)
 -- Name: actuals actuals_hotel_id_year_account_code_key; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -2631,7 +2811,7 @@ ALTER TABLE ONLY public.actuals
 
 
 --
--- TOC entry 5093 (class 2606 OID 34613)
+-- TOC entry 5109 (class 2606 OID 34613)
 -- Name: actuals actuals_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -2640,7 +2820,7 @@ ALTER TABLE ONLY public.actuals
 
 
 --
--- TOC entry 5113 (class 2606 OID 34716)
+-- TOC entry 5129 (class 2606 OID 34716)
 -- Name: ar_aging ar_aging_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -2649,7 +2829,7 @@ ALTER TABLE ONLY public.ar_aging
 
 
 --
--- TOC entry 5143 (class 2606 OID 35332)
+-- TOC entry 5159 (class 2606 OID 35332)
 -- Name: audit_agendas audit_agendas_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -2658,7 +2838,7 @@ ALTER TABLE ONLY public.audit_agendas
 
 
 --
--- TOC entry 5145 (class 2606 OID 35360)
+-- TOC entry 5161 (class 2606 OID 35360)
 -- Name: audit_checklist_categories audit_checklist_categories_name_key; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -2667,7 +2847,7 @@ ALTER TABLE ONLY public.audit_checklist_categories
 
 
 --
--- TOC entry 5147 (class 2606 OID 35358)
+-- TOC entry 5163 (class 2606 OID 35358)
 -- Name: audit_checklist_categories audit_checklist_categories_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -2676,7 +2856,7 @@ ALTER TABLE ONLY public.audit_checklist_categories
 
 
 --
--- TOC entry 5149 (class 2606 OID 35374)
+-- TOC entry 5165 (class 2606 OID 35374)
 -- Name: audit_checklist_items audit_checklist_items_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -2685,7 +2865,7 @@ ALTER TABLE ONLY public.audit_checklist_items
 
 
 --
--- TOC entry 5151 (class 2606 OID 35401)
+-- TOC entry 5167 (class 2606 OID 35401)
 -- Name: audit_results audit_results_agenda_id_item_id_key; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -2694,7 +2874,7 @@ ALTER TABLE ONLY public.audit_results
 
 
 --
--- TOC entry 5153 (class 2606 OID 35399)
+-- TOC entry 5169 (class 2606 OID 35399)
 -- Name: audit_results audit_results_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -2703,7 +2883,7 @@ ALTER TABLE ONLY public.audit_results
 
 
 --
--- TOC entry 5065 (class 2606 OID 34433)
+-- TOC entry 5081 (class 2606 OID 34433)
 -- Name: books books_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -2712,7 +2892,7 @@ ALTER TABLE ONLY public.books
 
 
 --
--- TOC entry 5083 (class 2606 OID 34549)
+-- TOC entry 5099 (class 2606 OID 34549)
 -- Name: budget_dsr budget_dsr_hotel_id_date_key; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -2721,7 +2901,7 @@ ALTER TABLE ONLY public.budget_dsr
 
 
 --
--- TOC entry 5085 (class 2606 OID 34547)
+-- TOC entry 5101 (class 2606 OID 34547)
 -- Name: budget_dsr budget_dsr_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -2730,7 +2910,7 @@ ALTER TABLE ONLY public.budget_dsr
 
 
 --
--- TOC entry 5079 (class 2606 OID 34500)
+-- TOC entry 5095 (class 2606 OID 34500)
 -- Name: budgets budgets_hotel_id_year_account_code_key; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -2739,7 +2919,7 @@ ALTER TABLE ONLY public.budgets
 
 
 --
--- TOC entry 5081 (class 2606 OID 34498)
+-- TOC entry 5097 (class 2606 OID 34498)
 -- Name: budgets budgets_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -2748,7 +2928,7 @@ ALTER TABLE ONLY public.budgets
 
 
 --
--- TOC entry 5095 (class 2606 OID 34632)
+-- TOC entry 5111 (class 2606 OID 34632)
 -- Name: dsr_opening_balances dsr_opening_balances_hotel_id_key; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -2757,7 +2937,7 @@ ALTER TABLE ONLY public.dsr_opening_balances
 
 
 --
--- TOC entry 5097 (class 2606 OID 34630)
+-- TOC entry 5113 (class 2606 OID 34630)
 -- Name: dsr_opening_balances dsr_opening_balances_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -2766,7 +2946,7 @@ ALTER TABLE ONLY public.dsr_opening_balances
 
 
 --
--- TOC entry 5139 (class 2606 OID 35259)
+-- TOC entry 5155 (class 2606 OID 35259)
 -- Name: guest_review_settings guest_review_settings_hotel_id_key; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -2775,7 +2955,7 @@ ALTER TABLE ONLY public.guest_review_settings
 
 
 --
--- TOC entry 5141 (class 2606 OID 35257)
+-- TOC entry 5157 (class 2606 OID 35257)
 -- Name: guest_review_settings guest_review_settings_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -2784,7 +2964,7 @@ ALTER TABLE ONLY public.guest_review_settings
 
 
 --
--- TOC entry 5135 (class 2606 OID 35214)
+-- TOC entry 5151 (class 2606 OID 35214)
 -- Name: guest_reviews guest_reviews_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -2793,7 +2973,43 @@ ALTER TABLE ONLY public.guest_reviews
 
 
 --
--- TOC entry 5073 (class 2606 OID 34470)
+-- TOC entry 5171 (class 2606 OID 35527)
+-- Name: hotel_competitor_data hotel_competitor_data_hotel_id_date_competitor_name_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.hotel_competitor_data
+    ADD CONSTRAINT hotel_competitor_data_hotel_id_date_competitor_name_key UNIQUE (hotel_id, date, competitor_name);
+
+
+--
+-- TOC entry 5173 (class 2606 OID 35525)
+-- Name: hotel_competitor_data hotel_competitor_data_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.hotel_competitor_data
+    ADD CONSTRAINT hotel_competitor_data_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 5175 (class 2606 OID 35565)
+-- Name: hotel_competitors hotel_competitors_hotel_id_competitor_name_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.hotel_competitors
+    ADD CONSTRAINT hotel_competitors_hotel_id_competitor_name_key UNIQUE (hotel_id, competitor_name);
+
+
+--
+-- TOC entry 5177 (class 2606 OID 35563)
+-- Name: hotel_competitors hotel_competitors_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.hotel_competitors
+    ADD CONSTRAINT hotel_competitors_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 5089 (class 2606 OID 34470)
 -- Name: hotels hotels_name_key; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -2802,7 +3018,7 @@ ALTER TABLE ONLY public.hotels
 
 
 --
--- TOC entry 5075 (class 2606 OID 34468)
+-- TOC entry 5091 (class 2606 OID 34468)
 -- Name: hotels hotels_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -2811,7 +3027,7 @@ ALTER TABLE ONLY public.hotels
 
 
 --
--- TOC entry 5122 (class 2606 OID 34763)
+-- TOC entry 5138 (class 2606 OID 34763)
 -- Name: inspection_items inspection_items_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -2820,7 +3036,7 @@ ALTER TABLE ONLY public.inspection_items
 
 
 --
--- TOC entry 5126 (class 2606 OID 34810)
+-- TOC entry 5142 (class 2606 OID 34810)
 -- Name: inspection_results inspection_results_inspection_id_item_id_key; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -2829,7 +3045,7 @@ ALTER TABLE ONLY public.inspection_results
 
 
 --
--- TOC entry 5128 (class 2606 OID 34808)
+-- TOC entry 5144 (class 2606 OID 34808)
 -- Name: inspection_results inspection_results_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -2838,7 +3054,7 @@ ALTER TABLE ONLY public.inspection_results
 
 
 --
--- TOC entry 5130 (class 2606 OID 34851)
+-- TOC entry 5146 (class 2606 OID 34851)
 -- Name: inspection_tasks inspection_tasks_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -2847,7 +3063,7 @@ ALTER TABLE ONLY public.inspection_tasks
 
 
 --
--- TOC entry 5118 (class 2606 OID 34750)
+-- TOC entry 5134 (class 2606 OID 34750)
 -- Name: inspection_types inspection_types_name_key; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -2856,7 +3072,7 @@ ALTER TABLE ONLY public.inspection_types
 
 
 --
--- TOC entry 5120 (class 2606 OID 34748)
+-- TOC entry 5136 (class 2606 OID 34748)
 -- Name: inspection_types inspection_types_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -2865,7 +3081,7 @@ ALTER TABLE ONLY public.inspection_types
 
 
 --
--- TOC entry 5124 (class 2606 OID 34789)
+-- TOC entry 5140 (class 2606 OID 34789)
 -- Name: inspections inspections_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -2874,7 +3090,7 @@ ALTER TABLE ONLY public.inspections
 
 
 --
--- TOC entry 5107 (class 2606 OID 34685)
+-- TOC entry 5123 (class 2606 OID 34685)
 -- Name: permissions permissions_action_key; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -2883,7 +3099,7 @@ ALTER TABLE ONLY public.permissions
 
 
 --
--- TOC entry 5109 (class 2606 OID 34683)
+-- TOC entry 5125 (class 2606 OID 34683)
 -- Name: permissions permissions_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -2892,7 +3108,7 @@ ALTER TABLE ONLY public.permissions
 
 
 --
--- TOC entry 5137 (class 2606 OID 35229)
+-- TOC entry 5153 (class 2606 OID 35229)
 -- Name: review_media review_media_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -2901,7 +3117,7 @@ ALTER TABLE ONLY public.review_media
 
 
 --
--- TOC entry 5111 (class 2606 OID 34690)
+-- TOC entry 5127 (class 2606 OID 34690)
 -- Name: role_permissions role_permissions_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -2910,7 +3126,7 @@ ALTER TABLE ONLY public.role_permissions
 
 
 --
--- TOC entry 5103 (class 2606 OID 34673)
+-- TOC entry 5119 (class 2606 OID 34673)
 -- Name: roles roles_name_key; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -2919,7 +3135,7 @@ ALTER TABLE ONLY public.roles
 
 
 --
--- TOC entry 5105 (class 2606 OID 34671)
+-- TOC entry 5121 (class 2606 OID 34671)
 -- Name: roles roles_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -2928,7 +3144,7 @@ ALTER TABLE ONLY public.roles
 
 
 --
--- TOC entry 5099 (class 2606 OID 34654)
+-- TOC entry 5115 (class 2606 OID 34654)
 -- Name: room_production room_production_hotel_id_date_segment_company_pic_name_key; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -2937,7 +3153,7 @@ ALTER TABLE ONLY public.room_production
 
 
 --
--- TOC entry 5101 (class 2606 OID 34652)
+-- TOC entry 5117 (class 2606 OID 34652)
 -- Name: room_production room_production_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -2946,7 +3162,7 @@ ALTER TABLE ONLY public.room_production
 
 
 --
--- TOC entry 5116 (class 2606 OID 34732)
+-- TOC entry 5132 (class 2606 OID 34732)
 -- Name: slides slides_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -2955,7 +3171,7 @@ ALTER TABLE ONLY public.slides
 
 
 --
--- TOC entry 5133 (class 2606 OID 35134)
+-- TOC entry 5149 (class 2606 OID 35134)
 -- Name: trial_balances trial_balances_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -2964,7 +3180,7 @@ ALTER TABLE ONLY public.trial_balances
 
 
 --
--- TOC entry 5077 (class 2606 OID 34478)
+-- TOC entry 5093 (class 2606 OID 34478)
 -- Name: user_hotel_access user_hotel_access_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -2973,7 +3189,7 @@ ALTER TABLE ONLY public.user_hotel_access
 
 
 --
--- TOC entry 5067 (class 2606 OID 34458)
+-- TOC entry 5083 (class 2606 OID 34458)
 -- Name: users users_email_key; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -2982,7 +3198,7 @@ ALTER TABLE ONLY public.users
 
 
 --
--- TOC entry 5069 (class 2606 OID 34454)
+-- TOC entry 5085 (class 2606 OID 34454)
 -- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -2991,7 +3207,7 @@ ALTER TABLE ONLY public.users
 
 
 --
--- TOC entry 5071 (class 2606 OID 34456)
+-- TOC entry 5087 (class 2606 OID 34456)
 -- Name: users users_username_key; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3000,7 +3216,7 @@ ALTER TABLE ONLY public.users
 
 
 --
--- TOC entry 5114 (class 1259 OID 34739)
+-- TOC entry 5130 (class 1259 OID 34739)
 -- Name: idx_slides_position; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -3008,7 +3224,7 @@ CREATE INDEX idx_slides_position ON public.slides USING btree ("position");
 
 
 --
--- TOC entry 5131 (class 1259 OID 35167)
+-- TOC entry 5147 (class 1259 OID 35167)
 -- Name: idx_trial_balances_position; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -3016,7 +3232,7 @@ CREATE INDEX idx_trial_balances_position ON public.trial_balances USING btree ("
 
 
 --
--- TOC entry 5192 (class 2620 OID 35474)
+-- TOC entry 5218 (class 2620 OID 35644)
 -- Name: audit_agendas set_timestamp_audit_agendas; Type: TRIGGER; Schema: public; Owner: postgres
 --
 
@@ -3024,7 +3240,7 @@ CREATE TRIGGER set_timestamp_audit_agendas BEFORE UPDATE ON public.audit_agendas
 
 
 --
--- TOC entry 5193 (class 2620 OID 35475)
+-- TOC entry 5219 (class 2620 OID 35645)
 -- Name: audit_checklist_categories set_timestamp_audit_checklist_categories; Type: TRIGGER; Schema: public; Owner: postgres
 --
 
@@ -3032,7 +3248,7 @@ CREATE TRIGGER set_timestamp_audit_checklist_categories BEFORE UPDATE ON public.
 
 
 --
--- TOC entry 5194 (class 2620 OID 35476)
+-- TOC entry 5220 (class 2620 OID 35646)
 -- Name: audit_checklist_items set_timestamp_audit_checklist_items; Type: TRIGGER; Schema: public; Owner: postgres
 --
 
@@ -3040,7 +3256,7 @@ CREATE TRIGGER set_timestamp_audit_checklist_items BEFORE UPDATE ON public.audit
 
 
 --
--- TOC entry 5195 (class 2620 OID 35477)
+-- TOC entry 5221 (class 2620 OID 35647)
 -- Name: audit_results set_timestamp_audit_results; Type: TRIGGER; Schema: public; Owner: postgres
 --
 
@@ -3048,7 +3264,7 @@ CREATE TRIGGER set_timestamp_audit_results BEFORE UPDATE ON public.audit_results
 
 
 --
--- TOC entry 5191 (class 2620 OID 35473)
+-- TOC entry 5217 (class 2620 OID 35643)
 -- Name: guest_review_settings set_timestamp_guest_review_settings; Type: TRIGGER; Schema: public; Owner: postgres
 --
 
@@ -3056,7 +3272,7 @@ CREATE TRIGGER set_timestamp_guest_review_settings BEFORE UPDATE ON public.guest
 
 
 --
--- TOC entry 5190 (class 2620 OID 35472)
+-- TOC entry 5216 (class 2620 OID 35642)
 -- Name: guest_reviews set_timestamp_guest_reviews; Type: TRIGGER; Schema: public; Owner: postgres
 --
 
@@ -3064,7 +3280,23 @@ CREATE TRIGGER set_timestamp_guest_reviews BEFORE UPDATE ON public.guest_reviews
 
 
 --
--- TOC entry 5183 (class 2620 OID 35465)
+-- TOC entry 5222 (class 2620 OID 35648)
+-- Name: hotel_competitor_data set_timestamp_hotel_competitor_data; Type: TRIGGER; Schema: public; Owner: postgres
+--
+
+CREATE TRIGGER set_timestamp_hotel_competitor_data BEFORE UPDATE ON public.hotel_competitor_data FOR EACH ROW EXECUTE FUNCTION public.trigger_set_timestamp();
+
+
+--
+-- TOC entry 5223 (class 2620 OID 35588)
+-- Name: hotel_competitors set_timestamp_hotel_competitors; Type: TRIGGER; Schema: public; Owner: postgres
+--
+
+CREATE TRIGGER set_timestamp_hotel_competitors BEFORE UPDATE ON public.hotel_competitors FOR EACH ROW EXECUTE FUNCTION public.trigger_set_timestamp();
+
+
+--
+-- TOC entry 5209 (class 2620 OID 35635)
 -- Name: hotels set_timestamp_hotels; Type: TRIGGER; Schema: public; Owner: postgres
 --
 
@@ -3072,7 +3304,7 @@ CREATE TRIGGER set_timestamp_hotels BEFORE UPDATE ON public.hotels FOR EACH ROW 
 
 
 --
--- TOC entry 5188 (class 2620 OID 35470)
+-- TOC entry 5214 (class 2620 OID 35640)
 -- Name: inspection_items set_timestamp_inspection_items; Type: TRIGGER; Schema: public; Owner: postgres
 --
 
@@ -3080,7 +3312,7 @@ CREATE TRIGGER set_timestamp_inspection_items BEFORE UPDATE ON public.inspection
 
 
 --
--- TOC entry 5187 (class 2620 OID 35469)
+-- TOC entry 5213 (class 2620 OID 35639)
 -- Name: inspection_types set_timestamp_inspection_types; Type: TRIGGER; Schema: public; Owner: postgres
 --
 
@@ -3088,7 +3320,7 @@ CREATE TRIGGER set_timestamp_inspection_types BEFORE UPDATE ON public.inspection
 
 
 --
--- TOC entry 5185 (class 2620 OID 35467)
+-- TOC entry 5211 (class 2620 OID 35637)
 -- Name: roles set_timestamp_roles; Type: TRIGGER; Schema: public; Owner: postgres
 --
 
@@ -3096,7 +3328,7 @@ CREATE TRIGGER set_timestamp_roles BEFORE UPDATE ON public.roles FOR EACH ROW EX
 
 
 --
--- TOC entry 5184 (class 2620 OID 35466)
+-- TOC entry 5210 (class 2620 OID 35636)
 -- Name: room_production set_timestamp_room_production; Type: TRIGGER; Schema: public; Owner: postgres
 --
 
@@ -3104,7 +3336,7 @@ CREATE TRIGGER set_timestamp_room_production BEFORE UPDATE ON public.room_produc
 
 
 --
--- TOC entry 5186 (class 2620 OID 35468)
+-- TOC entry 5212 (class 2620 OID 35638)
 -- Name: slides set_timestamp_slides; Type: TRIGGER; Schema: public; Owner: postgres
 --
 
@@ -3112,7 +3344,7 @@ CREATE TRIGGER set_timestamp_slides BEFORE UPDATE ON public.slides FOR EACH ROW 
 
 
 --
--- TOC entry 5189 (class 2620 OID 35471)
+-- TOC entry 5215 (class 2620 OID 35641)
 -- Name: trial_balances set_timestamp_trial_balances; Type: TRIGGER; Schema: public; Owner: postgres
 --
 
@@ -3120,7 +3352,7 @@ CREATE TRIGGER set_timestamp_trial_balances BEFORE UPDATE ON public.trial_balanc
 
 
 --
--- TOC entry 5159 (class 2606 OID 34599)
+-- TOC entry 5183 (class 2606 OID 34599)
 -- Name: actual_dsr actual_dsr_hotel_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3129,7 +3361,7 @@ ALTER TABLE ONLY public.actual_dsr
 
 
 --
--- TOC entry 5160 (class 2606 OID 34616)
+-- TOC entry 5184 (class 2606 OID 34616)
 -- Name: actuals actuals_hotel_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3138,7 +3370,7 @@ ALTER TABLE ONLY public.actuals
 
 
 --
--- TOC entry 5165 (class 2606 OID 34717)
+-- TOC entry 5189 (class 2606 OID 34717)
 -- Name: ar_aging ar_aging_hotel_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3147,7 +3379,7 @@ ALTER TABLE ONLY public.ar_aging
 
 
 --
--- TOC entry 5179 (class 2606 OID 35333)
+-- TOC entry 5203 (class 2606 OID 35333)
 -- Name: audit_agendas audit_agendas_hotel_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3156,7 +3388,7 @@ ALTER TABLE ONLY public.audit_agendas
 
 
 --
--- TOC entry 5180 (class 2606 OID 35375)
+-- TOC entry 5204 (class 2606 OID 35375)
 -- Name: audit_checklist_items audit_checklist_items_category_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3165,7 +3397,7 @@ ALTER TABLE ONLY public.audit_checklist_items
 
 
 --
--- TOC entry 5181 (class 2606 OID 35402)
+-- TOC entry 5205 (class 2606 OID 35402)
 -- Name: audit_results audit_results_agenda_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3174,7 +3406,7 @@ ALTER TABLE ONLY public.audit_results
 
 
 --
--- TOC entry 5182 (class 2606 OID 35407)
+-- TOC entry 5206 (class 2606 OID 35407)
 -- Name: audit_results audit_results_item_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3183,7 +3415,7 @@ ALTER TABLE ONLY public.audit_results
 
 
 --
--- TOC entry 5154 (class 2606 OID 34868)
+-- TOC entry 5178 (class 2606 OID 34868)
 -- Name: books books_hotel_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3192,7 +3424,7 @@ ALTER TABLE ONLY public.books
 
 
 --
--- TOC entry 5158 (class 2606 OID 34550)
+-- TOC entry 5182 (class 2606 OID 34550)
 -- Name: budget_dsr budget_dsr_hotel_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3201,7 +3433,7 @@ ALTER TABLE ONLY public.budget_dsr
 
 
 --
--- TOC entry 5157 (class 2606 OID 34501)
+-- TOC entry 5181 (class 2606 OID 34501)
 -- Name: budgets budgets_hotel_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3210,7 +3442,7 @@ ALTER TABLE ONLY public.budgets
 
 
 --
--- TOC entry 5161 (class 2606 OID 34633)
+-- TOC entry 5185 (class 2606 OID 34633)
 -- Name: dsr_opening_balances dsr_opening_balances_hotel_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3219,7 +3451,7 @@ ALTER TABLE ONLY public.dsr_opening_balances
 
 
 --
--- TOC entry 5178 (class 2606 OID 35260)
+-- TOC entry 5202 (class 2606 OID 35260)
 -- Name: guest_review_settings guest_review_settings_hotel_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3228,7 +3460,7 @@ ALTER TABLE ONLY public.guest_review_settings
 
 
 --
--- TOC entry 5176 (class 2606 OID 35215)
+-- TOC entry 5200 (class 2606 OID 35215)
 -- Name: guest_reviews guest_reviews_hotel_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3237,7 +3469,25 @@ ALTER TABLE ONLY public.guest_reviews
 
 
 --
--- TOC entry 5167 (class 2606 OID 34764)
+-- TOC entry 5207 (class 2606 OID 35528)
+-- Name: hotel_competitor_data hotel_competitor_data_hotel_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.hotel_competitor_data
+    ADD CONSTRAINT hotel_competitor_data_hotel_id_fkey FOREIGN KEY (hotel_id) REFERENCES public.hotels(id) ON DELETE CASCADE;
+
+
+--
+-- TOC entry 5208 (class 2606 OID 35566)
+-- Name: hotel_competitors hotel_competitors_hotel_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.hotel_competitors
+    ADD CONSTRAINT hotel_competitors_hotel_id_fkey FOREIGN KEY (hotel_id) REFERENCES public.hotels(id) ON DELETE CASCADE;
+
+
+--
+-- TOC entry 5191 (class 2606 OID 34764)
 -- Name: inspection_items inspection_items_inspection_type_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3246,7 +3496,7 @@ ALTER TABLE ONLY public.inspection_items
 
 
 --
--- TOC entry 5171 (class 2606 OID 34811)
+-- TOC entry 5195 (class 2606 OID 34811)
 -- Name: inspection_results inspection_results_inspection_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3255,7 +3505,7 @@ ALTER TABLE ONLY public.inspection_results
 
 
 --
--- TOC entry 5172 (class 2606 OID 34816)
+-- TOC entry 5196 (class 2606 OID 34816)
 -- Name: inspection_results inspection_results_item_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3264,7 +3514,7 @@ ALTER TABLE ONLY public.inspection_results
 
 
 --
--- TOC entry 5173 (class 2606 OID 34862)
+-- TOC entry 5197 (class 2606 OID 34862)
 -- Name: inspection_tasks inspection_tasks_hotel_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3273,7 +3523,7 @@ ALTER TABLE ONLY public.inspection_tasks
 
 
 --
--- TOC entry 5174 (class 2606 OID 34852)
+-- TOC entry 5198 (class 2606 OID 34852)
 -- Name: inspection_tasks inspection_tasks_inspection_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3282,7 +3532,7 @@ ALTER TABLE ONLY public.inspection_tasks
 
 
 --
--- TOC entry 5175 (class 2606 OID 34857)
+-- TOC entry 5199 (class 2606 OID 34857)
 -- Name: inspection_tasks inspection_tasks_item_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3291,7 +3541,7 @@ ALTER TABLE ONLY public.inspection_tasks
 
 
 --
--- TOC entry 5168 (class 2606 OID 34790)
+-- TOC entry 5192 (class 2606 OID 34790)
 -- Name: inspections inspections_hotel_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3300,7 +3550,7 @@ ALTER TABLE ONLY public.inspections
 
 
 --
--- TOC entry 5169 (class 2606 OID 34795)
+-- TOC entry 5193 (class 2606 OID 34795)
 -- Name: inspections inspections_inspection_type_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3309,7 +3559,7 @@ ALTER TABLE ONLY public.inspections
 
 
 --
--- TOC entry 5170 (class 2606 OID 34900)
+-- TOC entry 5194 (class 2606 OID 34900)
 -- Name: inspections inspections_inspector_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3318,7 +3568,7 @@ ALTER TABLE ONLY public.inspections
 
 
 --
--- TOC entry 5177 (class 2606 OID 35230)
+-- TOC entry 5201 (class 2606 OID 35230)
 -- Name: review_media review_media_review_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3327,7 +3577,7 @@ ALTER TABLE ONLY public.review_media
 
 
 --
--- TOC entry 5163 (class 2606 OID 34696)
+-- TOC entry 5187 (class 2606 OID 34696)
 -- Name: role_permissions role_permissions_permission_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3336,7 +3586,7 @@ ALTER TABLE ONLY public.role_permissions
 
 
 --
--- TOC entry 5164 (class 2606 OID 34691)
+-- TOC entry 5188 (class 2606 OID 34691)
 -- Name: role_permissions role_permissions_role_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3345,7 +3595,7 @@ ALTER TABLE ONLY public.role_permissions
 
 
 --
--- TOC entry 5162 (class 2606 OID 34655)
+-- TOC entry 5186 (class 2606 OID 34655)
 -- Name: room_production room_production_hotel_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3354,7 +3604,7 @@ ALTER TABLE ONLY public.room_production
 
 
 --
--- TOC entry 5166 (class 2606 OID 34733)
+-- TOC entry 5190 (class 2606 OID 34733)
 -- Name: slides slides_hotel_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3363,7 +3613,7 @@ ALTER TABLE ONLY public.slides
 
 
 --
--- TOC entry 5155 (class 2606 OID 34484)
+-- TOC entry 5179 (class 2606 OID 34484)
 -- Name: user_hotel_access user_hotel_access_hotel_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3372,7 +3622,7 @@ ALTER TABLE ONLY public.user_hotel_access
 
 
 --
--- TOC entry 5156 (class 2606 OID 34479)
+-- TOC entry 5180 (class 2606 OID 34479)
 -- Name: user_hotel_access user_hotel_access_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3380,11 +3630,11 @@ ALTER TABLE ONLY public.user_hotel_access
     ADD CONSTRAINT user_hotel_access_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(id) ON DELETE CASCADE;
 
 
--- Completed on 2025-12-19 14:40:48
+-- Completed on 2025-12-23 16:50:17
 
 --
 -- PostgreSQL database dump complete
 --
 
-\unrestrict RL4PA0R9WwkBLVlRaCAAuwAHKNcqesyJ4LBC3KMZBrMoL1tafsgow8Hp92UOUo5
+\unrestrict PlXbsMvVG8g760idg9E951DTuN4jVrjTxIdP6MDjeARbBfhQXrfRulsj8WQy8Lx
 
