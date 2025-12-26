@@ -10,7 +10,7 @@ const hotelAccessMiddleware = (req, res, next) => {
     }
 
     // Extract hotel_id from request body or query parameters
-    const requestedHotelId = parseInt(req.body.hotel_id || req.query.hotel_id, 10);
+    const requestedHotelId = parseInt(req.body?.hotel_id || req.query.hotel_id, 10);
 
     // If no specific hotel_id is requested or if the user is a manager (and not admin),
     // and manager is not restricted by hotel, then allow
