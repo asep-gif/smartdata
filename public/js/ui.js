@@ -127,6 +127,7 @@ function applyUserPermissions() {
         'submenu:input_budget_dsr': 'nav-input-budget-dsr',
         'submenu:input_actual_dsr': 'nav-input-actual-dsr',
         'submenu:input_room_production': 'nav-input-room-production',
+        'submenu:input_hotel_competitor': 'nav-input-hotel-competitor',
         'menu:ar_aging': 'nav-input-ar-aging-parent',
         'submenu:input_ar_aging': 'nav-input-ar-aging',
         'submenu:ar_summary': 'nav-ar-summary',
@@ -204,6 +205,34 @@ function closeAddUserModal() {
 }
 
 /**
+ * BARU: Membuka modal untuk menambah hotel baru.
+ */
+function openAddHotelModal() {
+    const modal = document.getElementById('add-hotel-modal');
+    if (modal) {
+        document.getElementById('add-hotel-form').reset();
+        const errorDiv = document.getElementById('add-hotel-error');
+        if (errorDiv) {
+            errorDiv.classList.add('hidden');
+            errorDiv.textContent = '';
+        }
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+    }
+}
+
+/**
+ * BARU: Menutup modal tambah hotel.
+ */
+function closeAddHotelModal() {
+    const modal = document.getElementById('add-hotel-modal');
+    if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+    }
+}
+
+/**
  * BARU: Menutup modal edit pengguna.
  */
 function closeEditUserModal() {
@@ -215,23 +244,10 @@ function closeEditUserModal() {
 }
 
 /**
- * BARU: Membuka modal untuk menambah hotel baru.
+ * BARU: Menutup modal edit hotel.
  */
-function openAddHotelModal() {
-    const modal = document.getElementById('add-hotel-modal');
-    if (modal) {
-        document.getElementById('add-hotel-form').reset();
-        document.getElementById('add-hotel-error').classList.add('hidden');
-        modal.classList.remove('hidden');
-        modal.classList.add('flex');
-    }
-}
-
-/**
- * BARU: Menutup modal tambah hotel.
- */
-function closeAddHotelModal() {
-    const modal = document.getElementById('add-hotel-modal');
+function closeEditHotelModal() {
+    const modal = document.getElementById('edit-hotel-modal');
     if (modal) {
         modal.classList.add('hidden');
         modal.classList.remove('flex');
@@ -314,12 +330,10 @@ function handleHashChange() {
         showMainReports();
     } else if (hash === '#slides') {
         showPage('slides');
-        initSlidesPage(); // Panggil inisialisasi di sini
         showMainSettings();
         showMainReports();
     } else if (hash === '#slides-corporate') {
         showPage('slides-corporate');
-        initSlidesCorporatePage(); // Panggil inisialisasi di sini
         showMainSettings();
         showMainReports();
     } else if (hash === '#input-ar-aging') {
@@ -430,6 +444,8 @@ function handleHashChange() {
             showRoleManagement();
         } else if (hash === '#settings/competitors') {
             showCompetitorManagement();
+        } else if (hash === '#settings/formats') {
+            showFormatSettingsManagement();
         } else {
             showMainSettings();
         }
@@ -465,6 +481,7 @@ function showMainSettings() {
     document.getElementById('inspection-types-management-section').classList.add('hidden');
     document.getElementById('role-management-section').classList.add('hidden');
     document.getElementById('competitor-settings-section').classList.add('hidden');
+    document.getElementById('format-settings-section')?.classList.add('hidden');
 }
 
 /**
@@ -476,6 +493,21 @@ function showCompetitorManagement() {
     document.getElementById('competitor-settings-section').classList.remove('hidden');
     if (typeof initCompetitorSettingsPage === 'function') {
         initCompetitorSettingsPage();
+    }
+}
+
+/**
+ * Menampilkan bagian Kelola Format dan menyembunyikan yang lain.
+ */
+function showFormatSettingsManagement() {
+    showMainSettings(); // Sembunyikan semua dulu
+    document.getElementById('settings-grid').classList.add('hidden');
+    const formatSection = document.getElementById('format-settings-section');
+    if (formatSection) {
+        formatSection.classList.remove('hidden');
+    }
+    if (typeof initFormatSettingsForm === 'function') {
+        initFormatSettingsForm();
     }
 }
 

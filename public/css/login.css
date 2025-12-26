@@ -31,7 +31,7 @@ body::before {
   content: '';
   position: absolute;
   inset: 0;
-  background: url('https://golden-flower.co.id/wp-content/uploads/2020/01/facade.jpg') no-repeat center center/cover;
+  background: url('https://img.freepik.com/free-photo/view-starry-night-sky-with-nature-mountains-landscape_23-2151614765.jpg?semt=ais_hybrid&w=740&q=80') no-repeat center center/cover;
   animation: zoomOut 20s ease-in-out infinite alternate;
   z-index: -1; /* Pastikan berada di belakang overlay */
 }

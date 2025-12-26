@@ -16,6 +16,42 @@ async function initDashboardPage() {
         populateHotelChecklist('dashboard-hotel-checklist-container', 'dashboard-hotel-filter-select-all', 'dashboard-hotel-filter-label')
     ]);
 
+    // Initialize hotel filter dropdown functionality
+    initHotelFilterDropdown(
+        'dashboard-hotel-filter-btn',
+        'dashboard-hotel-filter-dropdown',
+        'dashboard-hotel-filter-search',
+        'dashboard-hotel-filter-select-all',
+        'dashboard-hotel-checklist-container',
+        'dashboard-hotel-filter-apply',
+        'dashboard-hotel-filter-label'
+    );
+
+    // Add event listeners for filters
+    document.getElementById('dashboard-year-filter')?.addEventListener('change', loadDashboardStats);
+    document.getElementById('dashboard-month-filter')?.addEventListener('change', loadDashboardStats);
+
+    const brandFilter = document.getElementById('dashboard-brand-filter');
+    if (brandFilter) {
+        brandFilter.addEventListener('change', () => {
+            // Reset hotel filter if brand is changed
+            const hotelCheckboxes = document.querySelectorAll('#dashboard-hotel-checklist-container input[type="checkbox"]');
+            hotelCheckboxes.forEach(cb => cb.checked = false);
+            updateHotelFilterLabel('dashboard-hotel-filter-label', 'dashboard-hotel-checklist-container');
+            loadDashboardStats();
+        });
+    }
+
+    const applyHotelFilterBtn = document.getElementById('dashboard-hotel-filter-apply');
+    if (applyHotelFilterBtn) {
+        applyHotelFilterBtn.addEventListener('click', () => {
+            // Reset brand filter if hotel filter is applied
+            document.getElementById('dashboard-brand-filter').value = 'all';
+            document.getElementById('dashboard-hotel-filter-dropdown').classList.add('hidden');
+            loadDashboardStats();
+        });
+    }
+
     // Inisialisasi fungsionalitas drag-and-drop untuk chart
     initDashboardDragAndDrop();
 
@@ -176,7 +212,7 @@ function updateStatsCardsView() {
     if(varianceLabelEl) varianceLabelEl.textContent = varianceLabel;
 
     // Update values
-    const formatCurrency = (val) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(val);
+    const formatCurrency = (val) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(val);
     if(budgetEl) budgetEl.textContent = formatCurrency(budgetValue);
     if(actualEl) actualEl.textContent = formatCurrency(actualValue);
 
@@ -412,7 +448,7 @@ async function loadDashboardStats() {
         const formatCurrencyShort = (val) => {
             if (val >= 1_000_000) return `Rp ${(val / 1_000_000).toFixed(1)} Jt`;
             if (val >= 1_000) return `Rp ${(val / 1_000).toFixed(0)} Rb`;
-            return `Rp ${Math.round(val || 0).toLocaleString('id-ID')}`;
+            return `Rp ${formatNumber(val || 0, { decimalPlaces: 0 })}`;
         };
         const getVarianceColor = (variance) => variance > 0 ? 'text-green-600' : (variance < 0 ? 'text-red-600' : 'text-slate-500');
 
@@ -562,7 +598,7 @@ function renderPLSummaryTable(summaryData) {
     }
 
     const formatPercent = (val) => `${(val || 0).toFixed(1)}%`;
-    const formatCurrency = (val) => Math.round(val || 0).toLocaleString('id-ID');
+    const formatCurrency = (val) => formatNumber(val || 0, { decimalPlaces: 0 });
     const getVarianceColor = (variance) => variance > 0 ? 'text-green-600' : (variance < 0 ? 'text-red-600' : 'text-slate-500');
 
     summaryData.forEach(item => {
@@ -1027,7 +1063,7 @@ function renderHotelAchievementChart(budgetData, actualData, allHotels) {
                         label: function(context) {
                             const raw = context.raw;
                             if (!raw) return '';
-                            const formatCurrency = (value) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(value);
+                            const formatCurrency = (value) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(value);
                             const ratioLine = `Ratio  : ${parseFloat(raw.x).toFixed(0)}%`;
                             const actualLine = `Actual : ${formatCurrency(raw.actual)}`;
                             const budgetLine = `Budget : ${formatCurrency(raw.budget)}`;
@@ -1077,7 +1113,7 @@ function initRoomProductionSegmentChart(labels = [], data = [], backgroundColors
                 },
                 tooltip: {
                     callbacks: {
-                        label: (context) => ` ${context.label}: ${context.raw.toLocaleString('id-ID')} Rooms`
+                        label: (context) => ` ${context.label}: ${formatNumber(context.raw, { decimalPlaces: 0 })} Rooms`
                     }
                 }
             },
@@ -1132,7 +1168,7 @@ function initRoomProductionArrChart(labels = [], data = [], backgroundColors = [
                     beginAtZero: true,
                     grid: { display: false },
                     ticks: {
-                        callback: (value) => `Rp ${new Intl.NumberFormat('id-ID', { maximumFractionDigits: 0 }).format(value)}`
+                        callback: (value) => `Rp ${new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 }).format(value)}`
                     }
                 },
                 x: { grid: { display: false } }
@@ -1147,7 +1183,7 @@ function initRoomProductionArrChart(labels = [], data = [], backgroundColors = [
                     callbacks: {
                         label: function(context) {
                             const raw = context.raw;
-                            const formatMoney = (value) => `Rp ${new Intl.NumberFormat('id-ID', { maximumFractionDigits: 0 }).format(value)}`;
+                            const formatMoney = (value) => `Rp ${new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 }).format(value)}`;
                             return `ARR: ${formatMoney(raw)}`;
                         }
                     }

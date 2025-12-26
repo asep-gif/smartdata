@@ -15,19 +15,19 @@ function initSettingsPage() {
         }
     }
     
-    document.getElementById('add-hotel-form')?.addEventListener('submit', handleAddHotelSubmit); // Kembalikan event listener
-    document.getElementById('edit-hotel-form')?.addEventListener('submit', handleEditHotelSubmit); // Kembalikan event listener
+    document.getElementById('add-hotel-form')?.addEventListener('submit', handleAddHotelSubmit);
+    document.getElementById('edit-hotel-form')?.addEventListener('submit', handleEditHotelSubmit);
     
     const editUserForm = document.getElementById('edit-user-form');
     if (editUserForm) {
-        editUserForm.addEventListener('submit', handleEditUserSubmit); // Kembalikan event listener
+        editUserForm.addEventListener('submit', handleEditUserSubmit);
         const editUserRoleSelect = document.getElementById('edit-user-role');
         if (editUserRoleSelect) {
             editUserRoleSelect.addEventListener('change', toggleEditHotelIdField);
         }
     }
     
-    document.getElementById('edit-opening-balance-form')?.addEventListener('submit', handleSaveOpeningBalance); // Kembalikan event listener
+    document.getElementById('edit-opening-balance-form')?.addEventListener('submit', handleSaveOpeningBalance);
     
     // BARU: Panggil fungsi untuk mengisi dropdown peran secara dinamis
     populateRolesDropdowns();
@@ -702,20 +702,19 @@ async function handleDeleteUser(userId, username) {
 async function loadHotelsTable() {
     const tableBody = document.getElementById('hotel-table-body');
     if (!tableBody) return;
-    tableBody.innerHTML = '<tr><td colspan="6" class="text-center p-4">Memuat data hotel...</td></tr>';
+    tableBody.innerHTML = '<tr><td colspan="5" class="text-center p-4">Memuat data hotel...</td></tr>';
     
     try {
         const hotels = await fetchAPI('/api/hotels');
         if (hotels.length === 0) {
-            tableBody.innerHTML = '<tr><td colspan="6" class="text-center p-4">Belum ada hotel terdaftar.</td></tr>';
+            tableBody.innerHTML = '<tr><td colspan="5" class="text-center p-4">Belum ada hotel terdaftar.</td></tr>';
             return;
         }
 
         tableBody.innerHTML = '';
-        hotels.forEach((hotel, index) => {
+        hotels.forEach(hotel => {
             const tr = document.createElement('tr');
             tr.innerHTML = `
-                <td class="px-6 py-4">${index + 1}</td>
                 <td class="px-6 py-4 font-medium">${hotel.name}</td>
                 <td class="px-6 py-4">${hotel.brand || '-'}</td>
                 <td class="px-6 py-4">${hotel.city || '-'}</td>
@@ -728,11 +727,16 @@ async function loadHotelsTable() {
             tableBody.appendChild(tr);
         });
     } catch (error) {
-        tableBody.innerHTML = `<tr><td colspan="6" class="text-center p-4 text-red-500">Gagal memuat data: ${error.message}</td></tr>`;
+        tableBody.innerHTML = `<tr><td colspan="5" class="text-center p-4 text-red-500">Gagal memuat data: ${error.message}</td></tr>`;
     }
 }
 
-function openEditHotelModal(hotel) {
+/**
+ * BARU: Membuka modal edit hotel dan mengisinya dengan data.
+ * Ditempelkan ke window agar bisa diakses dari onclick.
+ * @param {object} hotel - Objek data hotel.
+ */
+window.openEditHotelModal = function(hotel) {
     document.getElementById('edit-hotel-id').value = hotel.id;
     document.getElementById('edit-hotel-name').value = hotel.name || '';
     document.getElementById('edit-hotel-brand').value = hotel.brand || '';
@@ -743,14 +747,6 @@ function openEditHotelModal(hotel) {
     if (modal) {
         modal.classList.remove('hidden');
         modal.classList.add('flex');
-    }
-}
-
-function closeEditHotelModal() {
-    const modal = document.getElementById('edit-hotel-modal');
-    if (modal) {
-        modal.classList.add('hidden');
-        modal.classList.remove('flex');
     }
 }
 

@@ -257,7 +257,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         document.getElementById('modal-review-guest-name').textContent = `${review.guest_name} - Kamar ${review.room_number || '-'}`;
         document.getElementById('modal-review-rating').innerHTML = generateStarRating(review.rating);
-        document.getElementById('modal-review-date').textContent = new Date(review.created_at).toLocaleString('id-ID');
+        document.getElementById('modal-review-date').textContent = formatDate(review.created_at);
         document.getElementById('modal-review-voucher-number').textContent = review.voucher_number || '-';
         document.getElementById('modal-review-comment').textContent = review.comment || 'Tidak ada komentar.';
         document.getElementById('modal-review-id').value = review.id;

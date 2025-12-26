@@ -163,7 +163,7 @@ async function initializeAuditCalendar() {
             } else {
                 // Fallback ke alert jika fungsi tidak ditemukan
                 const props = info.event.extendedProps;
-                const eventDetails = `Agenda: ${info.event.title}\nAuditor: ${props.auditor || 'N/A'}\nStatus: ${props.status || 'N/A'}\nMulai: ${info.event.start ? info.event.start.toLocaleString('id-ID', { dateStyle: 'full', timeStyle: 'short' }) : 'N/A'}`;
+                const eventDetails = `Agenda: ${info.event.title}\nAuditor: ${props.auditor || 'N/A'}\nStatus: ${props.status || 'N/A'}\nMulai: ${info.event.start ? formatDate(info.event.start) + ' ' + formatTime(info.event.start) : 'N/A'}`;
                 alert(eventDetails.trim());
             }
         },

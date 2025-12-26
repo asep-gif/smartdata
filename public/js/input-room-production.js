@@ -312,7 +312,7 @@ function addRpTableRow(data = {}) {
     newRow.className = 'bg-white border-b';
 
     const date = data.date ? new Date(data.date).toISOString().split('T')[0] : '';
-    const formattedDate = data.date ? `${new Date(data.date).getUTCDate()}-${new Date(data.date).toLocaleString('default', { month: 'short' })}-${new Date(data.date).getUTCFullYear()}` : '';
+    const formattedDate = data.date ? formatDate(data.date) : '';
 
 
     newRow.innerHTML = `

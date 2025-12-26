@@ -92,7 +92,12 @@ document.addEventListener('DOMContentLoaded', () => {
     })();}
     if (document.getElementById('page-hotel-inspection')) initHotelInspectionPage(); // Tetap
     if (document.getElementById('page-task-to-do')) initTaskToDoPage(); // Tetap
-    if (document.getElementById('page-settings')) initInspectionTypesManagementPage();
+    if (document.getElementById('page-settings')) {
+        const user = JSON.parse(localStorage.getItem('user'));
+        if (user && (user.role === 'admin' || (user.permissions && user.permissions.includes('inspection_types:manage')))) {
+            initInspectionTypesManagementPage();
+        }
+    }
 
     if (document.getElementById('page-input-budget-dsr') || document.getElementById('page-input-actual-dsr')) {
         initDsrPage('budget');
@@ -103,6 +108,10 @@ document.addEventListener('DOMContentLoaded', () => {
     if (document.getElementById('page-input-ar-aging')) initArAgingPage();
     if (document.getElementById('page-input-hotel-competitor')) initHotelCompetitorPage();
 
+    // Inisialisasi halaman slides
+    if (document.getElementById('page-slides')) initSlidesPage();
+    if (document.getElementById('page-slides-corporate')) initSlidesCorporatePage();
+    
     // Inisialisasi dashboard lain
     if (document.getElementById('page-daily-income-dashboard')) initDailyIncomeDashboard();
 

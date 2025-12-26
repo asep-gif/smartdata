@@ -173,7 +173,7 @@ function getComboChartOptions(yLeftLabel, yRightLabel) {
                         if (context.parsed.y !== null) {
                             // Jika ini adalah data occupancy (%), bulatkan. Jika ARR, format sebagai mata uang.
                             const isOccupancy = context.dataset.yAxisID === 'yOcc';
-                            label += isOccupancy ? `${Math.round(context.parsed.y)}%` : new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(context.parsed.y);
+                            label += isOccupancy ? `${Math.round(context.parsed.y)}%` : new Intl.NumberFormat('en-US', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(context.parsed.y);
                         }
                         return label;
                     }

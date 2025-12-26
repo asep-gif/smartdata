@@ -2,8 +2,7 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kagum Smartdata</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">    <title>KAGUM SMARTDATA</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Font Awesome -->
@@ -38,6 +37,13 @@
     <style>
         .slide-card-modern {
             min-height: 120px; /* Menetapkan tinggi minimum untuk kartu slide */
+        }
+        /* BARU: Style untuk logo saat sidebar diciutkan agar lebih kontras */
+        .sidebar-collapsed .icon-collapsed {
+            background-color: white;
+            padding: 4px; /* Memberi sedikit ruang di sekitar logo */
+            border-radius: 6px; /* Membuat sudut sedikit membulat */
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1); /* Bayangan halus agar terangkat */
         }
         /* BARU: Style untuk item yang sedang di-drag */
         .sortable-ghost {
@@ -97,123 +103,128 @@
         .fade-in-fast { animation: fadeInFastAnimation 0.2s ease-out forwards; }
         @keyframes fadeInFastAnimation { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
     </style>
+    <style>
+        .bg-navy-glossy {
+            background-color: #031851; /* Tailwind's blue-900 */
+            background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0) 50%);
+        }
+    </style>
 </head>
 <body class="bg-slate-100 text-slate-800 font-sans antialiased h-screen flex flex-col md:flex-row overflow-hidden sidebar-collapsed">
 
     <!-- SIDEBAR -->
-    <aside class="bg-white text-slate-800 flex flex-col z-30 fixed md:relative inset-y-0 left-0 border-r border-slate-200 transition-all duration-300 -translate-x-full md:translate-x-0" id="sidebar">
-        <div class="h-16 px-6 flex items-center border-b border-slate-200 flex-shrink-0 relative">
-            <!-- Ikon Hotel (hanya terlihat saat sidebar diciutkan) -->
-            <i class="fa-solid fa-hotel text-2xl text-blue-500 icon-collapsed transition-opacity duration-200"></i>
-            <!-- Logo Penuh (terlihat saat sidebar normal, terpusat) -->
-            <!-- Logo Penuh (terlihat saat sidebar normal) -->
-            <img src="assets/logo/logo.png" alt="Kagum Smartdata Logo" class="h-9 w-auto nav-text transition-opacity duration-200 mx-auto">
+    <aside class="bg-navy-glossy text-slate-100 flex flex-col z-30 fixed md:relative inset-y-0 left-0 border-r border-slate-700 transition-all duration-300 -translate-x-full md:translate-x-0" id="sidebar">
+        <div class="h-16 px-6 flex items-center justify-center border-b border-white/10 flex-shrink-0 relative">
+            <!-- Logo kecil (terlihat saat sidebar diciutkan) -->
+            <img src="assets/logo/logo.png" alt="KAGUM SMARTDATA Icon" class="h-7 w-auto icon-collapsed transition-opacity duration-200">
+            <!-- Tulisan KAGUM SMARTDATA (terlihat saat sidebar normal) -->
+            <span class="text-xl font-bold tracking-wider nav-text transition-opacity duration-200">KAGUM SMARTDATA</span>
         </div>
         <nav class="flex-1 overflow-y-auto py-4">
             <ul class="space-y-1">
-                <li><button onclick="window.location.hash = '#dashboard'" class="w-full flex items-center gap-4 px-6 py-3 hover:bg-slate-100 border-l-4 border-transparent hover:border-blue-400 transition-colors active-menu" id="nav-dashboard"><div class="relative flex items-center gap-4" data-tooltip="Dashboard"><i class="fa-solid fa-chart-pie w-6 text-center"></i> <span class="nav-text">Dashboard</span></div></button></li>
+                <li><button onclick="window.location.hash = '#dashboard'" class="w-full flex items-center gap-4 px-6 py-3 hover:bg-white/10 border-l-4 border-transparent hover:border-blue-400 transition-colors active-menu" id="nav-dashboard"><div class="relative flex items-center gap-4" data-tooltip="Dashboard"><i class="fa-solid fa-chart-pie w-6 text-center"></i> <span class="nav-text">Dashboard</span></div></button></li>
                 <!-- Menu Achievement (Dropdown) -->
                 <li id="nav-achievement-parent">
-                    <button onclick="toggleSubmenu('achievement-submenu')" class="w-full flex items-center justify-between gap-4 px-6 py-3 hover:bg-slate-100 border-l-4 border-transparent hover:border-blue-400 transition-colors">
+                    <button onclick="toggleSubmenu('achievement-submenu')" class="w-full flex items-center justify-between gap-4 px-6 py-3 hover:bg-white/10 border-l-4 border-transparent hover:border-blue-400 transition-colors">
                         <div class="relative flex items-center gap-4" data-tooltip="Achievement">
                             <i class="fa-solid fa-trophy w-6 text-center"></i>
                             <span class="nav-text">Achievement</span>
                         </div>
                         <i id="achievement-submenu-arrow" class="fa-solid fa-chevron-down nav-text text-xs transition-transform"></i>
                     </button>
-                    <ul id="achievement-submenu" class="hidden pl-8 pr-2 py-1 space-y-1 bg-slate-50">
-                        <li><button onclick="window.location.hash = '#slides-corporate'" class="w-full flex items-center gap-4 px-4 py-2.5 hover:bg-slate-200/60 border-l-4 border-transparent hover:border-blue-400 transition-colors text-sm" id="nav-slides-corporate"><div class="relative flex items-center gap-4" data-tooltip="Slides Corporate"><i class="fa-solid fa-building-columns w-6 text-center"></i> <span class="nav-text">Slides Corporate</span></div></button></li>
-                        <li><button onclick="window.location.hash = '#slides'" class="w-full flex items-center gap-4 px-4 py-2.5 hover:bg-slate-200/60 border-l-4 border-transparent hover:border-blue-400 transition-colors text-sm" id="nav-slides"><div class="relative flex items-center gap-4" data-tooltip="Slides Hotel"><i class="fa-solid fa-person-chalkboard w-6 text-center"></i> <span class="nav-text">Slides Hotel</span></div></button></li>
-                        <li><button onclick="window.location.hash = '#ebook'" class="w-full flex items-center gap-4 px-4 py-2.5 hover:bg-slate-200/60 border-l-4 border-transparent hover:border-blue-400 transition-colors text-sm" id="nav-ebook"><div class="relative flex items-center gap-4" data-tooltip="Budget Ebook"><i class="fa-solid fa-book-open w-6 text-center"></i> <span class="nav-text">Budget Ebook</span></div></button></li>
-                        <li><button onclick="window.location.hash = '#input-budget'" class="w-full flex items-center gap-4 px-4 py-2.5 hover:bg-slate-200/60 border-l-4 border-transparent hover:border-blue-400 transition-colors text-sm" id="nav-input-budget"><div class="relative flex items-center gap-4" data-tooltip="Input Budget P&L"><i class="fa-solid fa-file-invoice-dollar w-6 text-center"></i> <span class="nav-text">Input Budget P&L</span></div></button></li>
-                        <li><button onclick="window.location.hash = '#input-actual'" class="w-full flex items-center gap-4 px-4 py-2.5 hover:bg-slate-200/60 border-l-4 border-transparent hover:border-blue-400 transition-colors text-sm" id="nav-input-actual"><div class="relative flex items-center gap-4" data-tooltip="Input Actual P&L"><i class="fa-solid fa-money-check-dollar w-6 text-center"></i> <span class="nav-text">Input Actual P&L</span></div></button></li>
+                    <ul id="achievement-submenu" class="hidden pl-8 pr-2 py-1 space-y-1 bg-black/20">
+                        <li><button onclick="window.location.hash = '#slides-corporate'" class="w-full flex items-center gap-4 px-4 py-2.5 hover:bg-white/10 border-l-4 border-transparent hover:border-blue-400 transition-colors text-sm" id="nav-slides-corporate"><div class="relative flex items-center gap-4" data-tooltip="Slides Corporate"><i class="fa-solid fa-building-columns w-6 text-center"></i> <span class="nav-text">Slides Corporate</span></div></button></li>
+                        <li><button onclick="window.location.hash = '#slides'" class="w-full flex items-center gap-4 px-4 py-2.5 hover:bg-white/10 border-l-4 border-transparent hover:border-blue-400 transition-colors text-sm" id="nav-slides"><div class="relative flex items-center gap-4" data-tooltip="Slides Hotel"><i class="fa-solid fa-person-chalkboard w-6 text-center"></i> <span class="nav-text">Slides Hotel</span></div></button></li>
+                        <li><button onclick="window.location.hash = '#ebook'" class="w-full flex items-center gap-4 px-4 py-2.5 hover:bg-white/10 border-l-4 border-transparent hover:border-blue-400 transition-colors text-sm" id="nav-ebook"><div class="relative flex items-center gap-4" data-tooltip="Budget Ebook"><i class="fa-solid fa-book-open w-6 text-center"></i> <span class="nav-text">Budget Ebook</span></div></button></li>
+                        <li><button onclick="window.location.hash = '#input-budget'" class="w-full flex items-center gap-4 px-4 py-2.5 hover:bg-white/10 border-l-4 border-transparent hover:border-blue-400 transition-colors text-sm" id="nav-input-budget"><div class="relative flex items-center gap-4" data-tooltip="Input Budget P&L"><i class="fa-solid fa-file-invoice-dollar w-6 text-center"></i> <span class="nav-text">Input Budget P&L</span></div></button></li>
+                        <li><button onclick="window.location.hash = '#input-actual'" class="w-full flex items-center gap-4 px-4 py-2.5 hover:bg-white/10 border-l-4 border-transparent hover:border-blue-400 transition-colors text-sm" id="nav-input-actual"><div class="relative flex items-center gap-4" data-tooltip="Input Actual P&L"><i class="fa-solid fa-money-check-dollar w-6 text-center"></i> <span class="nav-text">Input Actual P&L</span></div></button></li>
                     </ul>
                 </li>
                 <!-- Menu Daily Income (Dropdown) -->
                 <li id="nav-daily-income-parent">
-                    <button onclick="toggleSubmenu('daily-income-submenu')" class="w-full flex items-center justify-between gap-4 px-6 py-3 hover:bg-slate-100 border-l-4 border-transparent hover:border-blue-400 transition-colors">
+                    <button onclick="toggleSubmenu('daily-income-submenu')" class="w-full flex items-center justify-between gap-4 px-6 py-3 hover:bg-white/10 border-l-4 border-transparent hover:border-blue-400 transition-colors">
                         <div class="relative flex items-center gap-4" data-tooltip="Daily Income">
                             <i class="fa-solid fa-calendar-day w-6 text-center"></i>
                             <span class="nav-text">Daily Income</span>
                         </div>
                         <i id="daily-income-submenu-arrow" class="fa-solid fa-chevron-down nav-text text-xs transition-transform"></i>
                     </button>
-                    <ul id="daily-income-submenu" class="hidden pl-8 pr-2 py-1 space-y-1 bg-slate-50">
-                        <li><button onclick="window.location.hash = '#daily-income-dashboard'" class="w-full flex items-center gap-4 px-4 py-2.5 hover:bg-slate-200/60 border-l-4 border-transparent hover:border-blue-400 transition-colors text-sm" id="nav-daily-income-dashboard"><div class="relative flex items-center gap-4" data-tooltip="Dashboard"><i class="fa-solid fa-chart-line w-6 text-center"></i> <span class="nav-text">Dashboard</span></div></button></li>
-                        <li><button onclick="window.location.hash = '#input-budget-dsr'" class="w-full flex items-center gap-4 px-4 py-2.5 hover:bg-slate-200/60 border-l-4 border-transparent hover:border-blue-400 transition-colors text-sm" id="nav-input-budget-dsr"><div class="relative flex items-center gap-4" data-tooltip="Input Budget DSR"><i class="fa-solid fa-file-pen w-6 text-center"></i> <span class="nav-text">Input Budget DSR</span></div></button></li>
-                        <li><button onclick="window.location.hash = '#input-actual-dsr'" class="w-full flex items-center gap-4 px-4 py-2.5 hover:bg-slate-200/60 border-l-4 border-transparent hover:border-blue-400 transition-colors text-sm" id="nav-input-actual-dsr"><div class="relative flex items-center gap-4" data-tooltip="Input Actual DSR"><i class="fa-solid fa-file-invoice w-6 text-center"></i> <span class="nav-text">Input Actual DSR</span></div></button></li>
-                        <li><button onclick="window.location.hash = '#input-room-production'" class="w-full flex items-center gap-4 px-4 py-2.5 hover:bg-slate-200/60 border-l-4 border-transparent hover:border-blue-400 transition-colors text-sm" id="nav-input-room-production"><div class="relative flex items-center gap-4" data-tooltip="Input Room Production"><i class="fa-solid fa-person-shelter w-6 text-center"></i> <span class="nav-text">Input Room Production</span></div></button></li>
-                        <li><button onclick="window.location.hash = '#input-hotel-competitor'" class="w-full flex items-center gap-4 px-4 py-2.5 hover:bg-slate-200/60 border-l-4 border-transparent hover:border-blue-400 transition-colors text-sm" id="nav-input-hotel-competitor"><div class="relative flex items-center gap-4" data-tooltip="Input Hotel Competitor"><i class="fa-solid fa-hotel w-6 text-center"></i> <span class="nav-text">Input Hotel Competitor</span></div></button></li>
+                    <ul id="daily-income-submenu" class="hidden pl-8 pr-2 py-1 space-y-1 bg-black/20">
+                        <li><button onclick="window.location.hash = '#daily-income-dashboard'" class="w-full flex items-center gap-4 px-4 py-2.5 hover:bg-white/10 border-l-4 border-transparent hover:border-blue-400 transition-colors text-sm" id="nav-daily-income-dashboard"><div class="relative flex items-center gap-4" data-tooltip="Dashboard"><i class="fa-solid fa-chart-line w-6 text-center"></i> <span class="nav-text">Dashboard</span></div></button></li>
+                        <li><button onclick="window.location.hash = '#input-budget-dsr'" class="w-full flex items-center gap-4 px-4 py-2.5 hover:bg-white/10 border-l-4 border-transparent hover:border-blue-400 transition-colors text-sm" id="nav-input-budget-dsr"><div class="relative flex items-center gap-4" data-tooltip="Input Budget DSR"><i class="fa-solid fa-file-pen w-6 text-center"></i> <span class="nav-text">Input Budget DSR</span></div></button></li>
+                        <li><button onclick="window.location.hash = '#input-actual-dsr'" class="w-full flex items-center gap-4 px-4 py-2.5 hover:bg-white/10 border-l-4 border-transparent hover:border-blue-400 transition-colors text-sm" id="nav-input-actual-dsr"><div class="relative flex items-center gap-4" data-tooltip="Input Actual DSR"><i class="fa-solid fa-file-invoice w-6 text-center"></i> <span class="nav-text">Input Actual DSR</span></div></button></li>
+                        <li><button onclick="window.location.hash = '#input-room-production'" class="w-full flex items-center gap-4 px-4 py-2.5 hover:bg-white/10 border-l-4 border-transparent hover:border-blue-400 transition-colors text-sm" id="nav-input-room-production"><div class="relative flex items-center gap-4" data-tooltip="Input Room Production"><i class="fa-solid fa-person-shelter w-6 text-center"></i> <span class="nav-text">Input Room Production</span></div></button></li>
+                        <li><button onclick="window.location.hash = '#input-hotel-competitor'" class="w-full flex items-center gap-4 px-4 py-2.5 hover:bg-white/10 border-l-4 border-transparent hover:border-blue-400 transition-colors text-sm" id="nav-input-hotel-competitor"><div class="relative flex items-center gap-4" data-tooltip="Input Hotel Competitor"><i class="fa-solid fa-hotel w-6 text-center"></i> <span class="nav-text">Input Hotel Competitor</span></div></button></li>
                     </ul>
                 </li>
                 <!-- Menu AR Aging (Dropdown) -->
                 <li id="nav-input-ar-aging-parent">
-                    <button onclick="toggleSubmenu('input-ar-aging-submenu')" class="w-full flex items-center justify-between gap-4 px-6 py-3 hover:bg-slate-100 border-l-4 border-transparent hover:border-blue-400 transition-colors">
+                    <button onclick="toggleSubmenu('input-ar-aging-submenu')" class="w-full flex items-center justify-between gap-4 px-6 py-3 hover:bg-white/10 border-l-4 border-transparent hover:border-blue-400 transition-colors">
                         <div class="relative flex items-center gap-4" data-tooltip="AR Aging">
                             <i class="fa-solid fa-hourglass-half w-6 text-center"></i>
                             <span class="nav-text">AR Aging</span>
                         </div>
                         <i id="input-ar-aging-submenu-arrow" class="fa-solid fa-chevron-down nav-text text-xs transition-transform"></i>
                     </button>
-                    <ul id="input-ar-aging-submenu" class="hidden pl-8 pr-2 py-1 space-y-1 bg-slate-50">
-                        <li><button onclick="window.location.hash = '#input-ar-aging'" class="w-full flex items-center gap-4 px-4 py-2.5 hover:bg-slate-200/60 border-l-4 border-transparent hover:border-blue-400 transition-colors text-sm" id="nav-input-ar-aging"><div class="relative flex items-center gap-4" data-tooltip="Input AR Aging"><i class="fa-solid fa-file-pen w-6 text-center"></i> <span class="nav-text">Input AR Aging</span></div></button></li>
-                        <li><button onclick="window.location.hash = '#ar-summary'" class="w-full flex items-center gap-4 px-4 py-2.5 hover:bg-slate-200/60 border-l-4 border-transparent hover:border-blue-400 transition-colors text-sm" id="nav-ar-summary"><div class="relative flex items-center gap-4" data-tooltip="AR Summary"><i class="fa-solid fa-file-invoice w-6 text-center"></i> <span class="nav-text">AR Summary</span></div></button></li>
+                    <ul id="input-ar-aging-submenu" class="hidden pl-8 pr-2 py-1 space-y-1 bg-black/20">
+                        <li><button onclick="window.location.hash = '#input-ar-aging'" class="w-full flex items-center gap-4 px-4 py-2.5 hover:bg-white/10 border-l-4 border-transparent hover:border-blue-400 transition-colors text-sm" id="nav-input-ar-aging"><div class="relative flex items-center gap-4" data-tooltip="Input AR Aging"><i class="fa-solid fa-file-pen w-6 text-center"></i> <span class="nav-text">Input AR Aging</span></div></button></li>
+                        <li><button onclick="window.location.hash = '#ar-summary'" class="w-full flex items-center gap-4 px-4 py-2.5 hover:bg-white/10 border-l-4 border-transparent hover:border-blue-400 transition-colors text-sm" id="nav-ar-summary"><div class="relative flex items-center gap-4" data-tooltip="AR Summary"><i class="fa-solid fa-file-invoice w-6 text-center"></i> <span class="nav-text">AR Summary</span></div></button></li>
                     </ul>
                 </li>
                 <!-- BARU: Menu Internal Audit (Dropdown) -->
                 <li id="nav-internal-audit-parent">
-                    <button onclick="toggleSubmenu('internal-audit-submenu')" class="w-full flex items-center justify-between gap-4 px-6 py-3 hover:bg-slate-100 border-l-4 border-transparent hover:border-blue-400 transition-colors">
+                    <button onclick="toggleSubmenu('internal-audit-submenu')" class="w-full flex items-center justify-between gap-4 px-6 py-3 hover:bg-white/10 border-l-4 border-transparent hover:border-blue-400 transition-colors">
                         <div class="relative flex items-center gap-4" data-tooltip="Internal Audit">
                             <i class="fa-solid fa-balance-scale w-6 text-center"></i>
                             <span class="nav-text">Internal Audit</span>
                         </div>
                         <i id="internal-audit-submenu-arrow" class="fa-solid fa-chevron-down nav-text text-xs transition-transform"></i>
                     </button>
-                    <ul id="internal-audit-submenu" class="hidden pl-8 pr-2 py-1 space-y-1 bg-slate-50">
-                        <li><button onclick="window.location.hash = '#trial-balance'" class="w-full flex items-center gap-4 px-4 py-2.5 hover:bg-slate-200/60 border-l-4 border-transparent hover:border-blue-400 transition-colors text-sm" id="nav-trial-balance"><div class="relative flex items-center gap-4" data-tooltip="Trial Balance"><i class="fa-solid fa-file-invoice-dollar w-6 text-center"></i> <span class="nav-text">Trial Balance</span></div></button></li>
-                        <li><button onclick="window.location.hash = '#agenda-audit'" class="w-full flex items-center gap-4 px-4 py-2.5 hover:bg-slate-200/60 border-l-4 border-transparent hover:border-blue-400 transition-colors text-sm" id="nav-agenda-audit"><div class="relative flex items-center gap-4" data-tooltip="Agenda Audit"><i class="fa-solid fa-calendar-check w-6 text-center"></i> <span class="nav-text">Agenda Audit</span></div></button></li>
-                        <li><button onclick="window.location.hash = '#audit-calendar'" class="w-full flex items-center gap-4 px-4 py-2.5 hover:bg-slate-200/60 border-l-4 border-transparent hover:border-blue-400 transition-colors text-sm" id="nav-audit-calendar"><div class="relative flex items-center gap-4" data-tooltip="Audit Calendar"><i class="fa-solid fa-calendar-week w-6 text-center"></i> <span class="nav-text">Calendar</span></div></button></li>
+                    <ul id="internal-audit-submenu" class="hidden pl-8 pr-2 py-1 space-y-1 bg-black/20">
+                        <li><button onclick="window.location.hash = '#trial-balance'" class="w-full flex items-center gap-4 px-4 py-2.5 hover:bg-white/10 border-l-4 border-transparent hover:border-blue-400 transition-colors text-sm" id="nav-trial-balance"><div class="relative flex items-center gap-4" data-tooltip="Trial Balance"><i class="fa-solid fa-file-invoice-dollar w-6 text-center"></i> <span class="nav-text">Trial Balance</span></div></button></li>
+                        <li><button onclick="window.location.hash = '#agenda-audit'" class="w-full flex items-center gap-4 px-4 py-2.5 hover:bg-white/10 border-l-4 border-transparent hover:border-blue-400 transition-colors text-sm" id="nav-agenda-audit"><div class="relative flex items-center gap-4" data-tooltip="Agenda Audit"><i class="fa-solid fa-calendar-check w-6 text-center"></i> <span class="nav-text">Agenda Audit</span></div></button></li>
+                        <li><button onclick="window.location.hash = '#audit-calendar'" class="w-full flex items-center gap-4 px-4 py-2.5 hover:bg-white/10 border-l-4 border-transparent hover:border-blue-400 transition-colors text-sm" id="nav-audit-calendar"><div class="relative flex items-center gap-4" data-tooltip="Audit Calendar"><i class="fa-solid fa-calendar-week w-6 text-center"></i> <span class="nav-text">Calendar</span></div></button></li>
                     </ul>
                 </li>
                 <!-- Menu Inspection (Dropdown) -->
                 <li id="nav-inspection-parent">
-                    <button onclick="toggleSubmenu('inspection-submenu')" class="w-full flex items-center justify-between gap-4 px-6 py-3 hover:bg-slate-100 border-l-4 border-transparent hover:border-blue-400 transition-colors">
+                    <button onclick="toggleSubmenu('inspection-submenu')" class="w-full flex items-center justify-between gap-4 px-6 py-3 hover:bg-white/10 border-l-4 border-transparent hover:border-blue-400 transition-colors">
                         <div class="relative flex items-center gap-4" data-tooltip="Inspection">
                             <i class="fa-solid fa-clipboard-check w-6 text-center"></i>
                             <span class="nav-text">Inspection</span>
                         </div>
                         <i id="inspection-submenu-arrow" class="fa-solid fa-chevron-down nav-text text-xs transition-transform"></i>
                     </button>
-                    <ul id="inspection-submenu" class="hidden pl-8 pr-2 py-1 space-y-1 bg-slate-50">
-                        <li><button onclick="window.location.hash = '#inspection-dashboard'" class="w-full flex items-center gap-4 px-4 py-2.5 hover:bg-slate-200/60 border-l-4 border-transparent hover:border-blue-400 transition-colors text-sm" id="nav-inspection-dashboard"><div class="relative flex items-center gap-4" data-tooltip="Dashboard Inspection"><i class="fa-solid fa-gauge w-6 text-center"></i> <span class="nav-text">Dashboard Inspection</span></div></button></li>
-                        <li><button onclick="window.location.hash = '#hotel-inspection'" class="w-full flex items-center gap-4 px-4 py-2.5 hover:bg-slate-200/60 border-l-4 border-transparent hover:border-blue-400 transition-colors text-sm" id="nav-hotel-inspection"><div class="relative flex items-center gap-4" data-tooltip="Hotel Inspection"><i class="fa-solid fa-magnifying-glass-location w-6 text-center"></i> <span class="nav-text">Hotel Inspection</span></div></button></li>
-                        <li><button onclick="window.location.hash = '#task-to-do'" class="w-full flex items-center gap-4 px-4 py-2.5 hover:bg-slate-200/60 border-l-4 border-transparent hover:border-blue-400 transition-colors text-sm" id="nav-task-to-do"><div class="relative flex items-center gap-4" data-tooltip="Task to Do"><i class="fa-solid fa-list-check w-6 text-center"></i> <span class="nav-text">Task to Do</span></div></button></li>
+                    <ul id="inspection-submenu" class="hidden pl-8 pr-2 py-1 space-y-1 bg-black/20">
+                        <li><button onclick="window.location.hash = '#inspection-dashboard'" class="w-full flex items-center gap-4 px-4 py-2.5 hover:bg-white/10 border-l-4 border-transparent hover:border-blue-400 transition-colors text-sm" id="nav-inspection-dashboard"><div class="relative flex items-center gap-4" data-tooltip="Dashboard Inspection"><i class="fa-solid fa-gauge w-6 text-center"></i> <span class="nav-text">Dashboard Inspection</span></div></button></li>
+                        <li><button onclick="window.location.hash = '#hotel-inspection'" class="w-full flex items-center gap-4 px-4 py-2.5 hover:bg-white/10 border-l-4 border-transparent hover:border-blue-400 transition-colors text-sm" id="nav-hotel-inspection"><div class="relative flex items-center gap-4" data-tooltip="Hotel Inspection"><i class="fa-solid fa-magnifying-glass-location w-6 text-center"></i> <span class="nav-text">Hotel Inspection</span></div></button></li>
+                        <li><button onclick="window.location.hash = '#task-to-do'" class="w-full flex items-center gap-4 px-4 py-2.5 hover:bg-white/10 border-l-4 border-transparent hover:border-blue-400 transition-colors text-sm" id="nav-task-to-do"><div class="relative flex items-center gap-4" data-tooltip="Task to Do"><i class="fa-solid fa-list-check w-6 text-center"></i> <span class="nav-text">Task to Do</span></div></button></li>
                     </ul>
                 </li>
                 <!-- BARU: Menu Guest Review (Dropdown) -->
                 <li id="nav-guest-review-parent">
-                    <button onclick="toggleSubmenu('guest-review-submenu')" class="w-full flex items-center justify-between gap-4 px-6 py-3 hover:bg-slate-100 border-l-4 border-transparent hover:border-blue-400 transition-colors">
+                    <button onclick="toggleSubmenu('guest-review-submenu')" class="w-full flex items-center justify-between gap-4 px-6 py-3 hover:bg-white/10 border-l-4 border-transparent hover:border-blue-400 transition-colors">
                         <div class="relative flex items-center gap-4" data-tooltip="Guest Review">
                             <i class="fa-solid fa-comments w-6 text-center"></i>
                             <span class="nav-text">Guest Review</span>
                         </div>
                         <i id="guest-review-submenu-arrow" class="fa-solid fa-chevron-down nav-text text-xs transition-transform"></i>
                     </button>
-                    <ul id="guest-review-submenu" class="hidden pl-8 pr-2 py-1 space-y-1 bg-slate-50">
-                        <li><button onclick="window.location.hash = '#guest-review-dashboard'" class="w-full flex items-center gap-4 px-4 py-2.5 hover:bg-slate-200/60 border-l-4 border-transparent hover:border-blue-400 transition-colors text-sm" id="nav-guest-review-dashboard"><div class="relative flex items-center gap-4" data-tooltip="Dashboard"><i class="fa-solid fa-chart-bar w-6 text-center"></i> <span class="nav-text">Dashboard</span></div></button></li>
-                        <li><button onclick="window.location.hash = '#guest-review-settings'" class="w-full flex items-center gap-4 px-4 py-2.5 hover:bg-slate-200/60 border-l-4 border-transparent hover:border-blue-400 transition-colors text-sm" id="nav-guest-review-settings"><div class="relative flex items-center gap-4" data-tooltip="Setting Form"><i class="fa-solid fa-cogs w-6 text-center"></i> <span class="nav-text">Setting Form</span></div></button></li>
-                        <li><button onclick="window.location.hash = '#guest-review-replies'" class="w-full flex items-center gap-4 px-4 py-2.5 hover:bg-slate-200/60 border-l-4 border-transparent hover:border-blue-400 transition-colors text-sm" id="nav-guest-review-replies"><div class="relative flex items-center gap-4" data-tooltip="Replies"><i class="fa-solid fa-reply-all w-6 text-center"></i> <span class="nav-text">Replies</span></div></button></li>
-                        <li><button onclick="window.location.hash = '#guest-review-vouchers'" class="w-full flex items-center gap-4 px-4 py-2.5 hover:bg-slate-200/60 border-l-4 border-transparent hover:border-blue-400 transition-colors text-sm" id="nav-guest-review-vouchers"><div class="relative flex items-center gap-4" data-tooltip="Voucher Use"><i class="fa-solid fa-ticket w-6 text-center"></i> <span class="nav-text">Voucher Use</span></div></button></li>
+                    <ul id="guest-review-submenu" class="hidden pl-8 pr-2 py-1 space-y-1 bg-black/20">
+                        <li><button onclick="window.location.hash = '#guest-review-dashboard'" class="w-full flex items-center gap-4 px-4 py-2.5 hover:bg-white/10 border-l-4 border-transparent hover:border-blue-400 transition-colors text-sm" id="nav-guest-review-dashboard"><div class="relative flex items-center gap-4" data-tooltip="Dashboard"><i class="fa-solid fa-chart-bar w-6 text-center"></i> <span class="nav-text">Dashboard</span></div></button></li>
+                        <li><button onclick="window.location.hash = '#guest-review-settings'" class="w-full flex items-center gap-4 px-4 py-2.5 hover:bg-white/10 border-l-4 border-transparent hover:border-blue-400 transition-colors text-sm" id="nav-guest-review-settings"><div class="relative flex items-center gap-4" data-tooltip="Setting Form"><i class="fa-solid fa-cogs w-6 text-center"></i> <span class="nav-text">Setting Form</span></div></button></li>
+                        <li><button onclick="window.location.hash = '#guest-review-replies'" class="w-full flex items-center gap-4 px-4 py-2.5 hover:bg-white/10 border-l-4 border-transparent hover:border-blue-400 transition-colors text-sm" id="nav-guest-review-replies"><div class="relative flex items-center gap-4" data-tooltip="Replies"><i class="fa-solid fa-reply-all w-6 text-center"></i> <span class="nav-text">Replies</span></div></button></li>
+                        <li><button onclick="window.location.hash = '#guest-review-vouchers'" class="w-full flex items-center gap-4 px-4 py-2.5 hover:bg-white/10 border-l-4 border-transparent hover:border-blue-400 transition-colors text-sm" id="nav-guest-review-vouchers"><div class="relative flex items-center gap-4" data-tooltip="Voucher Use"><i class="fa-solid fa-ticket w-6 text-center"></i> <span class="nav-text">Voucher Use</span></div></button></li>
                     </ul>
                 </li>
-                <li><button onclick="window.location.hash = '#reports'" class="w-full flex items-center gap-4 px-6 py-3 hover:bg-slate-100 border-l-4 border-transparent hover:border-blue-400 transition-colors" id="nav-reports"><div class="relative flex items-center gap-4" data-tooltip="Reports"><i class="fa-solid fa-file-contract w-6 text-center"></i> <span class="nav-text">Reports</span></div></button></li>
-                <li><button onclick="window.location.hash = '#settings'" class="w-full flex items-center gap-4 px-6 py-3 hover:bg-slate-100 border-l-4 border-transparent hover:border-blue-400 transition-colors" id="nav-settings"><div class="relative flex items-center gap-4" data-tooltip="Settings"><i class="fa-solid fa-gear w-6 text-center"></i> <span class="nav-text">Settings</span></div></button></li>
+                <li><button onclick="window.location.hash = '#reports'" class="w-full flex items-center gap-4 px-6 py-3 hover:bg-white/10 border-l-4 border-transparent hover:border-blue-400 transition-colors" id="nav-reports"><div class="relative flex items-center gap-4" data-tooltip="Reports"><i class="fa-solid fa-file-contract w-6 text-center"></i> <span class="nav-text">Reports</span></div></button></li>
+                <li><button onclick="window.location.hash = '#settings'" class="w-full flex items-center gap-4 px-6 py-3 hover:bg-white/10 border-l-4 border-transparent hover:border-blue-400 transition-colors" id="nav-settings"><div class="relative flex items-center gap-4" data-tooltip="Settings"><i class="fa-solid fa-gear w-6 text-center"></i> <span class="nav-text">Settings</span></div></button></li>
             </ul>
         </nav>
         <!-- Profile has been moved to the main header -->
         <!-- Logout Button -->
-        <div class="mt-auto p-4 border-t border-slate-200" onclick="handleLogout()">
-            <button class="w-full flex items-center gap-4 px-4 py-2 text-sm text-slate-600 hover:bg-red-50 hover:text-red-600 rounded-md transition-colors"><div class="relative flex items-center gap-4" data-tooltip="Logout"><i class="fa-solid fa-right-from-bracket w-6 text-center"></i><span class="nav-text">Logout</span></div></button>
+        <div class="mt-auto p-4 border-t border-white/10" onclick="handleLogout()">
+            <button class="w-full flex items-center gap-4 px-4 py-2 text-sm text-slate-300 hover:bg-red-500/50 hover:text-white rounded-md transition-colors"><div class="relative flex items-center gap-4" data-tooltip="Logout"><i class="fa-solid fa-right-from-bracket w-6 text-center"></i><span class="nav-text">Logout</span></div></button>
         </div>
     </aside>
 
@@ -263,8 +274,8 @@
                     </div>
                     <!-- Brand Filter -->
                     <div class="flex-grow md:flex-grow-0">
-                        <label for="inspection-dashboard-brand-filter" class="sr-only">Brand</label>
-                        <select id="inspection-dashboard-brand-filter" class="form-input w-full">
+                        <label for="dashboard-brand-filter" class="sr-only">Brand</label>
+                        <select id="dashboard-brand-filter" class="form-input w-full">
                             <!-- Opsi akan diisi oleh JavaScript -->
                         </select>
                     </div>
@@ -727,6 +738,19 @@
                         </div>
                     </button>
 
+                    <!-- BARU: Kartu Kelola Format -->
+                    <button onclick="window.location.hash = '#settings/formats'" class="text-left bg-white p-6 rounded-xl shadow-sm border border-slate-100 hover:shadow-md hover:-translate-y-1 transition-all duration-300">
+                        <div class="flex items-center gap-4 mb-4">
+                            <div class="w-12 h-12 bg-sky-100 text-sky-600 rounded-lg flex items-center justify-center flex-shrink-0">
+                                <i class="fa-solid fa-ruler-combined text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-lg">Kelola Format</h3>
+                                <p class="text-sm text-slate-500">Atur format angka, tanggal, dan waktu.</p>
+                            </div>
+                        </div>
+                    </button>
+
                     <!-- Kartu pengaturan lainnya bisa ditambahkan di sini -->
                 </div>
 
@@ -756,6 +780,77 @@
                     </div>
                 </div>
 
+                <!-- BARU: Bagian Kelola Format (awalnya tersembunyi) -->
+                <div id="format-settings-section" class="hidden bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+                    <div class="flex justify-between items-center mb-6 pb-4 border-b border-slate-200">
+                        <div>
+                            <h3 class="text-xl font-bold">Pengaturan Format Tampilan</h3>
+                            <p class="text-sm text-slate-500">Atur bagaimana angka, tanggal, dan waktu ditampilkan di seluruh aplikasi.</p>
+                        </div>
+                        <button onclick="window.location.hash = '#settings'" class="bg-slate-100 hover:bg-slate-200 text-slate-600 text-sm px-4 py-2 rounded-md shadow-sm transition flex-shrink-0">
+                            <i class="fa-solid fa-arrow-left mr-2"></i> Kembali
+                        </button>
+                    </div>
+
+                    <div class="max-w-2xl mx-auto">
+                        <form id="format-settings-form" class="space-y-6">
+                            <!-- Number Formatting -->
+                            <div>
+                                <h4 class="text-lg font-semibold text-slate-700 mb-2">Format Angka</h4>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <div>
+                                        <label for="setting-number-decimal-separator" class="block text-sm font-medium text-slate-600">Pemisah Desimal</label>
+                                        <select id="setting-number-decimal-separator" class="form-input w-full mt-1">
+                                            <option value=".">Titik (.) - Contoh: 1,234.56</option>
+                                            <option value=",">Koma (,) - Contoh: 1.234,56</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label for="setting-number-thousands-separator" class="block text-sm font-medium text-slate-600">Pemisah Ribuan</label>
+                                        <select id="setting-number-thousands-separator" class="form-input w-full mt-1">
+                                            <option value=",">Koma (,) - Contoh: 1,234.56</option>
+                                            <option value=".">Titik (.) - Contoh: 1.234,56</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Date Formatting -->
+                            <div>
+                                <h4 class="text-lg font-semibold text-slate-700 mb-2">Format Tanggal</h4>
+                                <div>
+                                    <label for="setting-date-format" class="block text-sm font-medium text-slate-600">Format</label>
+                                    <select id="setting-date-format" class="form-input w-full mt-1">
+                                        <option value="dd-mm-yyyy">DD-MM-YYYY (Contoh: 25-12-2025)</option>
+                                        <option value="mm-dd-yyyy">MM-DD-YYYY (Contoh: 12-25-2025)</option>
+                                        <option value="yyyy-mm-dd">YYYY-MM-DD (Contoh: 2025-12-25)</option>
+                                        <option value="d MMMM yyyy">d MMMM yyyy (Contoh: 25 December 2025)</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Time Formatting -->
+                            <div>
+                                <h4 class="text-lg font-semibold text-slate-700 mb-2">Format Waktu</h4>
+                                <div>
+                                    <label for="setting-time-format" class="block text-sm font-medium text-slate-600">Format</label>
+                                    <select id="setting-time-format" class="form-input w-full mt-1">
+                                        <option value="24h">24-Jam (Contoh: 14:30)</option>
+                                        <option value="12h">12-Jam dengan AM/PM (Contoh: 02:30 PM)</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Save Button -->
+                            <div class="pt-4 border-t border-slate-200">
+                                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 px-4 rounded-lg transition">
+                                    <i class="fa-solid fa-save mr-2"></i> Simpan Pengaturan Format
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
                 <!-- BARU: Bagian Opening Balance DSR (awalnya tersembunyi) -->
                 <div id="opening-balance-dsr-section" class="hidden bg-white p-6 rounded-xl shadow-sm border border-slate-100">
                     <div class="flex justify-between items-center mb-4">
@@ -781,6 +876,7 @@
                         </table>
                     </div>
             </div>
+
 
             <!-- BARU: Bagian Kelola Hotel Competitor (awalnya tersembunyi) -->
             <div id="competitor-settings-section" class="hidden bg-white p-6 rounded-xl shadow-sm border border-slate-100">
@@ -1136,6 +1232,16 @@
                                 <button id="import-budget-dsr-btn" class="bg-green-600 hover:bg-green-700 text-white text-sm px-4 py-2 rounded-md shadow transition flex items-center">
                                     <i class="fa-solid fa-file-import mr-2"></i>Import Excel
                                 </button>
+                                <button id="clear-budget-dsr-btn" class="bg-red-600 hover:bg-red-700 text-white text-sm px-4 py-2 rounded-md shadow transition flex items-center">
+                                    <i class="fa-solid fa-eraser mr-2"></i>Clear
+                                </button>
+                                <!-- BARU: Tombol Kunci & Buka Kunci -->
+                                <button id="lock-budget-dsr-btn" class="bg-yellow-500 hover:bg-yellow-600 text-white text-sm px-4 py-2 rounded-md shadow transition flex items-center">
+                                    <i class="fa-solid fa-lock mr-2"></i>Kunci Data
+                                </button>
+                                <button id="unlock-budget-dsr-btn" class="hidden bg-rose-500 hover:bg-rose-600 text-white text-sm px-4 py-2 rounded-md shadow transition flex items-center">
+                                    <i class="fa-solid fa-lock-open mr-2"></i>Buka Kunci
+                                </button>
                                 <!-- Tombol Simpan -->
                                 <button id="save-budget-dsr-btn" class="bg-blue-600 hover:bg-blue-700 text-white text-sm px-4 py-2 rounded-md shadow transition">
                                     <i class="fa-solid fa-save mr-1"></i> Simpan Budget DSR
@@ -1146,7 +1252,7 @@
                             <table id="budget-dsr-table" class="w-full text-sm text-left text-slate-500">
                                 <thead class="text-xs text-slate-700 uppercase bg-slate-50 sticky top-0 z-10">
                                     <tr>
-                                        <th scope="col" class="px-4 py-3 min-w-[100px] sticky left-0 bg-slate-50 z-10">DATE</th>
+                                        <th scope="col" class="px-4 py-3 min-w-[100px] sticky left-0 bg-slate-50 z-20">DATE</th>
                                         <th scope="col" class="px-4 py-3 min-w-[150px] text-right">Room Available</th>
                                         <th scope="col" class="px-4 py-3 min-w-[150px] text-right">Room OOO</th>
                                         <th scope="col" class="px-4 py-3 min-w-[150px] text-right">Room Com & HU</th>
@@ -1236,6 +1342,16 @@
                                 <button id="import-actual-dsr-btn" class="bg-green-600 hover:bg-green-700 text-white text-sm px-4 py-2 rounded-md shadow transition flex items-center">
                                     <i class="fa-solid fa-file-import mr-2"></i>Import Excel
                                 </button>
+                                <button id="clear-actual-dsr-btn" class="bg-red-600 hover:bg-red-700 text-white text-sm px-4 py-2 rounded-md shadow transition flex items-center">
+                                    <i class="fa-solid fa-eraser mr-2"></i>Clear
+                                </button>
+                                <!-- BARU: Tombol Kunci & Buka Kunci -->
+                                <button id="lock-actual-dsr-btn" class="bg-yellow-500 hover:bg-yellow-600 text-white text-sm px-4 py-2 rounded-md shadow transition flex items-center">
+                                    <i class="fa-solid fa-lock mr-2"></i>Kunci Data
+                                </button>
+                                <button id="unlock-actual-dsr-btn" class="hidden bg-rose-500 hover:bg-rose-600 text-white text-sm px-4 py-2 rounded-md shadow transition flex items-center">
+                                    <i class="fa-solid fa-lock-open mr-2"></i>Buka Kunci
+                                </button>
                                 <!-- Tombol Simpan -->
                                 <button id="save-actual-dsr-btn" class="bg-blue-600 hover:bg-blue-700 text-white text-sm px-4 py-2 rounded-md shadow transition">
                                     <i class="fa-solid fa-save mr-1"></i> Simpan Actual DSR
@@ -1246,7 +1362,7 @@
                             <table id="actual-dsr-table" class="w-full text-sm text-left text-slate-500">
                                 <thead class="text-xs text-slate-700 uppercase bg-slate-50 sticky top-0 z-10">
                                     <tr>
-                                        <th scope="col" class="px-4 py-3 min-w-[100px] sticky left-0 bg-slate-50 z-10">DATE</th>
+                                        <th scope="col" class="px-4 py-3 min-w-[100px] sticky left-0 bg-slate-50 z-20">DATE</th>
                                         <th scope="col" class="px-4 py-3 min-w-[150px] text-right">Room Available</th>
                                         <th scope="col" class="px-4 py-3 min-w-[150px] text-right">Room OOO</th>
                                         <th scope="col" class="px-4 py-3 min-w-[150px] text-right">Room Com & HU</th>
@@ -1539,17 +1655,38 @@
                     <div id="daily-income-loader" class="absolute inset-0 bg-white/50 backdrop-blur-sm flex items-center justify-center z-10 rounded-xl hidden">
                         <i class="fa-solid fa-circle-notch fa-spin text-3xl text-blue-500"></i>
                     </div>
-                    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100" id="daily-stats-arr-card">
-                        <p class="text-xs text-slate-500 font-bold uppercase">ARR</p>
-                        <h3 id="daily-stats-arr" class="text-2xl font-bold mt-1 text-slate-800">...</h3>
+                    <div id="daily-stats-arr-card" class="bg-white p-4 rounded-lg shadow">
+                        <p id="daily-stats-arr-card p" class="text-sm text-slate-500 font-medium">ARR</p>
+                        <div class="mt-1 flex items-end justify-between">
+                            <p id="daily-stats-arr" class="text-2xl font-semibold text-slate-900">Rp 0</p>
+                            <!-- Elemen untuk perbandingan -->
+                            <div class="flex flex-col items-end text-sm font-medium">
+                                <div id="daily-stats-arr-vs-budget"></div>
+                                <div id="daily-stats-arr-vs-ly"></div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100" id="daily-stats-revpar-card">
-                        <p class="text-xs text-slate-500 font-bold uppercase">RevPAR</p>
-                        <h3 id="daily-stats-revpar" class="text-2xl font-bold mt-1 text-slate-800">...</h3>
+                    <div id="daily-stats-revpar-card" class="bg-white p-4 rounded-lg shadow">
+                        <p id="daily-stats-revpar-card p" class="text-sm text-slate-500 font-medium">RevPAR</p>
+                        <div class="mt-1 flex items-end justify-between">
+                            <p id="daily-stats-revpar" class="text-2xl font-semibold text-slate-900">Rp 0</p>
+                            <!-- Elemen untuk perbandingan -->
+                            <div class="flex flex-col items-end text-sm font-medium">
+                                <div id="daily-stats-revpar-vs-budget"></div>
+                                <div id="daily-stats-revpar-vs-ly"></div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100" id="daily-stats-total-revenue-card">
-                        <p class="text-xs text-slate-500 font-bold uppercase">Total Revenue</p>
-                        <h3 id="daily-stats-total-revenue" class="text-2xl font-bold mt-1 text-slate-800">...</h3>
+                    <div id="daily-stats-total-revenue-card" class="bg-white p-4 rounded-lg shadow">
+                        <p id="daily-stats-total-revenue-card p" class="text-sm text-slate-500 font-medium">Total Revenue</p>
+                        <div class="mt-1 flex items-end justify-between">
+                            <p id="daily-stats-total-revenue" class="text-2xl font-semibold text-slate-900">Rp 0</p>
+                            <!-- Elemen untuk perbandingan -->
+                            <div class="flex flex-col items-end text-sm font-medium">
+                                <div id="daily-stats-total-revenue-vs-budget"></div>
+                                <div id="daily-stats-total-revenue-vs-ly"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -2641,7 +2778,6 @@
                     <table class="w-full text-sm text-left text-slate-500">
                         <thead class="text-xs text-slate-700 uppercase bg-slate-50">
                             <tr>
-                                <th scope="col" class="px-6 py-3">No.</th>
                                 <th scope="col" class="px-6 py-3">Nama Hotel</th>
                                 <th scope="col" class="px-6 py-3">Brand</th>
                                 <th scope="col" class="px-6 py-3">Kota</th>
@@ -2937,7 +3073,7 @@
     </div>
     <!-- EDIT HOTEL MODAL -->
     <div id="edit-hotel-modal" class="fixed inset-0 z-50 bg-slate-900/70 hidden items-center justify-center backdrop-blur-sm p-4">
-        <div class="max-w-2xl w-full bg-white rounded-xl shadow-2xl border border-slate-200 relative fade-in flex flex-col">
+        <div class="max-w-lg w-full bg-white rounded-xl shadow-2xl border border-slate-200 relative fade-in flex flex-col">
             <div class="flex justify-between items-center p-6 border-b border-slate-200">
                 <h3 class="text-lg font-bold text-slate-800">Edit Data Hotel</h3>
                 <button onclick="closeEditHotelModal()" class="w-8 h-8 bg-slate-100 hover:bg-slate-200 rounded-full flex items-center justify-center transition"><i class="fa-solid fa-xmark text-slate-600"></i></button>
@@ -2948,8 +3084,8 @@
                     <div class="md:col-span-2"><label for="edit-hotel-name" class="block text-sm font-medium text-slate-700 mb-1">Nama Hotel <span class="text-red-500">*</span></label><input type="text" id="edit-hotel-name" name="name" class="form-input" placeholder="Contoh: Grand Hotel Jakarta" required></div>
                     <div><label for="edit-hotel-brand" class="block text-sm font-medium text-slate-700 mb-1">Brand</label><input type="text" id="edit-hotel-brand" name="brand" class="form-input" placeholder="Contoh: Accor"></div>
                     <div><label for="edit-hotel-city" class="block text-sm font-medium text-slate-700 mb-1">Kota</label><input type="text" id="edit-hotel-city" name="city" class="form-input" placeholder="Contoh: Jakarta"></div>
-                    <div class="md:col-span-2"><label for="edit-hotel-address" class="block text-sm font-medium text-slate-700 mb-1">Alamat</label><textarea id="edit-hotel-address" name="address" class="form-input" rows="5" placeholder="Jl. Jenderal Sudirman Kav. 1, Jakarta"></textarea></div>
                 </div>
+                <div><label for="edit-hotel-address" class="block text-sm font-medium text-slate-700 mb-1">Alamat</label><textarea id="edit-hotel-address" name="address" class="form-input" rows="3" placeholder="Jl. Jenderal Sudirman Kav. 1, Jakarta"></textarea></div>
                 <div id="edit-hotel-error" class="hidden text-sm text-red-600 bg-red-50 p-3 rounded-md"></div>
                 <div class="pt-4 flex justify-end gap-3"><button type="submit" id="edit-hotel-submit-btn" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg transition">Simpan Perubahan</button></div>
             </form>
@@ -3643,6 +3779,7 @@
     <script src="js/audit-calendar.js"></script> <!-- BARU -->
     <script src="js/trial-balance.js"></script>
     <script src="js/competitor-settings.js"></script> <!-- BARU -->
+    <script src="js/formats.js"></script> <!-- BARU -->
     <script src="js/script.js"></script>
 </body>
 </html>

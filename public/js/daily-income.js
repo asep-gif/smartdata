@@ -22,12 +22,20 @@ async function initDailyIncomeDashboard() {
         'daily-income-hotel-filter-label'
     );
 
-    // Tambahkan event listener ke semua filter
+    // Tambahkan event listener ke filter standar
     document.getElementById('daily-income-year-filter')?.addEventListener('change', loadDailyIncomeDashboardData);
     document.getElementById('daily-income-month-filter')?.addEventListener('change', loadDailyIncomeDashboardData);
     document.getElementById('daily-income-start-date')?.addEventListener('change', loadDailyIncomeDashboardData);
     document.getElementById('daily-income-end-date')?.addEventListener('change', loadDailyIncomeDashboardData);
-    document.getElementById('daily-income-period-filter')?.addEventListener('change', loadDailyIncomeDashboardData);
+
+    // Event listener khusus untuk filter periode
+    const periodFilter = document.getElementById('daily-income-period-filter');
+    if (periodFilter) {
+        periodFilter.addEventListener('change', () => {
+            handlePeriodFilterChange(); // Selalu panggil ini untuk menyesuaikan UI
+            loadDailyIncomeDashboardData(); // Kemudian muat data
+        });
+    }
 
     const brandFilter = document.getElementById('daily-income-brand-filter');
     if (brandFilter) {
@@ -50,6 +58,9 @@ async function initDailyIncomeDashboard() {
         });
     }
 
+    // Panggil untuk mengatur visibilitas filter saat pertama kali dimuat
+    handlePeriodFilterChange();
+
     // Muat data awal
     await loadDailyIncomeDashboardData();
 }
@@ -65,9 +76,6 @@ async function loadDailyIncomeDashboardData() {
     const endDate = document.getElementById('daily-income-end-date').value;
     const brand = document.getElementById('daily-income-brand-filter').value;
     const selectedHotels = getSelectedHotels('daily-income');
-
-    // Panggil fungsi untuk menyesuaikan UI filter
-    handlePeriodFilterChange();
 
     const periodStyles = {
         mtd: { text: 'MTD', color: 'text-blue-600' },
@@ -123,7 +131,7 @@ async function loadDailyIncomeDashboardData() {
 
     try {
         const data = await fetchAPI(`/api/dashboard/daily-income-summary?${params.toString()}`);
-        const formatCurrency = (value) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(value);
+        const formatCurrency = (value) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(value);
 
         if (arrCardTitle) arrCardTitle.innerHTML = `ARR ${periodLabelSpan}`;
         if (revparCardTitle) revparCardTitle.innerHTML = `RevPAR ${periodLabelSpan}`;
@@ -135,17 +143,59 @@ async function loadDailyIncomeDashboardData() {
             arrEl.textContent = formatCurrency(data.summary.actual.arr);
             revparEl.textContent = formatCurrency(data.summary.actual.revpar);
             totalRevEl.textContent = formatCurrency(data.summary.actual.total_revenue);
+
+            const { actual, budget, actualLastYear } = data.summary;
+
+            const renderVariance = (actualValue, budgetValue, lastYearValue, cardPrefix) => {
+                const budgetVarEl = document.getElementById(`${cardPrefix}-vs-budget`);
+                const lastYearVarEl = document.getElementById(`${cardPrefix}-vs-ly`);
+
+                if (budgetVarEl) {
+                    if (budgetValue > 0) {
+                        const variance = ((actualValue - budgetValue) / budgetValue) * 100;
+                        budgetVarEl.innerHTML = `
+                            <span class="${variance >= 0 ? 'text-green-500' : 'text-red-500'}">${variance >= 0 ? '▲' : '▼'} ${Math.abs(variance).toFixed(1)}%</span>
+                            <span class="text-slate-500 text-xs ml-1">vs Budget</span>
+                        `;
+                    } else {
+                        budgetVarEl.innerHTML = '';
+                    }
+                }
+
+                if (lastYearVarEl) {
+                    if (lastYearValue > 0) {
+                        const variance = ((actualValue - lastYearValue) / lastYearValue) * 100;
+                        lastYearVarEl.innerHTML = `
+                            <span class="${variance >= 0 ? 'text-green-500' : 'text-red-500'}">${variance >= 0 ? '▲' : '▼'} ${Math.abs(variance).toFixed(1)}%</span>
+                            <span class="text-slate-500 text-xs ml-1">vs LY</span>
+                        `;
+                    } else {
+                        lastYearVarEl.innerHTML = '';
+                    }
+                }
+            };
+
+            renderVariance(actual.arr, budget.arr, actualLastYear?.arr, 'daily-stats-arr');
+            renderVariance(actual.revpar, budget.revpar, actualLastYear?.revpar, 'daily-stats-revpar');
+            renderVariance(actual.total_revenue, budget.total_revenue, actualLastYear?.total_revenue, 'daily-stats-total-revenue');
             
             initDailyOccupancyGaugeChart(
-                data.summary.actual.average_occupancy,
-                data.summary.actual.total_room_sold,
-                data.summary.actual.total_room_available
+                actual.average_occupancy,
+                budget.average_occupancy
             );
         } else {
             arrEl.textContent = 'N/A';
             revparEl.textContent = 'N/A';
             totalRevEl.textContent = 'N/A';
-            initDailyOccupancyGaugeChart(0, 0, 0); 
+            initDailyOccupancyGaugeChart(0, 0); 
+
+            const prefixes = ['daily-stats-arr', 'daily-stats-revpar', 'daily-stats-total-revenue'];
+            prefixes.forEach(prefix => {
+                const budgetEl = document.getElementById(`${prefix}-vs-budget`);
+                const lyEl = document.getElementById(`${prefix}-vs-ly`);
+                if (budgetEl) budgetEl.innerHTML = '';
+                if (lyEl) lyEl.innerHTML = '';
+            });
         }
 
         const chartTitleEl = document.getElementById('daily-income-chart-title');
@@ -155,7 +205,7 @@ async function loadDailyIncomeDashboardData() {
                 : 'Tren Pendapatan Harian (Actual vs Budget)';
         }
         
-        initDailyIncomeChart(data.daily.budget, data.daily.actual, data.daily.labels, data.daily.isMonthly || false);
+        initDailyIncomeChart(data.daily.budget, data.daily.actual, data.daily.actualLastYear, data.daily.labels, data.daily.isMonthly || false);
 
         renderDailyIncomeSummaryTable(data.hotel_summaries);
 
@@ -208,7 +258,7 @@ function renderDailyIncomeSummaryTable(hotelSummaries) {
     }
 
     const formatPercent = (val) => `${(val || 0).toFixed(0)}%`;
-    const formatCurrency = (val) => Math.round(val || 0).toLocaleString('id-ID');
+    const formatCurrency = (val) => formatNumber(val || 0, { decimalPlaces: 0 });
     const getVarianceColor = (variance) => variance > 0 ? 'text-green-600' : (variance < 0 ? 'text-red-600' : 'text-slate-500');
 
     const totals = {
@@ -313,9 +363,10 @@ function handlePeriodFilterChange() {
  * Inisialisasi atau update chart "Pendapatan Harian" dengan data budget vs actual.
  * @param {number[]} budgetData - Array data budget revenue harian.
  * @param {number[]} actualData - Array data actual revenue harian.
+ * @param {number[]} actualLastYearData - Array data actual revenue harian tahun lalu.
  * @param {string[]} labels - Array label tanggal untuk sumbu-X.
  */
-function initDailyIncomeChart(budgetData = [], actualData = [], labels = [], isMonthly = false) {
+function initDailyIncomeChart(budgetData = [], actualData = [], actualLastYearData = [], labels = [], isMonthly = false) {
     const ctx = document.getElementById('dailyIncomeChart');
     if (!ctx) return;
 
@@ -326,22 +377,14 @@ function initDailyIncomeChart(budgetData = [], actualData = [], labels = [], isM
     let formattedLabels = labels;
     let budgetLabel = 'Budget Harian';
     let actualLabel = 'Actual Harian';
+    let actualLastYearLabel = 'Actual Tahun Lalu';
 
     if (isMonthly) {
-        formattedLabels = labels;
         budgetLabel = 'Budget Bulanan';
         actualLabel = 'Actual Bulanan';
+        actualLastYearLabel = 'Actual Tahun Lalu';
     } else {
-        formattedLabels = labels.map(label => {
-            try {
-                const date = new Date(label);
-                const day = date.toLocaleDateString('id-ID', { weekday: 'short' });
-                const dayOfMonth = String(date.getDate()).padStart(2, '0');
-                return `${day}-${dayOfMonth}`;
-            } catch (e) {
-                return label; 
-            }
-        });
+         formattedLabels = labels;
     }
 
     dailyIncomeChartInstance = new Chart(ctx, {
@@ -364,6 +407,15 @@ function initDailyIncomeChart(budgetData = [], actualData = [], labels = [], isM
                     backgroundColor: 'rgba(79, 70, 229, 0.1)',
                     fill: true,
                     tension: 0.3
+                },
+                {
+                    label: actualLastYearLabel,
+                    data: actualLastYearData,
+                    borderColor: '#9ca3af', // Gray color
+                    backgroundColor: 'rgba(156, 163, 175, 0.1)',
+                    fill: true,
+                    tension: 0.3,
+                    borderDash: [5, 5], // Dashed line
                 }
             ]
         },
@@ -377,24 +429,32 @@ function initDailyIncomeChart(budgetData = [], actualData = [], labels = [], isM
 }
 
 /**
- * Inisialisasi atau update chart speedometer untuk okupansi.
- * @param {number} occupancy - Nilai okupansi (0-100).
- * @param {number} roomSold - Jumlah kamar terjual.
- * @param {number} roomAvailable - Jumlah kamar tersedia.
+ * Inisialisasi atau update chart speedometer untuk okupansi dengan penanda budget.
+ * @param {number} actualOccupancy - Nilai okupansi aktual (0-100).
+ * @param {number} budgetOccupancy - Nilai okupansi budget (0-100).
  */
-function initDailyOccupancyGaugeChart(occupancy = 0, roomSold = 0, roomAvailable = 0) {
+function initDailyOccupancyGaugeChart(actualOccupancy = 0, budgetOccupancy = 0) {
     const ctx = document.getElementById('dailyOccupancyGaugeChart');
     if (!ctx) return;
 
     if (dailyOccupancyGaugeChartInstance) {
         dailyOccupancyGaugeChartInstance.destroy();
     }
+    
+    const card = ctx.closest('.flex-col');
+    if (card) {
+        let titleEl = card.querySelector('.font-bold');
+        if (titleEl) {
+            titleEl.textContent = 'Avg. Occupancy (Actual vs Budget)';
+        }
+    }
 
-    const safeOccupancy = Math.max(0, Math.min(100, occupancy));
+    const safeActual = Math.max(0, Math.min(100, actualOccupancy));
+    const safeBudget = Math.max(0, Math.min(100, budgetOccupancy));
 
-    const data = {
+    const gaugeData = {
         datasets: [{
-            data: [safeOccupancy, 100 - safeOccupancy],
+            data: [safeActual, 100 - safeActual],
             backgroundColor: ['#4f46e5', '#e5e7eb'],
             borderColor: ['#4f46e5', '#e5e7eb'],
             borderWidth: 1,
@@ -409,40 +469,76 @@ function initDailyOccupancyGaugeChart(occupancy = 0, roomSold = 0, roomAvailable
             const { ctx } = chart;
             const { width, height } = chart;
             const xCenter = width / 2;
-            const yCenterPercent = height / 2 + 0;
-            const yCenterDetail = yCenterPercent + 28;
-            const yCenterLabel = yCenterDetail + 16;
-
+            const yCenter = height / 2 + 30; 
+    
             ctx.save();
-            ctx.font = 'bold 2rem sans-serif';
-            ctx.fillStyle = '#1e293b';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
-            ctx.fillText(`${safeOccupancy.toFixed(0)}%`, xCenter, yCenterPercent);
-
-            ctx.font = '0.75rem sans-serif'; 
-            ctx.fillStyle = '#64748b'; 
-            const soldFormatted = roomSold.toLocaleString('id-ID');
-            const availableFormatted = roomAvailable.toLocaleString('id-ID');
-            ctx.fillText(`${soldFormatted} / ${availableFormatted}`, xCenter, yCenterDetail);
-
-            ctx.font = '0.65rem sans-serif';
-            ctx.fillStyle = '#94a3b8';
-            ctx.fillText('Total Room Sold / Total Room Available', xCenter, yCenterLabel);
-
+    
+            ctx.font = 'bold 2rem sans-serif';
+            ctx.fillStyle = '#1e293b';
+            ctx.fillText(`${safeActual.toFixed(2)}%`, xCenter, yCenter - 15);
+            ctx.font = '0.75rem sans-serif';
+            ctx.fillStyle = '#64748b';
+            ctx.fillText('Actual', xCenter, yCenter + 10);
+            
+            ctx.font = '0.85rem sans-serif';
+            ctx.fillStyle = '#4b5563';
+            ctx.fillText(`Budget: ${safeBudget.toFixed(2)}%`, xCenter, yCenter + 35);
+            
+            ctx.restore();
+        }
+    };
+    
+    const gaugeBudgetLine = {
+        id: 'gaugeBudgetLine',
+        afterDatasetsDraw(chart) {
+            const { ctx, chartArea } = chart;
+            const { bottom } = chartArea;
+            const radius = chart.getDatasetMeta(0).data[0].outerRadius;
+            const xCenter = chart.chartArea.width / 2;
+            const yCenter = bottom; 
+    
+            const angle = Math.PI + (safeBudget / 100) * Math.PI;
+    
+            const x = xCenter + Math.cos(angle) * (radius + 5);
+            const y = yCenter + Math.sin(angle) * (radius + 5);
+            const xOuter = xCenter + Math.cos(angle) * (radius - 5);
+            const yOuter = yCenter + Math.sin(angle) * (radius - 5);
+    
+            ctx.save();
+            ctx.beginPath();
+            ctx.strokeStyle = '#ef4444';
+            ctx.lineWidth = 2;
+            ctx.moveTo(x, y);
+            ctx.lineTo(xOuter, yOuter);
+            ctx.stroke();
             ctx.restore();
         }
     };
 
     dailyOccupancyGaugeChartInstance = new Chart(ctx, {
         type: 'doughnut',
-        data: data,
+        data: gaugeData,
         options: {
             responsive: true,
             maintainAspectRatio: false,
             cutout: '80%',
-            plugins: { legend: { display: false }, tooltip: { enabled: false } }
+            plugins: {
+                legend: { display: false },
+                tooltip: { 
+                    enabled: true,
+                    callbacks: {
+                        label: function() {
+                            return `Actual: ${safeActual.toFixed(2)}%`;
+                        },
+                        afterLabel: function() {
+                            return `Budget: ${safeBudget.toFixed(2)}%`;
+                        }
+                    }
+                }
+            }
         },
-        plugins: [gaugeText]
+        plugins: [gaugeText, gaugeBudgetLine]
     });
 }

@@ -222,7 +222,7 @@ function renderIncomeStatementTable(budgetData, actualData) {
             }
         }
 
-        const formatNumber = (num) => num.toLocaleString('id-ID');
+        const formatNumber = (num) => num.toLocaleString('en-US');
         const formatPercent = (num) => num.toFixed(0) + '%';
         const formatValue = (value, isRatioRow) => isRatioRow ? formatPercent(value) : formatNumber(Math.round(value));
 
@@ -256,8 +256,8 @@ function generateReportRows(reportStructure, budgetYtd, actualYtd) {
     const formatValue = (value, format) => {
         if (isNaN(value) || value === null) return '-';
         if (format === 'percent') return `${value.toFixed(0)}%`;
-        if (format === 'currency') return Math.round(value).toLocaleString('id-ID');
-        return Math.round(value).toLocaleString('id-ID');
+        if (format === 'currency') return Math.round(value).toLocaleString('en-US');
+        return Math.round(value).toLocaleString('en-US');
     };
 
     const calculatedValues = { budget: { ...budgetYtd }, actual: { ...actualYtd } };
@@ -483,7 +483,7 @@ function renderMonthlySummaryTable(data) {
         return;
     }
 
-    const formatCurrency = (val) => Math.round(val).toLocaleString('id-ID');
+    const formatCurrency = (val) => Math.round(val).toLocaleString('en-US');
     const formatPercent = (val) => `${val.toFixed(2)}%`;
     const getVarianceColor = (variance) => variance > 0 ? 'text-green-600' : (variance < 0 ? 'text-red-600' : 'text-slate-500');
 

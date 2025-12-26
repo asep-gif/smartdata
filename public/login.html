@@ -1,9 +1,8 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Kagum Smartdata</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">    <title>Login - KAGUM SMARTDATA</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Font Awesome -->
@@ -18,43 +17,42 @@
 
     <div class="relative min-h-screen flex flex-col items-center justify-center p-4">
         <!-- Form Card -->
-        <div class="w-full max-w-sm bg-white rounded-xl shadow-2xl p-8">
+        <div class="w-full max-w-sm rounded-xl shadow-2xl p-8 border border-white/20 bg-slate-800/50 backdrop-blur-sm">
             <div class="text-center mb-8">
-                <img src="assets/logo/logo.png" alt="Kagum Smartdata Logo" class="h-12 w-auto mx-auto mb-4">
-                <p class="text-slate-500 text-sm mt-1">Silakan masuk untuk melanjutkan</p>
+                <img src="assets/logo/logo.png" alt="KAGUM SMARTDATA Logo" class="h-16 w-auto mx-auto mb-4">
             </div>
 
             <form id="login-form">
                 <div class="mb-4">
-                    <label class="block text-slate-700 text-sm font-bold mb-2" for="email">Alamat Email</label>
+                    <label class="block text-slate-200 text-sm font-bold mb-2" for="email">Email Address</label>
                     <div class="relative">
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                             <i class="fa-solid fa-envelope text-slate-400"></i>
                         </div>
-                        <input class="form-input pl-10 pr-10" id="email" name="email" type="email" placeholder="admin@hotel.com" required>
+                        <input class="form-input w-full pl-10 pr-10 bg-white/10 text-white placeholder-slate-400" id="email" name="email" type="email" placeholder="admin@hotel.com" required>
                     </div>
                 </div>
                 <div class="mb-4">
-                    <label class="block text-slate-700 text-sm font-bold mb-2" for="password">Password</label>
+                    <label class="block text-slate-200 text-sm font-bold mb-2" for="password">Password</label>
                     <div class="relative">
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                             <i class="fa-solid fa-lock text-slate-400"></i>
                         </div>
-                        <input class="form-input pl-10 pr-10" id="password" name="password" type="password" placeholder="••••••••" required>
-                        <div id="toggle-password" class="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer" title="Tampilkan/Sembunyikan password">
+                        <input class="form-input w-full pl-10 pr-10 bg-white/10 text-white placeholder-slate-400" id="password" name="password" type="password" placeholder="••••••••" required>
+                        <div id="toggle-password" class="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer" title="Show/Hide password">
                             <i id="toggle-password-icon" class="fa-solid fa-eye-slash text-slate-400 hover:text-slate-600 transition"></i>
                         </div>
                     </div>
                 </div>
                 <div class="flex items-center justify-between mb-6">
-                    <label class="flex items-center text-sm text-slate-600 cursor-pointer"><input type="checkbox" id="remember-me" class="form-checkbox h-4 w-4 text-blue-600 rounded mr-2 focus:ring-blue-500">Ingat Saya</label>
+                    <label class="flex items-center text-sm text-slate-300 cursor-pointer"><input type="checkbox" id="remember-me" class="form-checkbox h-4 w-4 text-blue-600 rounded mr-2 focus:ring-blue-500">Remember Me</label>
                 </div>
                 <div id="login-error" class="hidden text-sm text-red-600 bg-red-50 p-3 rounded-md mb-6 text-center"></div>
-                <button id="login-button" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition duration-300 shadow-lg shadow-blue-500/20" type="submit">Masuk</button>
+                <button id="login-button" class="w-full bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 text-white font-bold py-3 px-4 rounded-lg transition duration-300 shadow-lg" type="submit">Sign In</button>
             </form>
         </div>
         <!-- Copyright -->
-        <p class="text-center text-white/60 text-sm mt-8">© 2026 Kagum Smartdata. All rights reserved.</p>
+        <p class="text-center text-white/60 text-sm mt-8">© 2026 KAGUM SMARTDATA. All rights reserved.</p>
     </div>
 
     <script src="js/utils.js"></script>
