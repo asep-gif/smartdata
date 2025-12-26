@@ -10,12 +10,15 @@ router.use(authenticateToken);
 // Rute yang memerlukan hak akses spesifik (manager/admin)
 router.post('/budgets', authorize(['financials:pl:manage']), hotelAccessMiddleware, financialsController.createOrUpdateBudget);
 router.post('/actuals', authorize(['financials:pl:manage']), hotelAccessMiddleware, financialsController.createOrUpdateActual);
-router.post('/dsr/budget', authorize(['financials:dsr:manage']), hotelAccessMiddleware, financialsController.createOrUpdateDsrBudget);
-router.post('/dsr/actual', authorize(['financials:dsr:manage']), hotelAccessMiddleware, financialsController.createOrUpdateDsrActual);
+router.post('/dsr/budget', authorize(['submenu:input_budget_dsr']), hotelAccessMiddleware, financialsController.createOrUpdateDsrBudget);
+router.post('/dsr/actual', authorize(['submenu:input_actual_dsr']), hotelAccessMiddleware, financialsController.createOrUpdateDsrActual);
+router.delete('/dsr/budget', authorize(['financials:dsr:manage']), hotelAccessMiddleware, financialsController.clearDsrBudget);
+router.delete('/dsr/actual', authorize(['financials:dsr:manage']), hotelAccessMiddleware, financialsController.clearDsrActual);
 router.get('/dsr/opening-balances', authorize(['financials:dsr:manage']), financialsController.getOpeningBalances);
 router.post('/dsr/opening-balance', authorize(['financials:dsr:manage']), hotelAccessMiddleware, financialsController.saveOpeningBalance);
 router.post('/room-production', authorize(['financials:room_prod:manage']), hotelAccessMiddleware, financialsController.saveRoomProduction);
 router.post('/ar-aging', authorize(['financials:ar_aging:manage']), hotelAccessMiddleware, financialsController.saveArAging);
+router.post('/dsr/lock', authorize(['financials:dsr:manage']), hotelAccessMiddleware, financialsController.lockDsrData);
 
 // Rute yang dapat diakses oleh role lain (sesuai kebutuhan)
 // Untuk saat ini, kita asumsikan semua GET bisa diakses oleh pengguna terotentikasi

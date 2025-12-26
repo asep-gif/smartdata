@@ -6,7 +6,12 @@ const hotelAccessMiddleware = require('../middleware/hotelAccess'); // New impor
 
 router.post('/budget', authenticateToken, authorize(['financials:dsr:manage']), hotelAccessMiddleware, dsrController.saveBudgetDsr);
 router.get('/budget', authenticateToken, authorize(['menu:daily_income']), hotelAccessMiddleware, dsrController.getBudgetDsr);
+router.delete('/budget', authenticateToken, authorize(['financials:dsr:manage']), hotelAccessMiddleware, dsrController.deleteBudgetDsr);
+
 router.post('/actual', authenticateToken, authorize(['financials:dsr:manage']), hotelAccessMiddleware, dsrController.saveActualDsr);
 router.get('/actual', authenticateToken, authorize(['menu:daily_income']), hotelAccessMiddleware, dsrController.getActualDsr);
+router.delete('/actual', authenticateToken, authorize(['financials:dsr:manage']), hotelAccessMiddleware, dsrController.deleteActualDsr);
+
+
 
 module.exports = router;

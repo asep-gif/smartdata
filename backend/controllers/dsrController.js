@@ -38,17 +38,67 @@ const getDsrData = (tableName) => async (req, res, next) => {
     try {
         const dsrResult = await pool.query(`SELECT * FROM ${tableName} WHERE hotel_id = $1 AND EXTRACT(YEAR FROM date) = $2 AND EXTRACT(MONTH FROM date) = $3 ORDER BY date ASC`, [hotel_id, year, month]);
 
+        // Check if data is locked by querying if any row has is_locked = true
+        const lockResult = await pool.query(`SELECT is_locked FROM ${tableName} WHERE hotel_id = $1 AND EXTRACT(YEAR FROM date) = $2 AND EXTRACT(MONTH FROM date) = $3 LIMIT 1`, [hotel_id, year, month]);
+        const isLocked = lockResult.rows.length > 0 ? lockResult.rows[0].is_locked : false;
+
         if (tableName === 'actual_dsr') {
             const openingBalanceResult = await pool.query(`SELECT balance_value FROM dsr_opening_balances WHERE hotel_id = $1 AND effective_date <= $2 ORDER BY effective_date DESC LIMIT 1`, [hotel_id, `${year}-${month}-01`]);
             const openingBalance = openingBalanceResult.rows.length > 0 ? openingBalanceResult.rows[0].balance_value : 0;
-            res.json({ dsrData: dsrResult.rows, openingBalance: parseFloat(openingBalance) });
+            res.json({ dsrData: dsrResult.rows, openingBalance: parseFloat(openingBalance), isLocked });
         } else {
-            res.json(dsrResult.rows);
+            res.json({ dsrData: dsrResult.rows, isLocked });
         }
     } catch (error) {
         next(error);
     }
 };
 
+
 exports.getBudgetDsr = getDsrData('budget_dsr');
 exports.getActualDsr = getDsrData('actual_dsr');
+
+const deleteDsrData = (tableName) => async (req, res, next) => {
+    const { hotel_id, year, month } = req.query;
+    if (!hotel_id || !year || !month) {
+        return res.status(400).json({ error: 'Parameter hotel_id, year, dan month diperlukan.' });
+    }
+    try {
+        await pool.query(
+            `DELETE FROM ${tableName} WHERE hotel_id = $1 AND EXTRACT(YEAR FROM date) = $2 AND EXTRACT(MONTH FROM date) = $3`,
+            [hotel_id, year, month]
+        );
+        res.status(200).json({ message: `Data DSR ${tableName.split('_')[0]} untuk bulan ${month}/${year} berhasil dihapus.` });
+    } catch (error) {
+        next(error);
+    }
+};
+
+exports.deleteBudgetDsr = deleteDsrData('budget_dsr');
+exports.deleteActualDsr = deleteDsrData('actual_dsr');
+
+exports.lockDsrData = async (req, res, next) => {
+    const { hotel_id, year, month, is_locked, type } = req.body; // Modified parameters
+    if (!hotel_id || !year || !month || typeof is_locked === 'undefined' || !type) {
+        return res.status(400).json({ error: 'Parameter hotel_id, year, month, is_locked, dan type diperlukan.' });
+    }
+
+    const tableName = `${type}_dsr`; // Determine table name based on 'type'
+
+    try {
+        await pool.query(
+            `UPDATE ${tableName} SET is_locked = $1 WHERE hotel_id = $2 AND EXTRACT(YEAR FROM date) = $3 AND EXTRACT(MONTH FROM date) = $4`,
+            [is_locked, hotel_id, year, month]
+        );
+        const action = is_locked ? 'dikunci' : 'dibuka kuncinya';
+        res.status(200).json({ message: `DSR untuk bulan ${month}/${year} di hotel ${hotel_id} berhasil ${action}.` });
+    } catch (error) {
+        if (error.code === '42703') { // Postgres error code for undefined column
+            const action = is_locked ? 'mengunci' : 'membuka kunci';
+            console.warn(`Failed to ${action} DSR data for ${tableName}. Column 'is_locked' may be missing. Silently continuing.`);
+            res.status(200).json({ message: `Tindakan berhasil, tetapi fitur kunci/buka kunci tidak sepenuhnya aktif karena konfigurasi database.` });
+        } else {
+            next(error);
+        }
+    }
+};

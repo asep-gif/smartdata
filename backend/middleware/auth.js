@@ -15,7 +15,7 @@ const authenticateToken = async (req, res, next) => {
     }
 
     try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET || 'your_default_secret_key');
+        const decoded = jwt.verify(token, process.env.JWT_SECRET); // JWT_SECRET must be set in .env
 
         // Ambil data pengguna dan hak aksesnya dalam satu query
         const userQuery = `

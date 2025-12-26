@@ -178,10 +178,19 @@ CREATE TABLE IF NOT EXISTS budget_dsr (
     total_settlement NUMERIC(15, 2) DEFAULT 0.00,
     gab NUMERIC(15, 2) DEFAULT 0.00,
     balance NUMERIC(15, 2) DEFAULT 0.00,
+    is_locked BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     UNIQUE(hotel_id, date)
 );
+
+-- BARU: Sinkronisasi untuk memastikan kolom is_locked ada di budget_dsr
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='budget_dsr' AND column_name='is_locked') THEN
+        ALTER TABLE budget_dsr ADD COLUMN is_locked BOOLEAN DEFAULT FALSE;
+    END IF;
+END$$;
 
 -- Membuat tabel untuk menyimpan data Actual DSR (Daily Summary Report)
 CREATE TABLE IF NOT EXISTS actual_dsr (
@@ -301,6 +310,9 @@ BEGIN
     END IF;
     IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='actual_dsr' AND column_name='updated_at') THEN
         ALTER TABLE actual_dsr ADD COLUMN updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP;
+    END IF;
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='actual_dsr' AND column_name='is_locked') THEN
+        ALTER TABLE actual_dsr ADD COLUMN is_locked BOOLEAN DEFAULT FALSE;
     END IF;
 END$$;
 
@@ -446,7 +458,7 @@ INSERT INTO permissions (action, group_name, description) VALUES
 ('inspection_types:manage', 'Inspection Settings', 'Bisa mengelola tipe dan item inspeksi'),
 -- BARU: Hak akses untuk menu-menu baru
 ('submenu:ar_summary', 'Menu Access', 'Akses submenu AR Aging Summary'),
-('menu:trial_balance', 'Menu Access', 'Akses menu Trial Balance'),
+('submenu:trial_balance', 'Menu Access', 'Akses submenu Trial Balance'),
 ('menu:guest_review', 'Menu Access', 'Akses menu Guest Review'),
 ('submenu:guest_review_dashboard', 'Menu Access', 'Akses submenu Dashboard Guest Review'),
 ('submenu:guest_review_settings', 'Menu Access', 'Akses submenu Pengaturan Guest Review'),
@@ -531,7 +543,7 @@ DECLARE
         'submenu:input_budget_pl', 'submenu:input_actual_pl', 'menu:daily_income', 'submenu:daily_income_dashboard',
         'submenu:input_budget_dsr', 'submenu:input_actual_dsr', 'submenu:input_room_production', 'submenu:input_hotel_competitor', 'menu:ar_aging',
         'submenu:input_ar_aging', 'submenu:ar_summary', 'menu:inspection', 'submenu:inspection_dashboard',
-        'submenu:hotel_inspection', 'submenu:task_to_do', 'menu:reports', 'menu:settings', 'menu:trial_balance',
+        'submenu:hotel_inspection', 'submenu:task_to_do', 'menu:reports', 'menu:settings', 'submenu:trial_balance',
         'menu:guest_review', 'submenu:guest_review_dashboard', 'submenu:guest_review_settings', 'submenu:guest_review_replies',
         'menu:audit', 'submenu:agenda_audit', 'submenu:audit_calendar',
         -- Action & Settings Permissions
@@ -639,6 +651,28 @@ BEGIN
         SELECT id INTO perm_id FROM permissions WHERE action = perm_action;
         IF night_audit_role_id IS NOT NULL AND perm_id IS NOT NULL THEN
             INSERT INTO role_permissions (role_id, permission_id) VALUES (night_audit_role_id, perm_id) ON CONFLICT (role_id, permission_id) DO NOTHING;
+        END IF;
+    END LOOP;
+END $$;
+
+-- BARU: Tetapkan hak akses untuk peran "staff" agar bisa melihat Trial Balance
+DO $$
+DECLARE
+    staff_role_id INTEGER;
+    permissions_to_grant TEXT[] := ARRAY[
+        'menu:audit',
+        'submenu:trial_balance',
+        'submenu:input_budget_dsr',
+        'submenu:input_actual_dsr'
+    ];
+    perm_action TEXT;
+    perm_id INTEGER;
+BEGIN
+    SELECT id INTO staff_role_id FROM roles WHERE name = 'staff';
+    FOREACH perm_action IN ARRAY permissions_to_grant LOOP
+        SELECT id INTO perm_id FROM permissions WHERE action = perm_action;
+        IF staff_role_id IS NOT NULL AND perm_id IS NOT NULL THEN
+            INSERT INTO role_permissions (role_id, permission_id) VALUES (staff_role_id, perm_id) ON CONFLICT (role_id, permission_id) DO NOTHING;
         END IF;
     END LOOP;
 END $$;

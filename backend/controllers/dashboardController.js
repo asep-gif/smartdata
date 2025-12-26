@@ -20,6 +20,30 @@ const buildHotelFilter = (hotels, brand, startingParamIndex = 1) => {
     return { filterClause: '', queryParams: [] };
 };
 
+// Helper function to generate a range of dates
+const generateDateRange = (year, month = null, startDate = null, endDate = null) => {
+    const dates = [];
+    if (startDate && endDate) {
+        const [startY, startM, startD] = startDate.split('-').map(Number);
+        let currentDate = new Date(Date.UTC(startY, startM - 1, startD));
+
+        const [endY, endM, endD] = endDate.split('-').map(Number);
+        let end = new Date(Date.UTC(endY, endM - 1, endD));
+
+        while (currentDate <= end) {
+            dates.push(currentDate.toISOString().split('T')[0]);
+            currentDate.setUTCDate(currentDate.getUTCDate() + 1); // Use UTC date methods
+        }
+    } else if (month !== null) { // This is the MTD case
+        const numDays = new Date(year, month, 0).getDate(); // Get number of days in the month
+        for (let i = 1; i <= numDays; i++) {
+            const date = new Date(Date.UTC(year, month - 1, i)); // Month is 0-indexed here for Date constructor
+            dates.push(date.toISOString().split('T')[0]);
+        }
+    }
+    return dates;
+};
+
 // GET /api/dashboard/stats
 exports.getDashboardStats = async (req, res, next) => {
     const { brand, hotels, year, month } = req.query;
@@ -28,34 +52,29 @@ exports.getDashboardStats = async (req, res, next) => {
         const targetYear = year ? parseInt(year, 10) : new Date().getFullYear();
         const monthIndex = month && month !== 'all' ? parseInt(month, 10) - 1 : -1;
 
-        let hotelFilterClause = '';
-        let queryParams = [];
-        if (hotels) {
-            const hotelIds = hotels.split(',').map(id => parseInt(id.trim(), 10)).filter(id => !isNaN(id));
-            if (hotelIds.length > 0) {
-                hotelFilterClause = `WHERE id = ANY($1::int[])`;
-                queryParams.push(hotelIds);
-            }
-        }
-
-        let hotelCount;
-        if (!hotelFilterClause) {
-            const countResult = await pool.query('SELECT COUNT(DISTINCT hotel_id) FROM (SELECT hotel_id FROM budgets WHERE year = $1 UNION SELECT hotel_id FROM actuals WHERE year = $1) as hotels_with_data', [targetYear]);
-            hotelCount = parseInt(countResult.rows[0].count, 10);
-        } else {
-            const hotelCountQuery = `SELECT COUNT(*) AS total FROM hotels ${hotelFilterClause}`;
-            const hotelCountResult = await pool.query(hotelCountQuery, queryParams);
-            hotelCount = parseInt(hotelCountResult.rows[0].total, 10);
-        }
-
         let dataFilterClause = '';
         let dataQueryParams = [targetYear];
-        
+
         const { filterClause: hotelDataFilter, queryParams: hotelDataParams } = buildHotelFilter(hotels, brand, 2);
         if (hotelDataFilter) {
             dataFilterClause = `AND ${hotelDataFilter}`;
             dataQueryParams.push(...hotelDataParams);
         }
+
+        let hotelCount;
+        let hotelCountQuery = 'SELECT COUNT(DISTINCT hotel_id) FROM (SELECT hotel_id FROM budgets WHERE year = $1';
+        let hotelCountParams = [targetYear];
+        if (hotelDataFilter) {
+            hotelCountQuery += ' AND hotel_id IN (SELECT id FROM hotels WHERE ' + hotelDataFilter.replace(/h\./g, '') + ')';
+            hotelCountParams.push(hotelDataParams[0]);
+        }
+        hotelCountQuery += ' UNION SELECT hotel_id FROM actuals WHERE year = $1';
+        if (hotelDataFilter) {
+            hotelCountQuery += ' AND hotel_id IN (SELECT id FROM hotels WHERE ' + hotelDataFilter.replace(/h\./g, '') + ')';
+        }
+        hotelCountQuery += ') as hotels_with_data';
+        const countResult = await pool.query(hotelCountQuery, hotelCountParams);
+        hotelCount = parseInt(countResult.rows[0].count, 10);
 
         const relevantAccountCodes = [
             'rev_room', 'rev_fnb', 'rev_others', 'osaw_room', 'ooe_room', 'cos_fnb', 'osaw_fnb', 'ooe_fnb', 'cos_others',
@@ -73,10 +92,12 @@ exports.getDashboardStats = async (req, res, next) => {
             ];
             let joinClause = '';
 
-            if (hotelDataFilter) {
+            const { filterClause: hotelFilter, queryParams: hotelParams } = buildHotelFilter(hotels, brand, queryParams.length + 1);
+
+            if (hotelFilter) {
                 joinClause = ` JOIN hotels h ON ${tableAlias}.hotel_id = h.id`;
-                whereConditions.push(`h.id = ANY($${queryParams.length + 1}::int[])`);
-                queryParams.push(...hotelDataParams);
+                whereConditions.push(hotelFilter);
+                queryParams.push(...hotelParams);
             }
             return { query: `SELECT ${tableAlias}.account_code, ${tableAlias}.values FROM ${baseTable} ${tableAlias}${joinClause} WHERE ${whereConditions.join(' AND ')}`, params: queryParams };
         };
@@ -121,8 +142,8 @@ exports.getDashboardStats = async (req, res, next) => {
         let monthlyBudgetRevenue = Array(12).fill(0).map((_, i) => (budgetData['rev_room']?.[i] || 0) + (budgetData['rev_fnb']?.[i] || 0) + (budgetData['rev_others']?.[i] || 0));
         let monthlyActualRevenue = Array(12).fill(0).map((_, i) => (actualData['rev_room']?.[i] || 0) + (actualData['rev_fnb']?.[i] || 0) + (actualData['rev_others']?.[i] || 0));
         
-        const monthlyBudgetGop = calculateMonthlyGop(budgetData);
-        const monthlyActualGop = calculateMonthlyGop(actualData);
+        let monthlyBudgetGop = calculateMonthlyGop(budgetData);
+        let monthlyActualGop = calculateMonthlyGop(actualData);
 
         const calculateMonthlyOccArr = (data) => {
             const occ = Array(12).fill(0);
@@ -151,7 +172,7 @@ exports.getDashboardStats = async (req, res, next) => {
         if (monthIndex >= 0 && monthIndex < 12) {
             totalBudgetRevenue = monthlyBudgetRevenue[monthIndex];
             totalActualRevenue = monthlyActualRevenue[monthIndex];
-            
+
             const filterMonth = (data) => {
                 const filtered = Array(12).fill(0);
                 filtered[monthIndex] = data[monthIndex];
@@ -161,6 +182,12 @@ exports.getDashboardStats = async (req, res, next) => {
             monthlyActualRevenue = filterMonth(monthlyActualRevenue);
             monthlyBudgetGop = filterMonth(monthlyBudgetGop);
             monthlyActualGop = filterMonth(monthlyActualGop);
+
+            // Filter monthlyOccArr for the selected month
+            budgetOccArr.occ = filterMonth(budgetOccArr.occ);
+            budgetOccArr.arr = filterMonth(budgetOccArr.arr);
+            actualOccArr.occ = filterMonth(actualOccArr.occ);
+            actualOccArr.arr = filterMonth(actualOccArr.arr);
         } else {
             totalBudgetRevenue = monthlyBudgetRevenue.reduce((sum, value) => sum + value, 0);
             totalActualRevenue = monthlyActualRevenue.reduce((sum, value) => sum + value, 0);
@@ -212,8 +239,9 @@ exports.getDashboardStats = async (req, res, next) => {
 
         if (dataFilterClause) {
             roomProductionQuery += ` JOIN hotels h ON rp.hotel_id = h.id `;
-            roomProductionWhereClauses.push(`h.id = ANY($${roomProductionParams.length + 1}::int[])`);
-            roomProductionParams.push(hotelDataParams[0]); // hotelDataParams is [[1,2,3]], we need [1,2,3]
+            const adjustedHotelFilter = hotelDataFilter.replace(/\$(\d+)/g, (match, n) => `$${parseInt(n) + roomProductionParams.length - 1}`);
+            roomProductionWhereClauses.push(adjustedHotelFilter.replace(/h\./g, 'h.'));
+            roomProductionParams.push(...hotelDataParams);
         }
 
         if (roomProductionWhereClauses.length > 0) {
@@ -405,73 +433,140 @@ exports.getDailyIncomeSummary = async (req, res, next) => {
     if (period === 'custom' && (!startDate || !endDate)) return res.status(400).json({ error: 'Parameter startDate dan endDate diperlukan untuk periode Custom.' });
 
     try {
-        const queryParams = [];
-        const whereClauses = [];
+        const currentYear = parseInt(year, 10);
+        const lastYear = currentYear - 1;
 
-        if (period === 'mtd') {
-            whereClauses.push(`EXTRACT(YEAR FROM t.date) = $${queryParams.length + 1}`);
-            queryParams.push(year);
-            whereClauses.push(`EXTRACT(MONTH FROM t.date) = $${queryParams.length + 1}`);
-            queryParams.push(month);
-        } else if (period === 'ytd') {
-            whereClauses.push(`EXTRACT(YEAR FROM t.date) = $${queryParams.length + 1}`);
-            queryParams.push(year);
-        } else if (period === 'lastday') {
-            whereClauses.push(`t.date = (CURRENT_DATE - INTERVAL '1 day')`);
-        } else if (period === 'custom') {
-            whereClauses.push(`t.date BETWEEN $${queryParams.length + 1} AND $${queryParams.length + 2}`);
-            queryParams.push(startDate, endDate);
+        const createWhereClause = (targetYear, p_startDate, p_endDate, p_month) => {
+            const where = { clauses: [], params: [] };
+            
+            const addClause = (clause, ...p) => {
+                const paramIndexes = Array.from(clause.matchAll(/(\$\d+)/g)).map(m => parseInt(m[1].substring(1)));
+                const maxIndex = paramIndexes.length > 0 ? Math.max(...paramIndexes) : 0;
+                const newClause = clause.replace(/\$(\d+)/g, (_, n) => `$${where.params.length + parseInt(n)}`);
+                where.clauses.push(newClause);
+                where.params.push(...p);
+            };
+
+            if (period === 'mtd') {
+                addClause(`EXTRACT(YEAR FROM t.date) = $1 AND EXTRACT(MONTH FROM t.date) = $2`, targetYear, p_month);
+            } else if (period === 'ytd') {
+                addClause(`EXTRACT(YEAR FROM t.date) = $1`, targetYear);
+            } else if (period === 'lastday') {
+                addClause(`t.date = (CURRENT_DATE - INTERVAL '1 day' - INTERVAL '${currentYear - targetYear} year')`);
+            } else if (period === 'custom' && p_startDate && p_endDate) {
+                addClause(`t.date BETWEEN $1 AND $2`, p_startDate, p_endDate);
+            }
+
+            return where;
+        };
+
+        const hotelFilterClause = buildHotelFilter(hotels, brand, 1);
+        
+        const buildFinalWhere = (periodWhere) => {
+            const finalWhere = {
+                clauses: [...periodWhere.clauses],
+                params: [...periodWhere.params]
+            };
+            if (hotelFilterClause.filterClause) {
+                const updatedHotelClause = hotelFilterClause.filterClause.replace(/\$(\d+)/g, (_, n) => `$${finalWhere.params.length + parseInt(n)}`);
+                finalWhere.clauses.push(updatedHotelClause);
+                finalWhere.params.push(...hotelFilterClause.queryParams);
+            }
+            return finalWhere;
+        };
+        
+        const currentPeriodWhere = createWhereClause(currentYear, startDate, endDate, month);
+
+        let lastYearStartDate, lastYearEndDate;
+        if(period === 'custom' && startDate && endDate){
+            const [startYear, startMonth, startDay] = startDate.split('-').map(Number);
+            const [endYear, endMonth, endDay] = endDate.split('-').map(Number);
+            
+            const tempLastYearStartDate = new Date(Date.UTC(lastYear, startMonth - 1, startDay));
+            const tempLastYearEndDate = new Date(Date.UTC(lastYear, endMonth - 1, endDay));
+
+            lastYearStartDate = tempLastYearStartDate.toISOString().split('T')[0];
+            lastYearEndDate = tempLastYearEndDate.toISOString().split('T')[0];
         }
 
-        const { filterClause: hotelFilter, queryParams: hotelParams } = buildHotelFilter(hotels, brand, queryParams.length + 1);
-        if (hotelFilter) {
-            whereClauses.push(hotelFilter);
-            queryParams.push(...hotelParams);
-        }
+        const lastYearPeriodWhere = createWhereClause(lastYear, lastYearStartDate, lastYearEndDate, month);
 
-        const whereClause = whereClauses.length > 0 ? `WHERE ${whereClauses.join(' AND ')}` : '';
+        const currentWhere = buildFinalWhere(currentPeriodWhere);
+        const lastYearWhere = buildFinalWhere(lastYearPeriodWhere);
 
-        const getDailyAggregatedData = async (tableName) => {
+        const getDailyAggregatedData = async (tableName, where) => {
             const query = `
                 SELECT t.date::text AS date, SUM(t.total_revenue) as total_revenue
                 FROM ${tableName} t JOIN hotels h ON t.hotel_id = h.id
-                ${whereClause}
+                ${where.clauses.length > 0 ? 'WHERE ' + where.clauses.join(' AND ') : ''}
                 GROUP BY t.date ORDER BY t.date ASC;`;
-            return await pool.query(query, queryParams);
+            return await pool.query(query, where.params);
         };
-
-        const getHotelSummaryData = async (tableName) => {
+        
+        const getHotelSummaryData = async (tableName, where) => {
             const query = `
                 SELECT h.name as hotel_name, SUM(t.total_revenue) as total_revenue, 
                        SUM(t.room_revenue) as room_revenue, SUM(t.room_sold) as room_sold, SUM(t.room_available) as room_available
                 FROM ${tableName} t JOIN hotels h ON t.hotel_id = h.id
-                ${whereClause}
+                ${where.clauses.length > 0 ? 'WHERE ' + where.clauses.join(' AND ') : ''}
                 GROUP BY h.name ORDER BY h.name ASC;`;
-            return await pool.query(query, queryParams);
+            return await pool.query(query, where.params);
         };
 
-        const [dailyBudget, dailyActual, hotelBudgetSummary, hotelActualSummary] = await Promise.all([
-            getDailyAggregatedData('budget_dsr'),
-            getDailyAggregatedData('actual_dsr'),
-            getHotelSummaryData('budget_dsr'),
-            getHotelSummaryData('actual_dsr')
+        const [dailyBudget, dailyActual, dailyActualLastYear, hotelBudgetSummary, hotelActualSummary, hotelActualLastYearSummary] = await Promise.all([
+            getDailyAggregatedData('budget_dsr', currentWhere),
+            getDailyAggregatedData('actual_dsr', currentWhere),
+            getDailyAggregatedData('actual_dsr', lastYearWhere),
+            getHotelSummaryData('budget_dsr', currentWhere),
+            getHotelSummaryData('actual_dsr', currentWhere),
+            getHotelSummaryData('actual_dsr', lastYearWhere)
         ]);
 
         let chartData;
         if (period === 'ytd') {
             const monthlyBudgetData = Array(12).fill(0);
             const monthlyActualData = Array(12).fill(0);
+            const monthlyActualLastYearData = Array(12).fill(0);
             dailyBudget.rows.forEach(r => { monthlyBudgetData[new Date(r.date).getMonth()] += parseFloat(r.total_revenue) || 0; });
             dailyActual.rows.forEach(r => { monthlyActualData[new Date(r.date).getMonth()] += parseFloat(r.total_revenue) || 0; });
-            chartData = { budget: monthlyBudgetData, actual: monthlyActualData, labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'], isMonthly: true };
+            dailyActualLastYear.rows.forEach(r => { monthlyActualLastYearData[new Date(r.date).getMonth()] += parseFloat(r.total_revenue) || 0; });
+            chartData = { budget: monthlyBudgetData, actual: monthlyActualData, actualLastYear: monthlyActualLastYearData, labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'], isMonthly: true };
         } else {
             const budgetMap = new Map(dailyBudget.rows.map(r => [r.date, parseFloat(r.total_revenue) || 0]));
             const actualMap = new Map(dailyActual.rows.map(r => [r.date, parseFloat(r.total_revenue) || 0]));
-            const allDates = [...new Set([...budgetMap.keys(), ...actualMap.keys()])].sort();
+            const actualLastYearMap = new Map(dailyActualLastYear.rows.map(r => [r.date, parseFloat(r.total_revenue) || 0]));
+            
+            let allDatesInPeriod = [];
+            if (period === 'mtd') {
+                allDatesInPeriod = generateDateRange(currentYear, parseInt(month, 10));
+            } else if (period === 'custom') {
+                allDatesInPeriod = generateDateRange(currentYear, null, startDate, endDate);
+            } else if (period === 'lastday') {
+                // For 'lastday', the query already fetches data for a single day.
+                // We'll generate a single-day range based on the fetched date or current date-1
+                if (dailyActual.rows.length > 0) {
+                    allDatesInPeriod = [dailyActual.rows[0].date];
+                } else {
+                    const yesterday = new Date();
+                    yesterday.setDate(yesterday.getDate() - 1);
+                    allDatesInPeriod = [yesterday.toISOString().split('T')[0]];
+                }
+            } else {
+                 allDatesInPeriod = [...new Set([...budgetMap.keys(), ...actualMap.keys(), ...actualLastYearMap.keys()])].sort();
+            }
+
             chartData = {
-                budget: allDates.map(d => budgetMap.get(d) || 0),
-                actual: allDates.map(d => actualMap.get(d) || 0),
-                labels: allDates,
+                budget: allDatesInPeriod.map(d => budgetMap.get(d) || 0),
+                actual: allDatesInPeriod.map(d => actualMap.get(d) || 0),
+                actualLastYear: allDatesInPeriod.map(d => {
+                    const currentDay = new Date(Date.UTC(parseInt(d.substring(0,4)), parseInt(d.substring(5,7)) - 1, parseInt(d.substring(8,10))));
+                    const lastYearDay = new Date(Date.UTC(currentDay.getUTCFullYear() - 1, currentDay.getUTCMonth(), currentDay.getUTCDate()));
+                    return actualLastYearMap.get(lastYearDay.toISOString().split('T')[0]) || 0;
+                }),
+                labels: allDatesInPeriod.map(d => {
+                    const tempDate = new Date(d);
+                    return tempDate.toLocaleDateString('id-ID', { month: 'short', day: 'numeric' });
+                }),
                 isMonthly: false
             };
         }
@@ -490,7 +585,7 @@ exports.getDailyIncomeSummary = async (req, res, next) => {
                     room_revenue: roomRevenue,
                     occupancy: roomAvailable > 0 ? (roomSold / roomAvailable) * 100 : 0,
                     arr: roomSold > 0 ? roomRevenue / roomSold : 0,
-                    revpar: roomAvailable > 0 ? totalRevenue / roomAvailable : 0
+                revpar: roomAvailable > 0 ? roomRevenue / roomAvailable : 0
                 };
             };
             return { hotel_name: actualRow.hotel_name, actual: calcStats(actualRow), budget: calcStats(budgetRow) };
@@ -511,13 +606,25 @@ exports.getDailyIncomeSummary = async (req, res, next) => {
                 total_room_available: totals.room_available,
                 average_occupancy: totals.room_available > 0 ? (totals.room_sold / totals.room_available) * 100 : 0,
                 arr: totals.room_sold > 0 ? totals.room_revenue / totals.room_sold : 0,
-                revpar: totals.room_available > 0 ? totals.total_revenue / totals.room_available : 0,
+                revpar: totals.room_available > 0 ? totals.room_revenue / totals.room_available : 0,
             };
         };
         
+        const lastYearSummariesForCalc = hotelActualLastYearSummary.rows.map(row => {
+            return {
+                actual: {
+                    total_revenue: parseFloat(row.total_revenue) || 0,
+                    room_revenue: parseFloat(row.room_revenue) || 0,
+                    room_sold: parseFloat(row.room_sold) || 0,
+                    room_available: parseFloat(row.room_available) || 0,
+                }
+            };
+        });
+
         const summary = {
             actual: calculateOverallSummary(hotelSummaries, 'actual'),
             budget: calculateOverallSummary(hotelSummaries, 'budget'),
+            actualLastYear: calculateOverallSummary(lastYearSummariesForCalc, 'actual'),
         };
 
         res.json({

@@ -5,8 +5,8 @@ const multer = require('multer');
 const cors = require('cors');
 const path = require('path');
 const fs = require('fs');
+const { authenticateToken, authorizeAdmin, authorizeManagerOrAdmin, authorize } = require('./middleware/auth');
 const { errorHandler } = require('./middleware/errorHandler');
-const { authenticateToken, authorizeAdmin, authorizeManagerOrAdmin } = require('./middleware/authMiddleware');
 
 // BARU: Impor rute yang sudah ada dan perbaiki nama yang salah
 const userRoutes = require('./routes/userRoutes');

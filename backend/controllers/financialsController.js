@@ -1,5 +1,7 @@
 const pool = require('../config/db');
 
+const DSR_COLUMNS = ['room_available', 'room_ooo', 'room_com_and_hu', 'room_sold', 'number_of_guest', 'occp_r_sold_percent', 'arr', 'revpar', 'lodging_revenue', 'others_room_revenue', 'room_revenue', 'breakfast_revenue', 'restaurant_revenue', 'room_service', 'banquet_revenue', 'fnb_others_revenue', 'fnb_revenue', 'others_revenue', 'total_revenue', 'service', 'tax', 'gross_revenue', 'shared_payable', 'deposit_reservation', 'cash_fo', 'cash_outlet', 'bank_transfer', 'qris', 'credit_debit_card', 'city_ledger', 'total_settlement', 'gab', 'balance'];
+
 /**
  * Factory function untuk membuat handler yang melakukan upsert data bulanan (P&L).
  * @param {string} tableName - Nama tabel ('budgets' atau 'actuals').
@@ -64,28 +66,73 @@ exports.createOrUpdateActual = createMonthlyDataHandler('actuals');
 exports.getActual = getMonthlyDataHandler('actuals');
 
 function createDsrUpsertQuery(tableName) {
-    const columns = ['room_available', 'room_ooo', 'room_com_and_hu', 'room_sold', 'number_of_guest', 'occp_r_sold_percent', 'arr', 'revpar', 'lodging_revenue', 'others_room_revenue', 'room_revenue', 'breakfast_revenue', 'restaurant_revenue', 'room_service', 'banquet_revenue', 'fnb_others_revenue', 'fnb_revenue', 'others_revenue', 'total_revenue', 'service', 'tax', 'gross_revenue', 'shared_payable', 'deposit_reservation', 'cash_fo', 'cash_outlet', 'bank_transfer', 'qris', 'credit_debit_card', 'city_ledger', 'total_settlement', 'gab', 'balance'];
-    const insertCols = ['hotel_id', 'date', ...columns, 'updated_at'].join(', ');
-    const valuePlaceholders = Array.from({ length: columns.length + 2 }, (_, i) => `$${i + 1}`).join(', ');
-    const updateSet = columns.map(col => `${col} = EXCLUDED.${col}`).join(', ') + ', updated_at = NOW()';
+    const insertCols = ['hotel_id', 'date', ...DSR_COLUMNS, 'updated_at'].join(', ');
+    const valuePlaceholders = Array.from({ length: DSR_COLUMNS.length + 2 }, (_, i) => `$${i + 1}`).join(', ');
+    const updateSet = DSR_COLUMNS.map(col => `${col} = EXCLUDED.${col}`).join(', ') + ', updated_at = NOW()';
     return `INSERT INTO ${tableName} (${insertCols}) VALUES (${valuePlaceholders}, NOW()) ON CONFLICT (hotel_id, date) DO UPDATE SET ${updateSet};`;
 }
 
+const INTEGER_DSR_COLUMNS = [
+    'room_available', 'room_ooo', 'room_com_and_hu', 'room_sold', 'number_of_guest', 
+    'occp_r_sold_percent', 'arr', 'revpar'
+];
+
 const saveDsrData = (tableName) => async (req, res, next) => {
-    const { hotel_id, data } = req.body;
+    const { hotel_id, year, month, data } = req.body;
     if (!hotel_id || !Array.isArray(data)) return res.status(400).json({ error: 'Data tidak lengkap.' });
     const client = await pool.connect();
     try {
         await client.query('BEGIN');
         const query = createDsrUpsertQuery(tableName);
         for (const record of data) {
-            const values = [hotel_id, record.date, record.room_available, record.room_ooo, record.room_com_and_hu, record.room_sold, record.number_of_guest, record.occp_r_sold_percent, record.arr, record.revpar, record.lodging_revenue, record.others_room_revenue, record.room_revenue, record.breakfast_revenue, record.restaurant_revenue, record.room_service, record.banquet_revenue, record.fnb_others_revenue, record.fnb_revenue, record.others_revenue, record.total_revenue, record.service, record.tax, record.gross_revenue, record.shared_payable, record.deposit_reservation, record.cash_fo, record.cash_outlet, record.bank_transfer, record.qris, record.credit_debit_card, record.city_ledger, record.total_settlement, record.gab, record.balance];
+            // --- NEW VALIDATION ---
+            if (!record.date || typeof record.date !== 'string' || isNaN(new Date(record.date).getTime())) {
+                throw new Error(`Invalid or missing date for one of the records: ${record.date}`);
+            }
+            for (const col of DSR_COLUMNS) {
+                const value = record[col];
+                if (typeof value !== 'number' || !isFinite(value)) {
+                    // Allow null, but throw error for other invalid types or non-finite numbers
+                    if (value !== null) {
+                         throw new Error(`Invalid non-numeric or non-finite value for column ${col}: ${value}`);
+                    }
+                }
+            }
+            // --- END VALIDATION ---
+
+            // Parse date as UTC to avoid timezone shifts
+            const dateObj = new Date(record.date);
+            const parsedDate = dateObj.getUTCFullYear() + '-' +
+                              String(dateObj.getUTCMonth() + 1).padStart(2, '0') + '-' +
+                              String(dateObj.getUTCDate()).padStart(2, '0');
+            const values = [
+                hotel_id,
+                parsedDate,
+                ...DSR_COLUMNS.map(col => {
+                    let value = record[col];
+                    if (value !== null && value !== undefined) {
+                        if (INTEGER_DSR_COLUMNS.includes(col)) {
+                            value = Math.round(parseFloat(value));
+                        }
+                    }
+                    return value === undefined ? null : value;
+                })
+            ];
+            // console.log('Executing DSR upsert with values:', values); // Keep this commented unless actively debugging
             await client.query(query, values);
         }
         await client.query('COMMIT');
         res.status(201).json({ message: `DSR ${tableName.split('_')[0]} berhasil disimpan.` });
     } catch (error) {
         await client.query('ROLLBACK');
+        
+        // --- NEW ERROR HANDLING ---
+        if (error.message.startsWith('Invalid')) {
+            return res.status(400).json({ message: error.message });
+        }
+        // --- END NEW ERROR HANDLING ---
+
+        console.error('Error during DSR upsert:', error); // Keep the log for other errors
         next(error);
     } finally {
         client.release();
@@ -100,13 +147,24 @@ const getDsrData = (tableName) => async (req, res, next) => {
     if (!hotel_id || !year || !month) return res.status(400).json({ error: 'Parameter hotel_id, year, dan month diperlukan.' });
     try {
         const dsrResult = await pool.query(`SELECT * FROM ${tableName} WHERE hotel_id = $1 AND EXTRACT(YEAR FROM date) = $2 AND EXTRACT(MONTH FROM date) = $3 ORDER BY date ASC`, [hotel_id, year, month]);
+        
+        let isLocked = false;
+        try {
+            const lockResult = await pool.query(`SELECT is_locked FROM ${tableName} WHERE hotel_id = $1 AND EXTRACT(YEAR FROM date) = $2 AND EXTRACT(MONTH FROM date) = $3 LIMIT 1`, [hotel_id, year, month]);
+            if (lockResult.rows.length > 0 && lockResult.rows[0].is_locked) {
+                isLocked = true;
+            }
+        } catch (lockError) {
+            // Abaikan error jika kolom 'is_locked' tidak ada
+            console.warn(`Could not check lock status for ${tableName} (hotel: ${hotel_id}, period: ${year}-${month}). Column 'is_locked' might be missing. Error: ${lockError.message}`);
+        }
 
         if (tableName === 'actual_dsr') {
             const openingBalanceResult = await pool.query(`SELECT balance_value FROM dsr_opening_balances WHERE hotel_id = $1 AND effective_date <= $2 ORDER BY effective_date DESC LIMIT 1`, [hotel_id, `${year}-${month}-01`]);
             const openingBalance = openingBalanceResult.rows.length > 0 ? openingBalanceResult.rows[0].balance_value : 0;
-            res.json({ dsrData: dsrResult.rows, openingBalance: parseFloat(openingBalance) });
+            res.json({ dsrData: dsrResult.rows, openingBalance: parseFloat(openingBalance), isLocked });
         } else {
-            res.json(dsrResult.rows);
+            res.json({ dsrData: dsrResult.rows, isLocked });
         }
     } catch (error) {
         next(error);
@@ -206,7 +264,7 @@ const createPeriodicDataHandler = ({ tableName, columns, insertCheckColumn, succ
     const client = await pool.connect();
     try {
         await client.query('BEGIN');
-        await client.query(`DELETE FROM room_production WHERE hotel_id = $1 AND EXTRACT(YEAR FROM date) = $2 AND EXTRACT(MONTH FROM date) = $3;`, [hotel_id, year, month]);
+        await client.query(`DELETE FROM ${tableName} WHERE hotel_id = $1 AND EXTRACT(YEAR FROM date) = $2 AND EXTRACT(MONTH FROM date) = $3;`, [hotel_id, year, month]);
 
         if (data.length > 0) {
             const valuePlaceholders = columns.map((_, i) => `$${i + 1}`).join(', ');
@@ -259,7 +317,7 @@ exports.getArAgingSummary = async (req, res, next) => {
 
     try {
         const query = `
-            SELECT 
+            SELECT
                 h.name AS hotel_name,
                 SUM(ar.current) AS current,
                 SUM(ar.days_1_30) AS days_1_30,
@@ -273,7 +331,7 @@ exports.getArAgingSummary = async (req, res, next) => {
             ORDER BY h.name;
         `;
         const result = await pool.query(query, [year, month]);
-        
+
         const summary = result.rows.map(row => {
             for (const key in row) {
                 if (typeof row[key] === 'bigint') {
@@ -287,5 +345,75 @@ exports.getArAgingSummary = async (req, res, next) => {
     } catch (error) {
         console.error('Error fetching AR Aging summary:', error);
         next(error);
+    }
+};
+
+const clearDsrData = (tableName) => async (req, res, next) => {
+    const { hotel_id, year, month } = req.query;
+    if (!hotel_id || !year || !month) return res.status(400).json({ error: 'Parameter hotel_id, year, dan month diperlukan.' });
+    try {
+        const query = `DELETE FROM ${tableName} WHERE hotel_id = $1 AND EXTRACT(YEAR FROM date) = $2 AND EXTRACT(MONTH FROM date) = $3;`;
+        const result = await pool.query(query, [hotel_id, year, month]);
+        res.status(200).json({ message: `Data DSR ${tableName.split('_')[0]} berhasil dihapus. ${result.rowCount} baris terpengaruh.` });
+    } catch (error) {
+        next(error);
+    }
+};
+
+exports.clearDsrBudget = clearDsrData('budget_dsr');
+exports.clearDsrActual = clearDsrData('actual_dsr');
+
+/**
+ * BARU: Mengunci atau membuka data DSR untuk periode tertentu.
+ * Dipindahkan dari dsrController.js untuk sentralisasi logika.
+ */
+exports.lockDsrData = async (req, res, next) => {
+    const { hotel_id, year, month, is_locked, type } = req.body;
+    if (!hotel_id || !year || !month || typeof is_locked === 'undefined' || !type) {
+        return res.status(400).json({ error: 'Parameter hotel_id, year, month, is_locked, dan type diperlukan.' });
+    }
+
+    const tableName = `${type}_dsr`;
+    const client = await pool.connect();
+
+    try {
+        await client.query('BEGIN');
+
+        // First, try to update existing rows for the entire month
+        const updateResult = await client.query(
+            `UPDATE ${tableName} SET is_locked = $1 WHERE hotel_id = $2 AND EXTRACT(YEAR FROM date) = $3 AND EXTRACT(MONTH FROM date) = $4`,
+            [is_locked, hotel_id, year, month]
+        );
+
+        // If no rows existed for that month and we are trying to lock it,
+        // we must create a record to hold the lock state. We'll use the first day of the month.
+        if (updateResult.rowCount === 0 && is_locked) {
+            const firstDayOfMonth = `${year}-${String(month).padStart(2, '0')}-01`;
+            // This will either insert a new record for the 1st of the month with the lock,
+            // or update the lock status if a record for the 1st already exists.
+            await client.query(
+                `INSERT INTO ${tableName} (hotel_id, date, is_locked)
+                 VALUES ($1, $2, $3)
+                 ON CONFLICT (hotel_id, date) DO UPDATE SET is_locked = EXCLUDED.is_locked`,
+                [hotel_id, firstDayOfMonth, true]
+            );
+        }
+        
+        await client.query('COMMIT');
+
+        const action = is_locked ? 'dikunci' : 'dibuka kuncinya';
+        res.status(200).json({ message: `DSR untuk bulan ${month}/${year} di hotel ${hotel_id} berhasil ${action}.` });
+
+    } catch (error) {
+        await client.query('ROLLBACK');
+        if (error.code === '42703') { // Postgres error code for undefined column
+            const action = is_locked ? 'mengunci' : 'membuka kunci';
+            console.warn(`Failed to ${action} DSR data for ${tableName}. Column 'is_locked' may be missing. Silently continuing.`);
+            res.status(200).json({ message: `Tindakan berhasil, tetapi fitur kunci/buka kunci tidak sepenuhnya aktif karena konfigurasi database.` });
+        } else {
+            next(error);
+        }
+    } finally {
+        client.release();
     }
 };

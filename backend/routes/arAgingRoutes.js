@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const arAgingController = require('../controllers/arAgingController');
-const { authenticateToken, authorizeAdmin } = require('../middleware/authMiddleware');
+const { authenticateToken, authorizeAdmin } = require('../middleware/auth');
 
 router.get('/', authenticateToken, arAgingController.getArAging);
 router.post('/', authenticateToken, authorizeAdmin, arAgingController.saveArAging);
